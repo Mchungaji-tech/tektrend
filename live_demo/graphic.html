@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Maven · Graphic Design</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0c0a08;
+      color: #f5ede4;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* --- Scrollbar --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1512; }
+    ::-webkit-scrollbar-thumb { background: #d4815a; border-radius: 10px; }
+
+    /* --- Navigation --- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(12, 10, 8, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212, 129, 90, 0.08);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #d4815a;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: #f5ede4; }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(245, 237, 228, 0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover { color: #d4815a; }
+
+    .nav-cta {
+      background: rgba(212, 129, 90, 0.12);
+      border: 1px solid rgba(212, 129, 90, 0.2);
+      padding: 0.5rem 1.8rem;
+      border-radius: 60px;
+      color: #d4815a !important;
+      transition: 0.3s;
+    }
+    .nav-cta:hover { background: rgba(212, 129, 90, 0.2); border-color: #d4815a; }
+
+    /* --- Hero --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 129, 90, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 700px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(212, 129, 90, 0.1);
+      border: 1px solid rgba(212, 129, 90, 0.15);
+      padding: 0.3rem 1.5rem;
+      border-radius: 60px;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #d4815a;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #f5ede4;
+    }
+
+    .hero h1 .highlight {
+      color: #d4815a;
+      position: relative;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: rgba(212, 129, 90, 0.2);
+      border-radius: 10px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(245, 237, 228, 0.5);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #d4815a;
+      color: #0c0a08;
+      padding: 0.9rem 2.5rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .btn-primary:hover {
+      background: #e08f66;
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(212, 129, 90, 0.2);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(245, 237, 228, 0.6);
+      padding: 0.9rem 2.5rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f5ede4;
+    }
+
+    /* --- Hero Stats --- */
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .stat-item .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #d4815a;
+    }
+    .stat-item .label {
+      font-size: 0.8rem;
+      color: rgba(245, 237, 228, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.2rem;
+    }
+
+    /* --- Hero Image (abstract) --- */
+    .hero-visual {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 400px;
+    }
+
+    .hero-visual .shape-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+    .shape-grid .shape {
+      aspect-ratio: 1;
+      border-radius: 20px;
+      background: rgba(212, 129, 90, 0.06);
+      border: 1px solid rgba(212, 129, 90, 0.05);
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: rgba(212, 129, 90, 0.15);
+    }
+    .shape-grid .shape:hover {
+      background: rgba(212, 129, 90, 0.12);
+      border-color: rgba(212, 129, 90, 0.15);
+      transform: scale(1.05);
+    }
+    .shape-grid .shape:nth-child(1) { background: rgba(212, 129, 90, 0.12); border-color: rgba(212, 129, 90, 0.15); color: rgba(212, 129, 90, 0.3); }
+    .shape-grid .shape:nth-child(5) { background: rgba(212, 129, 90, 0.08); border-color: rgba(212, 129, 90, 0.08); }
+
+    /* --- Featured Work Section --- */
+    .featured {
+      padding: 5rem 4rem;
+      background: rgba(255, 255, 255, 0.01);
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #f5ede4;
+    }
+    .section-header h2 span { color: #d4815a; }
+    .section-header p {
+      color: rgba(245, 237, 228, 0.4);
+      font-size: 0.95rem;
+      max-width: 400px;
+      line-height: 1.6;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .work-item {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 24px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      transition: 0.4s;
+    }
+    .work-item:hover {
+      background: rgba(212, 129, 90, 0.04);
+      border-color: rgba(212, 129, 90, 0.1);
+      transform: translateY(-4px);
+    }
+    .work-item .icon {
+      font-size: 2rem;
+      color: #d4815a;
+      margin-bottom: 1rem;
+    }
+    .work-item h4 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    .work-item p {
+      color: rgba(245, 237, 228, 0.4);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .work-item .tag {
+      display: inline-block;
+      margin-top: 1rem;
+      background: rgba(212, 129, 90, 0.06);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(212, 129, 90, 0.6);
+    }
+
+    /* --- Testimonial --- */
+    .testimonial {
+      padding: 4rem 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.02);
+      background: rgba(212, 129, 90, 0.02);
+    }
+    .testimonial blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      color: rgba(245, 237, 228, 0.7);
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .testimonial blockquote::before {
+      content: '"';
+      font-size: 4rem;
+      color: #d4815a;
+      opacity: 0.2;
+      display: block;
+      margin-bottom: -1rem;
+    }
+    .testimonial .author {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: rgba(245, 237, 228, 0.3);
+    }
+    .testimonial .author strong { color: rgba(245, 237, 228, 0.6); font-weight: 600; }
+
+    /* --- Footer --- */
+    .footer {
+      padding: 2.5rem 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.02);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      color: rgba(245, 237, 228, 0.15);
+      font-size: 0.8rem;
+    }
+    .footer a {
+      color: rgba(245, 237, 228, 0.15);
+      text-decoration: none;
+      transition: 0.3s;
+      margin-left: 1.5rem;
+    }
+    .footer a:hover { color: #d4815a; }
+
+    .back-link {
+      display: inline-block;
+      margin: 1rem 4rem 0;
+      color: rgba(245, 237, 228, 0.2);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+    .back-link:hover { color: #d4815a; }
+
+    /* --- Responsive --- */
+    @media (max-width: 1024px) {
+      .hero { flex-direction: column; text-align: center; padding: 8rem 2rem 3rem; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-visual { margin-top: 2rem; width: 100%; }
+      .shape-grid { max-width: 300px; margin: 0 auto; }
+      .navbar { padding: 1rem 1.5rem; flex-wrap: wrap; }
+      .nav-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+      .featured { padding: 3rem 1.5rem; }
+      .testimonial { padding: 3rem 1.5rem; }
+      .footer { padding: 1.5rem; flex-direction: column; align-items: center; text-align: center; }
+      .footer a { margin: 0 0.8rem; }
+      .back-link { margin: 0 1.5rem 1rem; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.8rem; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .stat-item .number { font-size: 1.6rem; }
+      .work-grid { grid-template-columns: 1fr; }
+      .testimonial blockquote { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">Maven<span>Studio</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Work</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" class="nav-cta">Let's Talk</a></li>
+    </ul>
+  </nav>
+
+  <!-- Back to Portfolio -->
+  <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag"><i class="fas fa-palette"></i> Creative Studio</span>
+      <h1>Design that <span class="highlight">speaks</span><br>without words</h1>
+      <p>We craft bold, minimal brand identities and digital experiences that resonate. From logos to motion — we bring vision to life.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary"><i class="fas fa-paper-plane"></i> Start a Project</a>
+        <a href="#" class="btn-secondary">View Our Work</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="number">120+</div><div class="label">Projects Delivered</div></div>
+        <div class="stat-item"><div class="number">4.9★</div><div class="label">Client Rating</div></div>
+        <div class="stat-item"><div class="number">14</div><div class="label">Design Awards</div></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="shape-grid">
+        <div class="shape"><i class="fas fa-paintbrush"></i></div>
+        <div class="shape"><i class="fas fa-layer-group"></i></div>
+        <div class="shape"><i class="fas fa-pen-fancy"></i></div>
+        <div class="shape"><i class="fas fa-image"></i></div>
+        <div class="shape"><i class="fas fa-video"></i></div>
+        <div class="shape"><i class="fas fa-cube"></i></div>
+        <div class="shape"><i class="fas fa-font"></i></div>
+        <div class="shape"><i class="fas fa-mobile-screen"></i></div>
+        <div class="shape"><i class="fas fa-star"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Work -->
+  <section class="featured">
+    <div class="section-header">
+      <h2>Featured <span>Work</span></h2>
+      <p>Selected projects that showcase our approach to brand identity, motion design, and digital experiences.</p>
+    </div>
+    <div class="work-grid">
+      <div class="work-item">
+        <div class="icon"><i class="fas fa-paintbrush"></i></div>
+        <h4>Brand Identity</h4>
+        <p>Complete visual systems — logo, typography, color palettes, and guidelines.</p>
+        <span class="tag">Logo · Identity</span>
+      </div>
+      <div class="work-item">
+        <div class="icon"><i class="fas fa-layer-group"></i></div>
+        <h4>Case Studies</h4>
+        <p>In‑depth project breakdowns showing strategy, process, and final results.</p>
+        <span class="tag">Strategy · Design</span>
+      </div>
+      <div class="work-item">
+        <div class="icon"><i class="fas fa-video"></i></div>
+        <h4>Motion Reels</h4>
+        <p>Showreels, animations, and motion graphics that bring brands to life.</p>
+        <span class="tag">Motion · Animation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="testimonial">
+    <blockquote>
+      The team at Maven Studio understood our vision immediately. They delivered a brand identity that feels timeless and truly represents who we are.
+    </blockquote>
+    <div class="author">— <strong>Sarah Chen</strong> · Founder, Lumina Creative</div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+  <span>Designed by <a href="../index.html">TekTrend</a></span>
+  <span>
+    <a href="mailto:info@tektrend">info@tektrend</a>
+    <a href="tel:0707246273">0707246273</a>
+    <a href="../index.html">Portfolio</a>
+  </span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Website Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f1e8;
+      color: #2f2a24;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      background:
+        linear-gradient(135deg, rgba(247, 241, 232, 0.88), rgba(245, 236, 224, 0.72)),
+        url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(183, 134, 72, 0.18), transparent 35%);
+    }
+    .container {
+      width: min(1180px, calc(100% - 2rem));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .topbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      padding: 1.2rem 0;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid rgba(92, 74, 53, 0.10);
+      border-radius: 999px;
+      background: rgba(255, 250, 244, 0.78);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 34px rgba(78, 61, 43, 0.08);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .brand i {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(183, 134, 72, 0.14);
+      color: #b78648;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+      color: rgba(56, 45, 34, 0.82);
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 8rem 0 4rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(183, 134, 72, 0.12);
+      border: 1px solid rgba(183, 134, 72, 0.18);
+      color: #8a6436;
+      font-size: 0.88rem;
+      margin-bottom: 1.1rem;
+    }
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.4rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      max-width: 10ch;
+      margin-bottom: 1.2rem;
+    }
+    .hero-copy p {
+      max-width: 58ch;
+      color: rgba(62, 48, 33, 0.82);
+      font-size: 1.05rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.6rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.95rem 1.3rem;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: 0.25s ease;
+    }
+    .btn-primary {
+      background: #b78648;
+      color: #fffaf4;
+    }
+    .btn-primary:hover { background: #9b6e35; }
+    .btn-secondary {
+      border-color: rgba(92, 74, 53, 0.16);
+      background: rgba(255, 250, 244, 0.54);
+      color: #433427;
+    }
+    .btn-secondary:hover { background: rgba(255, 250, 244, 0.84); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      max-width: 720px;
+    }
+    .stat {
+      padding: 1rem 1.1rem;
+      border-radius: 20px;
+      background: rgba(255, 250, 244, 0.72);
+      border: 1px solid rgba(92, 74, 53, 0.10);
+      box-shadow: 0 12px 30px rgba(78, 61, 43, 0.06);
+    }
+    .stat strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 0.2rem;
+    }
+    .stat span {
+      color: rgba(62, 48, 33, 0.74);
+      font-size: 0.92rem;
+    }
+
+    .hero-card {
+      padding: 1.6rem;
+      border-radius: 28px;
+      background: rgba(255, 250, 244, 0.84);
+      border: 1px solid rgba(92, 74, 53, 0.10);
+      box-shadow: 0 30px 70px rgba(78, 61, 43, 0.10);
+      backdrop-filter: blur(12px);
+    }
+    .hero-card h2 {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+    }
+    .service-list {
+      display: grid;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+    .service-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      background: rgba(247, 241, 232, 0.82);
+    }
+    .service-item span:last-child {
+      color: #8a6436;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .feature-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .feature-badges span {
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      background: rgba(183, 134, 72, 0.12);
+      border: 1px solid rgba(183, 134, 72, 0.16);
+      color: #8a6436;
+    }
+
+    section {
+      padding: 5.5rem 0;
+      background: #fffaf4;
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+    .section-head p {
+      max-width: 52ch;
+      color: rgba(62, 48, 33, 0.72);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      padding: 1.5rem;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,241,232,0.9));
+      border: 1px solid rgba(92, 74, 53, 0.10);
+      box-shadow: 0 14px 36px rgba(78, 61, 43, 0.06);
+    }
+    .card i {
+      font-size: 1.2rem;
+      color: #b78648;
+      margin-bottom: 1rem;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      color: rgba(62, 48, 33, 0.72);
+    }
+
+    .cta {
+      padding: 4.5rem 0 6rem;
+      background: #f4eadb;
+    }
+    .cta-box {
+      padding: 2rem;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(183,134,72,0.16), rgba(255,255,255,0.65));
+      border: 1px solid rgba(92, 74, 53, 0.10);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cta-box p {
+      color: rgba(62, 48, 33, 0.76);
+      max-width: 60ch;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 720px) {
+      .nav {
+        border-radius: 26px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .nav-links { justify-content: flex-start; }
+      .section-head,
+      .cta-box {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .hero-grid { padding-top: 9rem; }
+    }
+  
+    .tektrend-footer {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding: 1.2rem 2rem;
+      background: rgba(8, 10, 14, 0.78);
+      color: rgba(255,255,255,0.72);
+      border-top: 1px solid rgba(214, 194, 157, 0.16);
+      backdrop-filter: blur(10px);
+    }
+    .tektrend-footer__brand a,
+    .tektrend-footer__links a {
+      color: #d6c29d;
+      text-decoration: none;
+    }
+    .tektrend-footer__links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.1rem;
+    }
+    .tektrend-footer__links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .tektrend-footer__brand a:hover,
+    .tektrend-footer__links a:hover {
+      color: #f5efe2;
+    }
+    @media (max-width: 720px) {
+      .tektrend-footer {
+        padding: 1.3rem;
+        flex-direction: column;
+        text-align: center;
+      }
+      .tektrend-footer__links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="topbar">
+      <div class="container">
+        <div class="nav">
+          <a class="brand" href="../live_demo.html">
+            <i class="fas fa-church"></i>
+            <span>Grace Community</span>
+          </a>
+          <div class="nav-links">
+            <a href="#ministries">Ministries</a>
+            <a href="#welcome">Welcome</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow"><i class="fas fa-cross"></i> Church website demo</div>
+        <h1>Serve your church online with clarity.</h1>
+        <p>A warm and welcoming church website concept for ministries, events, sermons, prayer requests, and community connection.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#ministries"><i class="fas fa-heart"></i> Explore ministries</a>
+          <a class="btn btn-secondary" href="../live_demo.html"><i class="fas fa-arrow-left"></i> Back to demos</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>24/7</strong>
+            <span>Sermons, notices, events and ministries online</span>
+          </div>
+          <div class="stat">
+            <strong>12+</strong>
+            <span>Ministry groups, fellowships and outreach teams</span>
+          </div>
+          <div class="stat">
+            <strong>Weekly</strong>
+            <span>Services, devotion updates and church notices</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <h2>This Sunday</h2>
+        <div class="service-list">
+          <div class="service-item">
+            <span>Morning Worship</span>
+            <span>8:30 AM</span>
+          </div>
+          <div class="service-item">
+            <span>Youth Fellowship</span>
+            <span>11:30 AM</span>
+          </div>
+          <div class="service-item">
+            <span>Evening Prayer</span>
+            <span>5:00 PM</span>
+          </div>
+        </div>
+        <div class="feature-badges">
+          <span>Online Giving</span>
+          <span>Sermon Archive</span>
+          <span>Prayer Requests</span>
+          <span>Member Portal</span>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <section id="ministries">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Built for ministry teams</h2>
+        </div>
+        <p>Designed to help churches share programs, connect with members, and welcome first-time visitors with clarity and warmth.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <i class="fas fa-microphone-lines"></i>
+          <h3>Sermons and media</h3>
+          <p>Share sermon highlights, teaching series, media links and downloadable notes.</p>
+        </article>
+        <article class="card">
+          <i class="fas fa-calendar-days"></i>
+          <h3>Events and schedules</h3>
+          <p>Present conferences, worship services, bible study calendars and ministry meetings clearly.</p>
+        </article>
+        <article class="card">
+          <i class="fas fa-hands-praying"></i>
+          <h3>Prayer and care</h3>
+          <p>Create space for prayer requests, testimonies and follow-up support for the church family.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="welcome">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>A welcoming digital presence</h2>
+        </div>
+        <p>This demo focuses on the church experience itself: clear messaging, upcoming services, ministries, prayer touchpoints and easy navigation for visitors.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <i class="fas fa-people-group"></i>
+          <h3>For visitors</h3>
+          <p>Make service times, location, ministries and next steps easy to find on the first visit.</p>
+        </article>
+        <article class="card">
+          <i class="fas fa-dove"></i>
+          <h3>For the church family</h3>
+          <p>Keep members informed with notices, devotion highlights, youth updates and event reminders.</p>
+        </article>
+        <article class="card">
+          <i class="fas fa-hand-holding-heart"></i>
+          <h3>For outreach</h3>
+          <p>Support giving campaigns, mission stories, community projects and volunteer signups.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="container">
+      <div class="cta-box">
+        <div>
+          <h2>Church website demo</h2>
+          <p>A bright, welcoming demo page for a ministry or church brand, ready to sit alongside the rest of your showcase demos.</p>
+        </div>
+        <a class="btn btn-primary" href="../live_demo.html"><i class="fas fa-layer-group"></i> See all demos</a>
+      </div>
+    </div>
+  </section>
+<footer class="tektrend-footer">
+  <div class="tektrend-footer__brand">Designed by <a href="../index.html">TekTrend</a></div>
+  <div class="tektrend-footer__links">
+    <a href="mailto:info@tektrend"><i class="fas fa-envelope"></i> info@tektrend</a>
+    <a href="tel:0707246273"><i class="fab fa-whatsapp"></i> 0707246273</a>
+    <a href="../index.html"><i class="fas fa-briefcase"></i> Portfolio</a>
+  </div>
+</footer>
+</body>
+</html>

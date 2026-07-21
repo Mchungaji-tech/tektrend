@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Jardin · Gourmet Restaurant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f8f4ef;
+      color: #2c2420;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* --- Scrollbar --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f8f4ef; }
+    ::-webkit-scrollbar-thumb { background: #b48a7a; border-radius: 10px; }
+
+    /* --- Scroll Animations --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* --- Navigation (transparent) --- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.6rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(248, 244, 239, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(44, 36, 32, 0.04);
+      transition: 0.3s;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #2c2420;
+      letter-spacing: -0.5px;
+    }
+    .logo span {
+      font-weight: 300;
+      color: #b48a7a;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.8rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(44, 36, 32, 0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover { color: #b48a7a; }
+
+    .nav-cta {
+      background: #2c2420;
+      color: #f8f4ef !important;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      transition: 0.3s;
+      text-transform: uppercase;
+      font-size: 0.75rem !important;
+      letter-spacing: 1px !important;
+    }
+    .nav-cta:hover {
+      background: #b48a7a;
+      color: #f8f4ef !important;
+    }
+
+    /* --- Hero (full page big picture) --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 8rem 4rem 4rem;
+      background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+      background-attachment: fixed;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(44, 36, 32, 0.25);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      padding: 2rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(248, 244, 239, 0.12);
+      border: 1px solid rgba(248, 244, 239, 0.15);
+      padding: 0.3rem 1.8rem;
+      border-radius: 60px;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #f8f4ef;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #f8f4ef;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.15);
+    }
+
+    .hero h1 .highlight {
+      font-style: italic;
+      font-weight: 400;
+      color: rgba(248, 244, 239, 0.7);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(248, 244, 239, 0.7);
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 1.5rem auto 2.5rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      font-weight: 300;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #f8f4ef;
+      color: #2c2420;
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      background: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(248, 244, 239, 0.08);
+      border: 1px solid rgba(248, 244, 239, 0.15);
+      color: #f8f4ef;
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      backdrop-filter: blur(4px);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-secondary:hover {
+      background: rgba(248, 244, 239, 0.15);
+      border-color: rgba(248, 244, 239, 0.25);
+    }
+
+    .hero-info {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(248, 244, 239, 0.08);
+      flex-wrap: wrap;
+    }
+    .hero-info .info-item {
+      color: rgba(248, 244, 239, 0.6);
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+    .hero-info .info-item i {
+      margin-right: 0.5rem;
+      color: rgba(248, 244, 239, 0.3);
+    }
+
+    /* --- About / Story Section (light) --- */
+    .story {
+      padding: 6rem 4rem;
+      background: #f8f4ef;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .story-image {
+      border-radius: 30px;
+      overflow: hidden;
+      height: 450px;
+      background: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+    }
+
+    .story-content .sub {
+      color: #b48a7a;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .story-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #2c2420;
+      margin: 0.5rem 0 1.2rem;
+      line-height: 1.1;
+    }
+    .story-content h2 span { color: #b48a7a; font-style: italic; }
+    .story-content p {
+      color: rgba(44, 36, 32, 0.6);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      max-width: 500px;
+    }
+    .story-content .signature {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #b48a7a;
+      margin-top: 1.5rem;
+    }
+
+    /* --- Menu Section --- */
+    .menu-section {
+      padding: 6rem 4rem;
+      background: #fff9f5;
+      border-top: 1px solid rgba(44, 36, 32, 0.04);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-header .sub {
+      color: #b48a7a;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #2c2420;
+      margin: 0.5rem 0;
+    }
+    .section-header h2 span { color: #b48a7a; }
+    .section-header p {
+      color: rgba(44, 36, 32, 0.5);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .menu-card {
+      background: #f8f4ef;
+      border-radius: 24px;
+      padding: 2rem 1.8rem;
+      border: 1px solid rgba(44, 36, 32, 0.04);
+      transition: 0.4s;
+      text-align: center;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(44, 36, 32, 0.04);
+      border-color: rgba(180, 138, 122, 0.15);
+    }
+    .menu-card .icon {
+      font-size: 2rem;
+      color: #b48a7a;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    .menu-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #2c2420;
+    }
+    .menu-card .desc {
+      color: rgba(44, 36, 32, 0.5);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0.5rem 0 1rem;
+    }
+    .menu-card .price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #b48a7a;
+    }
+
+    /* --- Gallery / Ambiance --- */
+    .gallery {
+      padding: 5rem 4rem;
+      background: #f8f4ef;
+      border-top: 1px solid rgba(44, 36, 32, 0.03);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .gallery-item {
+      aspect-ratio: 4/3;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #e8ddd5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: rgba(44, 36, 32, 0.05);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .gallery-item:hover {
+      transform: scale(1.02);
+    }
+    .gallery-item:nth-child(1) { background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat; }
+    .gallery-item:nth-child(2) { background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; }
+    .gallery-item:nth-child(3) { background: url('https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; }
+    .gallery-item:nth-child(4) { background: url('https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?q=80&w=1935&auto=format&fit=crop') center/cover no-repeat; }
+
+    /* --- Testimonial --- */
+    .testimonial {
+      padding: 5rem 4rem;
+      background: #fff9f5;
+      border-top: 1px solid rgba(44, 36, 32, 0.03);
+    }
+    .testimonial blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #2c2420;
+      max-width: 750px;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .testimonial blockquote::before {
+      content: '"';
+      font-size: 4rem;
+      color: #b48a7a;
+      opacity: 0.2;
+      display: block;
+      margin-bottom: -1rem;
+    }
+    .testimonial .author {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: rgba(44, 36, 32, 0.4);
+    }
+    .testimonial .author strong { color: #2c2420; font-weight: 600; }
+
+    /* --- Footer --- */
+    .footer {
+      padding: 2.5rem 4rem;
+      background: #2c2420;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      color: rgba(248, 244, 239, 0.2);
+      font-size: 0.8rem;
+    }
+    .footer a {
+      color: rgba(248, 244, 239, 0.2);
+      text-decoration: none;
+      transition: 0.3s;
+      margin-left: 1.5rem;
+    }
+    .footer a:hover { color: #b48a7a; }
+
+    .back-link {
+      display: inline-block;
+      margin: 1.5rem 4rem 0;
+      color: rgba(44, 36, 32, 0.2);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+    .back-link:hover { color: #b48a7a; }
+
+    /* --- Responsive --- */
+    @media (max-width: 1024px) {
+      .hero { padding: 8rem 2rem 3rem; }
+      .story { grid-template-columns: 1fr; padding: 4rem 2rem; }
+      .story-image { height: 300px; }
+      .navbar { padding: 1rem 1.5rem; flex-wrap: wrap; }
+      .nav-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+      .menu-section { padding: 4rem 2rem; }
+      .gallery { padding: 4rem 2rem; }
+      .testimonial { padding: 3rem 2rem; }
+      .footer { padding: 1.5rem; flex-direction: column; align-items: center; text-align: center; }
+      .footer a { margin: 0 0.8rem; }
+      .back-link { margin: 0 1.5rem 1rem; }
+      .section-header h2 { font-size: 2.2rem; }
+      .hero-info { gap: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.8rem; }
+      .hero-info { flex-direction: column; align-items: center; gap: 0.8rem; }
+      .story-content h2 { font-size: 2.2rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .testimonial blockquote { font-size: 1.4rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item { aspect-ratio: 1/1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">Le <span>Jardin</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Menu</a></li>
+      <li><a href="#">Reservations</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" class="nav-cta">Book a Table</a></li>
+    </ul>
+  </nav>
+
+  <!-- Back to Portfolio -->
+  <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+  <!-- Hero (full page big picture) -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag"><i class="fas fa-utensils"></i> Fine Dining</span>
+      <h1>Where <span class="highlight">flavor</span><br>meets artistry</h1>
+      <p>Seasonal menus, crafted with passion. An unforgettable culinary experience in the heart of the city.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary"><i class="fas fa-calendar-check"></i> Reserve Now</a>
+        <a href="#" class="btn-secondary">Explore Menu</a>
+      </div>
+      <div class="hero-info">
+        <span class="info-item"><i class="fas fa-clock"></i> Tue–Sun · 6pm – 11pm</span>
+        <span class="info-item"><i class="fas fa-map-pin"></i> 123 Rue de Paris</span>
+        <span class="info-item"><i class="fas fa-phone"></i> +33 1 23 45 67 89</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="story">
+    <div class="story-image reveal-left"></div>
+    <div class="story-content reveal-right">
+      <span class="sub"><i class="fas fa-leaf"></i> Our Story</span>
+      <h2>Crafted with <span>passion</span>,<br>served with love</h2>
+      <p>Le Jardin is a celebration of seasonal ingredients, culinary artistry, and the joy of gathering around a table. Our menu evolves with the harvest, bringing you the finest flavors from farm to plate.</p>
+      <p style="margin-top: 0.8rem;">Each dish is a story — told through texture, color, and taste.</p>
+      <div class="signature">— Chef Éloïse Moreau</div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="menu-section">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-book-open"></i> Seasonal Selection</span>
+      <h2>Our <span>Menu</span></h2>
+      <p>Fresh, locally sourced ingredients transformed into unforgettable dishes.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card reveal">
+        <div class="icon"><i class="fas fa-fish"></i></div>
+        <h4>Seared Salmon</h4>
+        <div class="desc">With citrus beurre blanc, asparagus, and herb oil.</div>
+        <div class="price">$38</div>
+      </div>
+      <div class="menu-card reveal">
+        <div class="icon"><i class="fas fa-drumstick-bite"></i></div>
+        <h4>Wagyu Steak</h4>
+        <div class="desc">A5 Wagyu, truffle mash, grilled vegetables, red wine jus.</div>
+        <div class="price">$62</div>
+      </div>
+      <div class="menu-card reveal">
+        <div class="icon"><i class="fas fa-leaf"></i></div>
+        <h4>Garden Risotto</h4>
+        <div class="desc">Creamy Arborio rice, wild mushrooms, parmesan, truffle oil.</div>
+        <div class="price">$32</div>
+      </div>
+      <div class="menu-card reveal">
+        <div class="icon"><i class="fas fa-cake"></i></div>
+        <h4>Chocolate Fondant</h4>
+        <div class="desc">Dark chocolate, salted caramel, vanilla bean ice cream.</div>
+        <div class="price">$16</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-images"></i> Ambiance</span>
+      <h2>In the <span>heart</span> of the city</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal-scale"></div>
+      <div class="gallery-item reveal-scale"></div>
+      <div class="gallery-item reveal-scale"></div>
+      <div class="gallery-item reveal-scale"></div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="testimonial">
+    <blockquote class="reveal">
+      An extraordinary dining experience. The flavors, the atmosphere, the service — everything was impeccable.
+    </blockquote>
+    <div class="author">— <strong>Sophie Laurent</strong> · Food Critic, Paris Eats</div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+  <span>Designed by <a href="../index.html">TekTrend</a></span>
+  <span>
+    <a href="mailto:info@tektrend">info@tektrend</a>
+    <a href="tel:0707246273">0707246273</a>
+    <a href="../index.html">Portfolio</a>
+  </span>
+</footer>
+
+  <!-- Scroll Animation Script -->
+  <script>
+    (function() {
+      const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -30px 0px'
+      });
+
+      reveals.forEach(el => observer.observe(el));
+
+      // Trigger already visible elements
+      setTimeout(() => {
+        reveals.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            el.classList.add('visible');
+          }
+        });
+      }, 200);
+    })();
+  </script>
+
+</body>
+</html>

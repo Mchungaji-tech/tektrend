@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus · Advanced Commercial Solutions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <style>
+    /* --- Reset & Base --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f5f2;
+      color: #1a1a1a;
+      overflow-x: hidden;
+    }
+
+    /* --- Scrollbar --- */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f7f5f2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c9a87c;
+      border-radius: 10px;
+    }
+
+    /* --- Scroll Animations --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* --- Navigation --- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(247, 245, 242, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.04);
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #1a1a1a;
+    }
+    .logo span {
+      color: #c9a87c;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(26, 26, 26, 0.5);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover {
+      color: #1a1a1a;
+    }
+
+    .nav-cta {
+      background: #1a1a1a;
+      color: #f7f5f2 !important;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      transition: 0.3s;
+      text-transform: uppercase;
+      font-size: 0.7rem !important;
+      letter-spacing: 1px !important;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover {
+      background: #c9a87c;
+      color: #1a1a1a !important;
+    }
+
+    /* --- Hero (full page) --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(247, 245, 242, 0.88) 0%, rgba(247, 245, 242, 0.4) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(201, 168, 124, 0.12);
+      border: 1px solid rgba(201, 168, 124, 0.15);
+      padding: 0.3rem 1.8rem;
+      border-radius: 60px;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a87c;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      font-size: clamp(3.2rem, 8vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+
+    .hero h1 .highlight {
+      color: #c9a87c;
+      position: relative;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 6px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(201, 168, 124, 0.15);
+      border-radius: 10px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(26, 26, 26, 0.5);
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #1a1a1a;
+      color: #f7f5f2;
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary:hover {
+      background: #c9a87c;
+      transform: scale(1.02);
+    }
+
+    .btn-secondary {
+      background: rgba(26, 26, 26, 0.04);
+      border: 1px solid rgba(26, 26, 26, 0.06);
+      color: #1a1a1a;
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-secondary:hover {
+      background: rgba(26, 26, 26, 0.06);
+    }
+
+    .hero-info {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(26, 26, 26, 0.04);
+      flex-wrap: wrap;
+    }
+    .hero-info .info-item {
+      color: rgba(26, 26, 26, 0.3);
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .hero-info .info-item i {
+      color: #c9a87c;
+    }
+    .hero-info .info-item strong {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    /* --- Back Link --- */
+    .back-link {
+      position: fixed;
+      top: 5.5rem;
+      left: 4rem;
+      z-index: 1001;
+      color: rgba(26, 26, 26, 0.2);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .back-link:hover {
+      color: #1a1a1a;
+    }
+
+    /* --- Section Shared --- */
+    .section {
+      padding: 5rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-header .sub {
+      color: #c9a87c;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .section-header h2 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0.5rem 0;
+    }
+    .section-header h2 span {
+      color: #c9a87c;
+    }
+    .section-header p {
+      color: rgba(26, 26, 26, 0.4);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* --- Products Grid (slider-like) --- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(26, 26, 26, 0.03);
+      transition: 0.4s;
+      box-shadow: 0 4px 20px rgba(26, 26, 26, 0.02);
+      text-align: center;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 50px rgba(26, 26, 26, 0.06);
+      border-color: rgba(201, 168, 124, 0.1);
+    }
+    .product-card .icon {
+      font-size: 3rem;
+      color: #c9a87c;
+      margin-bottom: 1.2rem;
+      display: inline-block;
+      background: rgba(201, 168, 124, 0.06);
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      border-radius: 24px;
+    }
+    .product-card h4 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #1a1a1a;
+      margin-bottom: 0.5rem;
+    }
+    .product-card p {
+      color: rgba(26, 26, 26, 0.4);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .product-card .learn-more {
+      display: inline-block;
+      margin-top: 1.2rem;
+      color: #c9a87c;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+    .product-card .learn-more:hover {
+      border-bottom-color: #c9a87c;
+    }
+
+    /* --- Specialty Row (Coffee, Cocoa, Nuts) --- */
+    .specialty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .specialty-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(26, 26, 26, 0.03);
+      transition: 0.4s;
+      box-shadow: 0 4px 20px rgba(26, 26, 26, 0.02);
+    }
+    .specialty-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(26, 26, 26, 0.04);
+      border-color: rgba(201, 168, 124, 0.08);
+    }
+    .specialty-card .icon {
+      font-size: 2.5rem;
+      color: #c9a87c;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .specialty-card h4 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #1a1a1a;
+      margin-bottom: 0.5rem;
+    }
+    .specialty-card p {
+      color: rgba(26, 26, 26, 0.4);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* --- Testimonials (slider-like grid) --- */
+    .testimonials {
+      background: #f7f5f2;
+      padding: 5rem 4rem;
+      border-top: 1px solid rgba(26, 26, 26, 0.03);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.03);
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem;
+      border: 1px solid rgba(26, 26, 26, 0.03);
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(26, 26, 26, 0.02);
+    }
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201, 168, 124, 0.06);
+    }
+    .testimonial-card .stars {
+      color: #c9a87c;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+    }
+    .testimonial-card blockquote {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(26, 26, 26, 0.7);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .testimonial-card .author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .testimonial-card .author .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(201, 168, 124, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #c9a87c;
+    }
+    .testimonial-card .author .name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1a1a1a;
+    }
+    .testimonial-card .author .title {
+      font-size: 0.75rem;
+      color: rgba(26, 26, 26, 0.3);
+    }
+
+    /* --- Approach (Technology, Efficiency, Sustainability) --- */
+    .approach-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2.5rem;
+      text-align: center;
+    }
+
+    .approach-item .icon {
+      font-size: 2.8rem;
+      color: #c9a87c;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .approach-item h4 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #1a1a1a;
+    }
+    .approach-item p {
+      color: rgba(26, 26, 26, 0.4);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-top: 0.3rem;
+    }
+
+    /* --- Blog Grid --- */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .blog-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 1.8rem;
+      border: 1px solid rgba(26, 26, 26, 0.03);
+      transition: 0.4s;
+      box-shadow: 0 4px 15px rgba(26, 26, 26, 0.02);
+    }
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 30px rgba(26, 26, 26, 0.04);
+      border-color: rgba(201, 168, 124, 0.06);
+    }
+    .blog-card .tag {
+      display: inline-block;
+      background: rgba(201, 168, 124, 0.08);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #c9a87c;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    .blog-card h4 {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #1a1a1a;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .blog-card p {
+      color: rgba(26, 26, 26, 0.4);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .blog-card .read-more {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #c9a87c;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+    .blog-card .read-more:hover {
+      color: #1a1a1a;
+    }
+
+    /* --- Footer --- */
+    .footer {
+      padding: 2.5rem 4rem;
+      background: #1a1a1a;
+      border-top: 1px solid rgba(245, 243, 240, 0.03);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      color: rgba(245, 243, 240, 0.15);
+      font-size: 0.8rem;
+    }
+    .footer a {
+      color: rgba(245, 243, 240, 0.15);
+      text-decoration: none;
+      transition: 0.3s;
+      margin-left: 1.5rem;
+    }
+    .footer a:hover {
+      color: #c9a87c;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 1024px) {
+      .hero {
+        padding: 8rem 2rem 3rem;
+        text-align: center;
+      }
+      .hero p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-buttons {
+        justify-content: center;
+      }
+      .hero-info {
+        justify-content: center;
+      }
+      .navbar {
+        padding: 1rem 1.5rem;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+      .nav-links {
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .back-link {
+        top: 5rem;
+        left: 1.5rem;
+      }
+      .section {
+        padding: 3rem 1.5rem;
+      }
+      .testimonials {
+        padding: 3rem 1.5rem;
+      }
+      .footer {
+        padding: 1.5rem;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .footer a {
+        margin: 0 0.8rem;
+      }
+      .section-header h2 {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+      .hero-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+      }
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      .specialty-grid {
+        grid-template-columns: 1fr;
+      }
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+      .approach-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links a {
+        font-size: 0.7rem;
+      }
+      .back-link {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">Nexus<span>.</span></div>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#specialty">Specialty</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#" class="nav-cta">Get in Touch</a></li>
+    </ul>
+  </nav>
+
+  <!-- Back to Portfolio -->
+  <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag"><i class="fas fa-microchip"></i> Advanced Solutions</span>
+      <h1>Engineering <span class="highlight">reinvented</span></h1>
+      <p>For over three decades, we've pushed the boundaries of commercial equipment with revolutionary technology, craftsmanship, and remarkable design.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary"><i class="fas fa-arrow-right"></i> Explore Products</a>
+        <a href="#" class="btn-secondary">Read More</a>
+      </div>
+      <div class="hero-info">
+        <span class="info-item"><i class="fas fa-trophy"></i> <strong>30+</strong> Years of Innovation</span>
+        <span class="info-item"><i class="fas fa-globe"></i> <strong>50+</strong> Countries</span>
+        <span class="info-item"><i class="fas fa-users"></i> <strong>200+</strong> Trusted Partners</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="section" id="products">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-cogs"></i> Our Products</span>
+      <h2>Precision <span>Engineering</span></h2>
+      <p>From small shops to industrial factories, our equipment delivers consistent, award-winning results.</p>
+    </div>
+    <div class="product-grid">
+      <div class="product-card reveal">
+        <span class="icon"><i class="fas fa-industry"></i></span>
+        <h4>Industrial Series</h4>
+        <p>High-capacity systems for large-scale production with full automation and data integration.</p>
+        <a href="#" class="learn-more">Learn More →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="icon"><i class="fas fa-store"></i></span>
+        <h4>Commercial Series</h4>
+        <p>Versatile, reliable machines for small to medium businesses that prioritize quality and consistency.</p>
+        <a href="#" class="learn-more">Learn More →</a>
+      </div>
+      <div class="product-card reveal">
+        <span class="icon"><i class="fas fa-flask"></i></span>
+        <h4>Lab &amp; Specialty</h4>
+        <p>Precision roasters for R&amp;D, sample testing, and small-batch specialty production.</p>
+        <a href="#" class="learn-more">Learn More →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specialty (Coffee, Cocoa, Nuts) -->
+  <section class="section" id="specialty" style="background: #f7f5f2; border-top: 1px solid rgba(26,26,26,0.03); border-bottom: 1px solid rgba(26,26,26,0.03); border-radius: 0;">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-leaf"></i> Our Specialty</span>
+      <h2>Beyond the <span>Bean</span></h2>
+      <p>Perfecting the art of roasting across coffee, cocoa, and nuts with precise thermodynamic control.</p>
+    </div>
+    <div class="specialty-grid">
+      <div class="specialty-card reveal-left">
+        <span class="icon"><i class="fas fa-mug-saucer"></i></span>
+        <h4>Coffee</h4>
+        <p>Experience the art of coffee roasting with our precision-engineered roasters. From light to dark roasts, our machines deliver consistent, award-winning results that bring out the unique flavors and aromas of every coffee bean.</p>
+      </div>
+      <div class="specialty-card reveal-scale">
+        <span class="icon"><i class="fas fa-chocolate-bar"></i></span>
+        <h4>Cocoa</h4>
+        <p>Perfect your cocoa roasting process with our specialized equipment. Achieve optimal flavor development and consistent quality for your chocolate products. Our roasters are designed to handle the unique requirements of cocoa beans with precision and care.</p>
+      </div>
+      <div class="specialty-card reveal-right">
+        <span class="icon"><i class="fas fa-seedling"></i></span>
+        <h4>Nuts</h4>
+        <p>Roast nuts to perfection with our versatile roasting machines. Whether you're processing almonds, hazelnuts, or any other variety, our equipment ensures even heat distribution and precise control for the perfect roast every time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-star"></i> Testimonials</span>
+      <h2>What Our <span>Partners Say</span></h2>
+      <p>Trusted by leading brands worldwide for our technology, reliability, and support.</p>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <blockquote>"The precision and control we get with Nexus equipment has elevated our quality to award-winning levels. Every batch is consistently perfect."</blockquote>
+        <div class="author">
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <div><div class="name">Mark Jones</div><div class="title">Java Jones Roasters</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <blockquote>"What a team! Supportive, super professional, and friendly. Our machine is a beauty, super technological, and helps us get the best out of our product."</blockquote>
+        <div class="author">
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <div><div class="name">Mirko Silvestri</div><div class="title">Lupolab, Australia</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <blockquote>"We tested many machines in our search, but after testing the Ghibli R15 we knew it was the perfect equipment to suit our needs."</blockquote>
+        <div class="author">
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <div><div class="name">Thomas De Garnham</div><div class="title">Fireheart Coffee, London</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <blockquote>"The combination of advanced technology and outstanding design makes this the best investment for artisan roasters like us."</blockquote>
+        <div class="author">
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <div><div class="name">Aron Gyuga</div><div class="title">Herz New York</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="section" id="approach">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-bullseye"></i> Our Approach</span>
+      <h2>Technology · Efficiency · <span>Sustainability</span></h2>
+      <p>Built on three pillars that guide everything we design and manufacture.</p>
+    </div>
+    <div class="approach-grid">
+      <div class="approach-item reveal-scale">
+        <span class="icon"><i class="fas fa-microchip"></i></span>
+        <h4>Technology</h4>
+        <p>Cutting-edge engineering with smart controls, data integration, and precision thermodynamics.</p>
+      </div>
+      <div class="approach-item reveal-scale">
+        <span class="icon"><i class="fas fa-bolt"></i></span>
+        <h4>Efficiency</h4>
+        <p>Optimized energy consumption, faster throughput, and reduced waste in every production cycle.</p>
+      </div>
+      <div class="approach-item reveal-scale">
+        <span class="icon"><i class="fas fa-leaf"></i></span>
+        <h4>Sustainability</h4>
+        <p>Eco-friendly designs, renewable energy integration, and a commitment to reducing environmental impact.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section class="section" id="blog" style="background: #f7f5f2; border-top: 1px solid rgba(26,26,26,0.03); border-bottom: 1px solid rgba(26,26,26,0.03); border-radius: 0;">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-newspaper"></i> Insights</span>
+      <h2>From Our <span>Blog</span></h2>
+      <p>Stay tuned with recent updates, guides, and news from the world of commercial roasting.</p>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal">
+        <span class="tag">Guide</span>
+        <h4>Beyond Mass: Why EEP is the Ultimate Metric in Roasting</h4>
+        <p>Mass, Extraction, and the Foundational Error in the Roasting Industry</p>
+        <a href="#" class="read-more">Read More →</a>
+      </div>
+      <div class="blog-card reveal">
+        <span class="tag">News</span>
+        <h4>Low Emission Roasting with Renewable Energy</h4>
+        <p>How Fathom Coffee Roasters is leading the way in sustainable, low-emission production.</p>
+        <a href="#" class="read-more">Read More →</a>
+      </div>
+      <div class="blog-card reveal">
+        <span class="tag">Guide</span>
+        <h4>Conduction vs. Convection in Roasting</h4>
+        <p>Understanding the critical balance between heat transfer methods and their impact on final product quality.</p>
+        <a href="#" class="read-more">Read More →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+  <span>Designed by <a href="../index.html">TekTrend</a></span>
+  <span>
+    <a href="mailto:info@tektrend">info@tektrend</a>
+    <a href="tel:0707246273">0707246273</a>
+    <a href="../index.html">Portfolio</a>
+  </span>
+</footer>
+
+  <!-- Scroll Animation Script -->
+  <script>
+    (function() {
+      const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -30px 0px'
+      });
+
+      reveals.forEach(el => observer.observe(el));
+
+      setTimeout(() => {
+        reveals.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            el.classList.add('visible');
+          }
+        });
+      }, 200);
+    })();
+  </script>
+
+</body>
+</html>

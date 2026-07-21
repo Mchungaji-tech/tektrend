@@ -1,0 +1,12 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=$HOME/public_html/tektrend/
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - /bin/rm -f "${DEPLOYPATH}index.html" "${DEPLOYPATH}dashboard.html" "${DEPLOYPATH}live_demo.html"
+    - /bin/rm -rf "${DEPLOYPATH}live_demo"
+    - /bin/mkdir -p "${DEPLOYPATH}live_demo"
+    - /bin/cp index.html "$DEPLOYPATH"
+    - /bin/cp dashboard.html "$DEPLOYPATH"
+    - /bin/cp live_demo.html "$DEPLOYPATH"
+    - /bin/cp -R live_demo/* "${DEPLOYPATH}live_demo/"
