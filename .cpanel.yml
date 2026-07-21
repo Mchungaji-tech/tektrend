@@ -2,8 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=$HOME/public_html/
-    - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp index.html $DEPLOYPATH
-    - /bin/cp dashboard.html $DEPLOYPATH
-    - /bin/cp live_demo.html $DEPLOYPATH
-    - /bin/cp -R live_demo $DEPLOYPATH
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - /usr/bin/find . -mindepth 1 -maxdepth 1 ! -name ".git" ! -name ".cpanel.yml" ! -name ".gitignore" ! -name ".env" ! -name ".env.example" -exec /bin/cp -R {} "$DEPLOYPATH" \;
