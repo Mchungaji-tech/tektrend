@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tek Trend Innovations · World Class</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0b0d0f;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      body { cursor: none; }
+    }
+
+    /* ----- CUSTOM CURSOR ----- */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: #d6c29d;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s, background 0.2s;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid rgba(214, 194, 157, 0.3);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s, transform 0.15s ease;
+      transform: translate(-50%, -50%);
+      backdrop-filter: blur(2px);
+    }
+    /* Enlarge cursor on hoverable elements */
+    a:hover ~ .cursor-ring, 
+    button:hover ~ .cursor-ring,
+    .slide-card:hover ~ .cursor-ring {
+      width: 60px;
+      height: 60px;
+      border-color: #d6c29d;
+      background: rgba(214, 194, 157, 0.05);
+    }
+
+    /* ----- SCROLL PROGRESS BAR ----- */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #d6c29d, #f0e9d0);
+      z-index: 999;
+      transition: width 0.1s ease;
+      width: 0%;
+    }
+
+    /* ----- BACKGROUND WITH ANIMATED GRADIENT ----- */
+    .hero-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+      filter: brightness(0.5) saturate(1.1);
+      z-index: 0;
+      transform: translate3d(0, 0, 0) scale(1.08);
+      transform-origin: center top;
+      will-change: transform;
+    }
+    .gradient-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 30% 40%, rgba(40, 50, 80, 0.4) 0%, rgba(10, 12, 18, 0.8) 90%);
+      z-index: 1;
+      animation: pulseGradient 10s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    @keyframes pulseGradient {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+    }
+
+    /* ----- NAVBAR ----- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(8, 10, 14, 0.5);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      transition: background 0.3s;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f0e9d0, #b7a88b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo i { margin-right: 8px; color: #c7b18b; -webkit-text-fill-color: #c7b18b; }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+    }
+    .nav-links a:hover { color: #fff; border-bottom-color: #d6c29d; }
+    .nav-links a:focus-visible,
+    .demo-item a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid #d6c29d;
+      outline-offset: 4px;
+    }
+    .nav-links .highlight {
+      background: rgba(214, 194, 157, 0.12);
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      border: 1px solid rgba(214, 194, 157, 0.2);
+      transition: 0.3s;
+    }
+    .nav-links .highlight:hover {
+      background: rgba(214, 194, 157, 0.25);
+      border-color: #d6c29d;
+      transform: scale(1.02);
+    }
+
+    /* ----- HERO (with tilt) ----- */
+    .hero-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem 6rem;
+      min-height: 80vh;
+      text-align: center;
+      perspective: 800px;
+      will-change: transform;
+    }
+    .hero-text {
+      max-width: 900px;
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
+      padding: 3.5rem 4.5rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+      transform-style: preserve-3d;
+      transition: transform 0.2s ease-out;
+    }
+    .hero-text h1 {
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(to right, #f5efe2, #cfbc9a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-text p {
+      font-size: 1.2rem;
+      margin: 1.5rem 0 2rem;
+      opacity: 0.8;
+      font-weight: 300;
+      color: #d6d0c4;
+    }
+    .hero-text .badge {
+      display: inline-block;
+      background: rgba(214, 194, 157, 0.15);
+      border-radius: 100px;
+      padding: 0.4rem 2rem;
+      border: 1px solid rgba(214, 194, 157, 0.2);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      color: #e7ddcc;
+    }
+
+    /* ----- SLIDER (enhanced) ----- */
+    .slider-wrapper {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(4px);
+      padding: 4rem 0;
+      margin: 2rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    .slider-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .slider-track {
+      display: flex;
+      transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+      gap: 2rem;
+    }
+    .slide-card {
+      min-width: calc(33.333% - 1.4rem);
+      background: rgba(18, 22, 28, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 30px;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(255, 215, 150, 0.06);
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.7);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0);
+    }
+    .slide-card:hover {
+      background: rgba(28, 34, 44, 0.8);
+      border-color: rgba(214, 194, 157, 0.25);
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 30px 60px -15px rgba(0,0,0,0.8);
+    }
+    .slide-card i {
+      font-size: 2.8rem;
+      color: #d6c29d;
+      margin-bottom: 1.2rem;
+    }
+    .slide-card h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .slide-card p { opacity: 0.7; font-size: 1rem; line-height: 1.6; margin-bottom: 1.2rem; }
+    .slide-card .tech-tag { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+    .tech-tag span {
+      background: rgba(214, 194, 157, 0.1);
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255,255,255,0.03);
+      color: #cfc3ad;
+    }
+
+    .slider-controls { display: flex; justify-content: center; gap: 1.2rem; margin: 2rem 0 0.5rem; }
+    .slider-controls button {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #d6d0c4;
+      width: 50px; height: 50px;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      cursor: none;
+      transition: 0.3s;
+      backdrop-filter: blur(4px);
+    }
+    .slider-controls button:hover {
+      background: rgba(214, 194, 157, 0.15);
+      border-color: #d6c29d;
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .slider-dots { display: flex; justify-content: center; gap: 0.6rem; margin-top: 1.2rem; }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.1);
+      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: none;
+    }
+    .dot.active { background: #d6c29d; width: 35px; }
+
+    /* ----- SCROLLING WORDS (enhanced) ----- */
+    .scrolling-words {
+      overflow: hidden;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(6px);
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255, 215, 150, 0.04);
+      border-bottom: 1px solid rgba(255, 215, 150, 0.04);
+      margin: 2rem 0 0;
+      white-space: nowrap;
+    }
+    .scrolling-track {
+      display: inline-flex;
+      gap: 5rem;
+      animation: scrollLeft 30s linear infinite;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.8);
+    }
+    .scrolling-track span { display: inline-flex; align-items: center; gap: 0.8rem; }
+    .scrolling-track i { color: #d6c29d; opacity: 0.6; }
+    @keyframes scrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ----- CONTACT (enhanced) ----- */
+    .contact-section {
+      max-width: 1400px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      width: 100%;
+    }
+    .contact-card {
+      background: rgba(14, 18, 24, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 2.8rem;
+      border: 1px solid rgba(255, 215, 150, 0.04);
+      box-shadow: 0 20px 50px -10px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease, border-color 0.3s;
+    }
+    .contact-card:hover { border-color: rgba(214, 194, 157, 0.15); transform: translateY(-2px); }
+    .contact-card h2 {
+      font-size: 2rem; margin-bottom: 2rem; font-weight: 600;
+      border-bottom: 1px solid rgba(214, 194, 157, 0.1);
+      padding-bottom: 1rem;
+    }
+    .contact-card h2 i { color: #d6c29d; margin-right: 12px; }
+    .contact-detail {
+      display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; font-size: 1.05rem;
+    }
+    .contact-detail i { width: 30px; color: #d6c29d; font-size: 1.4rem; }
+    .contact-detail a {
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      border-bottom: 1px dotted rgba(214, 194, 157, 0.15);
+      transition: 0.3s;
+    }
+    .contact-detail a:hover { color: #fff; border-bottom-color: #d6c29d; }
+
+    .map-container {
+      margin-top: 1.5rem;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.04);
+      height: 200px;
+      background: #1a1e26;
+    }
+    .map-container iframe {
+      width: 100%; height: 100%; border: 0;
+      filter: invert(0.85) hue-rotate(180deg) saturate(0.5);
+    }
+
+    .live-demos { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.8rem; }
+    .demo-item {
+      background: rgba(0,0,0,0.2);
+      padding: 1.2rem 1.8rem;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255,255,255,0.03);
+      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .demo-item:hover {
+      background: rgba(214, 194, 157, 0.06);
+      border-color: rgba(214, 194, 157, 0.2);
+      transform: translateX(4px);
+    }
+    .demo-item span { font-weight: 400; }
+    .demo-item i { color: #d6c29d; margin-right: 10px; }
+    .demo-item a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      background: rgba(214, 194, 157, 0.06);
+      padding: 0.4rem 1.4rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(214, 194, 157, 0.06);
+      transition: 0.3s;
+      font-weight: 500;
+    }
+    .demo-item a:hover {
+      background: rgba(214, 194, 157, 0.2);
+      color: #fff;
+      border-color: #d6c29d;
+      transform: scale(1.02);
+    }
+
+    /* ----- SCROLL ANIMATIONS (fade-up) ----- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .slider-track, .slide-card, .demo-item, .nav-links a, button { transition: none; }
+      .hero-background, .gradient-overlay, .hero-section { transform: none !important; }
+    }
+
+    /* ----- RESPONSIVE ----- */
+    @media (max-width: 900px) {
+      .slide-card { min-width: calc(50% - 1rem); }
+      .contact-section { grid-template-columns: 1fr; }
+      .navbar { padding: 1rem 1.5rem; flex-direction: column; align-items: stretch; }
+      .nav-links { justify-content: center; gap: 1.2rem; }
+      .hero-text { padding: 2rem 1.5rem; }
+    }
+    @media (max-width: 600px) {
+      .slide-card { min-width: 100%; }
+      .scrolling-track { font-size: 1.4rem; gap: 2rem; }
+      .hero-text h1 { font-size: 2.6rem; }
+      .contact-card { padding: 1.8rem; }
+      .cursor-dot, .cursor-ring { display: none; } /* hide custom cursor on mobile */
+      body { cursor: auto; }
+    }
+  
+    .tektrend-footer {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding: 1.2rem 2rem;
+      background: rgba(8, 10, 14, 0.78);
+      color: rgba(255,255,255,0.72);
+      border-top: 1px solid rgba(214, 194, 157, 0.16);
+      backdrop-filter: blur(10px);
+    }
+    .tektrend-footer__brand a,
+    .tektrend-footer__links a {
+      color: #d6c29d;
+      text-decoration: none;
+    }
+    .tektrend-footer__links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.1rem;
+    }
+    .tektrend-footer__links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .tektrend-footer__brand a:hover,
+    .tektrend-footer__links a:hover {
+      color: #f5efe2;
+    }
+    @media (max-width: 720px) {
+      .tektrend-footer {
+        padding: 1.3rem;
+        flex-direction: column;
+        text-align: center;
+      }
+      .tektrend-footer__links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body id="top">
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Background -->
+  <div class="hero-background"></div>
+  <div class="gradient-overlay"></div>
+
+  <div class="content">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo"><i class="fas fa-code"></i> Tek Trend</div>
+      <div class="nav-links">
+        <a href="#top">Home</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+        <a href="live_demo.html" class="highlight"><i class="fas fa-rocket"></i> Live Demos</a>
+      </div>
+    </nav>
+
+    <!-- Hero (with tilt) -->
+    <section class="hero-section" id="heroTilt">
+      <div class="hero-text reveal">
+        <h1>code · design · systems</h1>
+        <p>PHP · HTML · CSS · Google Script · Dashboards · School Management</p>
+        <div class="badge"><i class="fas fa-certificate"></i>  Tek Trend Certified</div>
+      </div>
+    </section>
+
+    <!-- Slider -->
+    <div class="slider-wrapper" id="portfolio">
+      <div class="slider-container">
+        <div class="slider-track" id="sliderTrack">
+          <div class="slide-card reveal"><i class="fas fa-laptop-code"></i><h3>Web Design</h3><p>High‑end UI/UX with fluid interactions & motion. Pixel‑perfect, accessible.</p><div class="tech-tag"><span>Figma</span><span>GSAP</span><span>CSS</span></div></div>
+          <div class="slide-card reveal"><i class="fas fa-database"></i><h3>PHP & MySQL</h3><p>Custom backends, APIs, authentication & scalable architecture.</p><div class="tech-tag"><span>Laravel</span><span>PHP8</span><span>MySQL</span></div></div>
+          <div class="slide-card reveal"><i class="fas fa-google"></i><h3>Google Script</h3><p>Automation, GSuite add‑ons, Sheets/Docs integration & dashboards.</p><div class="tech-tag"><span>Apps Script</span><span>GCP</span><span>API</span></div></div>
+          <div class="slide-card reveal"><i class="fas fa-school"></i><h3>School Management</h3><p>Complete systems: attendance, grading, parent portal, analytics.</p><div class="tech-tag"><span>Dashboards</span><span>Reports</span><span>PHP</span></div></div>
+          <div class="slide-card reveal"><i class="fas fa-chart-pie"></i><h3>Dashboards</h3><p>Interactive data visualization, real‑time KPI, admin panels.</p><div class="tech-tag"><span>Chart.js</span><span>Vue</span><span>CSS Grid</span></div></div>
+        </div>
+        <div class="slider-controls">
+          <button id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+          <button id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots" id="sliderDots"></div>
+      </div>
+    </div>
+
+    <!-- Scrolling Words -->
+    <div class="scrolling-words">
+      <div class="scrolling-track">
+        <span><i class="fas fa-code"></i> PHP · HTML · CSS · Google Script</span>
+        <span><i class="fas fa-laptop"></i> Web Design · Dashboards · School Management</span>
+        <span><i class="fas fa-star"></i> Innovation · Motion · Excellence</span>
+        <span><i class="fas fa-code"></i> PHP · HTML · CSS · Google Script</span>
+        <span><i class="fas fa-laptop"></i> Web Design · Dashboards · School Management</span>
+        <span><i class="fas fa-star"></i> Innovation · Motion · Excellence</span>
+      </div>
+    </div>
+
+    <!-- Contact + Map + Live Demos -->
+    <section class="contact-section" id="contact">
+      <div class="contact-card reveal">
+        <h2><i class="fas fa-paper-plane"></i> Contact</h2>
+        <div class="contact-detail"><i class="fas fa-envelope"></i> <a href="mailto:info@tektrend">info@tektrend</a></div>
+        <div class="contact-detail"><i class="fas fa-phone-alt"></i> <a href="tel:0707246273">0707246273</a></div>
+        <div class="contact-detail"><i class="fas fa-map-pin"></i> <span>123 Innovation Drive, Tech City</span></div>
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343004!2d-74.00625868459415!3d40.713129745094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316bb7ae4d%3A0xb4b9c8d6d1b5e7c5!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1644262070686!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="contact-card reveal" id="demos">
+        <h2><i class="fas fa-rocket"></i> Live Demos</h2>
+        <div class="live-demos">
+          <div class="demo-item"><span><i class="fas fa-school"></i> School Management System</span> <a href="#contact">request →</a></div>
+          <div class="demo-item"><span><i class="fas fa-chart-line"></i> Analytics Dashboard</span> <a href="dashboard.html" target="_blank" rel="noopener noreferrer">demo →</a></div>
+          <div class="demo-item"><span><i class="fas fa-google"></i> Google Script Automation</span> <a href="#contact">request →</a></div>
+          <div class="demo-item"><span><i class="fas fa-paint-brush"></i> Web Design Showcase</span> <a href="#portfolio">view →</a></div>
+          <div class="demo-item"><span><i class="fas fa-database"></i> PHP CRM Portal</span> <a href="#contact">request →</a></div>
+        </div>
+        <p style="margin-top: 2rem; opacity: 0.3; font-size: 0.8rem;"><i class="fas fa-external-link-alt"></i>  click any link to open live project</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function() {
+      // ----- CUSTOM CURSOR -----
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      const enableCursor = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (enableCursor) {
+        document.addEventListener('mousemove', (e) => {
+          dot.style.left = e.clientX + 'px';
+          dot.style.top = e.clientY + 'px';
+          ring.style.left = e.clientX + 'px';
+          ring.style.top = e.clientY + 'px';
+        });
+        // hover effect for links/buttons
+        document.querySelectorAll('a, button, .slide-card, .demo-item').forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            dot.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            ring.style.transform = 'translate(-50%, -50%) scale(1.3)';
+            ring.style.borderColor = '#d6c29d';
+          });
+          el.addEventListener('mouseleave', () => {
+            dot.style.transform = 'translate(-50%, -50%) scale(1)';
+            ring.style.transform = 'translate(-50%, -50%) scale(1)';
+            ring.style.borderColor = 'rgba(214, 194, 157, 0.3)';
+          });
+        });
+      }
+
+      // ----- SCROLL PROGRESS BAR -----
+      const progressBar = document.getElementById('progressBar');
+      const heroBackground = document.querySelector('.hero-background');
+      const gradientOverlay = document.querySelector('.gradient-overlay');
+      const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let scrollTicking = false;
+
+      function updateScrollEffects() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        progressBar.style.width = progress + '%';
+
+        if (!prefersReducedMotion) {
+          const parallaxRange = Math.min(scrollTop, window.innerHeight * 1.2);
+          heroBackground.style.transform = `translate3d(0, ${parallaxRange * 0.18}px, 0) scale(1.08)`;
+          gradientOverlay.style.transform = `translate3d(0, ${parallaxRange * 0.1}px, 0)`;
+          hero.style.transform = `translate3d(0, ${parallaxRange * 0.12}px, 0)`;
+        }
+
+        scrollTicking = false;
+      }
+
+      function requestScrollEffects() {
+        if (!scrollTicking) {
+          window.requestAnimationFrame(updateScrollEffects);
+          scrollTicking = true;
+        }
+      }
+
+      window.addEventListener('scroll', requestScrollEffects, { passive: true });
+      window.addEventListener('resize', requestScrollEffects);
+
+      // ----- SCROLL REVEAL (Intersection Observer) -----
+      const revealElements = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      revealElements.forEach(el => observer.observe(el));
+
+      // ----- 3D TILT EFFECT (Hero) -----
+      const hero = document.getElementById('heroTilt');
+      hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        const tiltX = y * 8;
+        const tiltY = -x * 8;
+        hero.querySelector('.hero-text').style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+      });
+      hero.addEventListener('mouseleave', () => {
+        hero.querySelector('.hero-text').style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+
+      // ----- SLIDER -----
+      const track = document.getElementById('sliderTrack');
+      const dotsContainer = document.getElementById('sliderDots');
+      const prevBtn = document.getElementById('prevSlide');
+      const nextBtn = document.getElementById('nextSlide');
+      const slides = Array.from(track.children);
+      const slideCount = slides.length;
+      let currentIndex = 0;
+      let autoSlideInterval;
+
+      function createDots() {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < slideCount; i++) {
+          const dot = document.createElement('span');
+          dot.className = 'dot' + (i === 0 ? ' active' : '');
+          dot.dataset.index = i;
+          dot.addEventListener('click', () => goToSlide(i));
+          dotsContainer.appendChild(dot);
+        }
+      }
+      createDots();
+
+      function goToSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= slideCount) index = slideCount - 1;
+        currentIndex = index;
+        const slideWidth = slides[0].offsetWidth + 32;
+        track.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+        document.querySelectorAll('.dot').forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+      }
+
+      function nextSlide() { goToSlide((currentIndex + 1) % slideCount); }
+      function prevSlide() { goToSlide((currentIndex - 1 + slideCount) % slideCount); }
+
+      nextBtn.addEventListener('click', () => { clearInterval(autoSlideInterval); nextSlide(); startAutoSlide(); });
+      prevBtn.addEventListener('click', () => { clearInterval(autoSlideInterval); prevSlide(); startAutoSlide(); });
+
+      function startAutoSlide() {
+        if (autoSlideInterval) clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(nextSlide, 4000);
+      }
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => goToSlide(currentIndex), 120);
+      });
+
+      requestScrollEffects();
+      goToSlide(0);
+      startAutoSlide();
+
+      const sliderContainer = document.querySelector('.slider-container');
+      sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+      sliderContainer.addEventListener('mouseleave', startAutoSlide);
+    })();
+  </script>
+<footer class="tektrend-footer">
+  <div class="tektrend-footer__brand">Designed by <a href="index.html">TekTrend</a></div>
+  <div class="tektrend-footer__links">
+    <a href="mailto:info@tektrend"><i class="fas fa-envelope"></i> info@tektrend</a>
+    <a href="tel:0707246273"><i class="fab fa-whatsapp"></i> 0707246273</a>
+    <a href="index.html"><i class="fas fa-briefcase"></i> Portfolio</a>
+  </div>
+</footer>
+</body>
+</html>
