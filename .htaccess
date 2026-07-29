@@ -1,14 +1,17 @@
 # Tek Trend Virtual Company - Root .htaccess
-# Redirects all traffic to the public directory (PHP application)
+# Main entry point is index.php in the root directory
 # Original HTML landing pages (index.html, dashboard.html, live_demo.html)
 # remain accessible at their direct URLs as backups
 
 RewriteEngine On
+
+# Serve PHP application at root before static HTML backups
+DirectoryIndex index.php index.html
 
 # Allow direct access to existing files and directories in root
 # (original HTML landing pages, live_demo directory, etc.)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Redirect everything else to public/ (PHP application)
-RewriteRule ^(.*)$ public/$1 [QSA,L]
+# Route everything else to index.php (PHP application)
+RewriteRule ^(.*)$ index.php [QSA,L]

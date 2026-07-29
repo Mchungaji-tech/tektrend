@@ -1,14 +1,17 @@
 <?php
 /**
  * Tek Trend Virtual Company Management System
- * Public Entry Point
+ * Public Entry Point (Root)
+ *
+ * This is the main entry point for the application.
+ * All requests are routed through this file.
  */
 
 // Start timing
 $startTime = microtime(true);
 
-// Define base path
-define('BASE_PATH', dirname(__DIR__));
+// Define base path (root directory)
+define('BASE_PATH', __DIR__);
 
 // Load configuration
 require_once BASE_PATH . '/app/config/config.php';

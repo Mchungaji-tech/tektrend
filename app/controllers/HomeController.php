@@ -8,12 +8,17 @@ class HomeController extends Controller {
      * Display the landing page
      */
     public function index() {
-        // If user is already logged in, redirect to dashboard
         if (Auth::check()) {
             $this->redirect('/dashboard');
             return;
         }
-        // Render the landing page (no auth layout)
-        $this->view('home/index');
+
+        $settings = [];
+        $rows = $this->db->fetchAll("SELECT `key`, `value` FROM settings WHERE `group` IN ('general', 'email')");
+        foreach ($rows as $row) {
+            $settings[$row['key']] = $row;
+        }
+
+        $this->view('home/index', ['settings' => $settings]);
     }
 }

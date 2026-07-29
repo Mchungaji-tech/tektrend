@@ -1,12 +1,14 @@
 <?php
-/**
- * Landing Page (Home)
- * PHP version of the landing page - keeps the same design
- */
-// Allow dynamic content injection
 $siteTitle = 'Tek Trend Innovations · World Class';
 $loginUrl = '/login';
 $dashboardUrl = '/dashboard';
+$contactEmail = $settings['contact_email']['value'] ?? 'info@tektrend';
+$contactPhone = $settings['contact_phone']['value'] ?? '0707246273';
+$contactAddress = $settings['contact_address']['value'] ?? '123 Innovation Drive, Tech City';
+$footerBrand = $settings['footer_brand']['value'] ?? 'Designed by TekTrend';
+$footerEmail = $settings['footer_email']['value'] ?? 'info@tektrend';
+$footerPhone = $settings['footer_phone']['value'] ?? '0707246273';
+$footerPortfolio = $settings['footer_portfolio']['value'] ?? 'Portfolio';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +16,7 @@ $dashboardUrl = '/dashboard';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= sanitize($siteTitle) ?></title>
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts (Inter) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -97,30 +97,23 @@ $dashboardUrl = '/dashboard';
   </style>
 </head>
 <body id="top">
-  <!-- Custom Cursor -->
   <div class="cursor-dot" id="cursorDot"></div>
   <div class="cursor-ring" id="cursorRing"></div>
-
-  <!-- Progress Bar -->
   <div class="progress-bar" id="progressBar"></div>
-
-  <!-- Background -->
   <div class="hero-background"></div>
   <div class="gradient-overlay"></div>
 
   <div class="content">
-    <!-- Navbar -->
     <nav class="navbar">
       <div class="logo"><i class="fas fa-code"></i> Tek Trend</div>
       <div class="nav-links">
         <a href="#top">Home</a>
         <a href="#portfolio">Portfolio</a>
         <a href="#contact">Contact</a>
-        <a href="/login" class="highlight"><i class="fas fa-rocket"></i> Virtual Office</a>
+        <a href="<?= sanitize($loginUrl) ?>" class="highlight"><i class="fas fa-rocket"></i> Virtual Office</a>
       </div>
     </nav>
 
-    <!-- Hero (with tilt) -->
     <section class="hero-section" id="heroTilt">
       <div class="hero-text reveal">
         <h1>code · design · systems</h1>
@@ -129,7 +122,6 @@ $dashboardUrl = '/dashboard';
       </div>
     </section>
 
-    <!-- Slider -->
     <div class="slider-wrapper" id="portfolio">
       <div class="slider-container">
         <div class="slider-track" id="sliderTrack">
@@ -147,7 +139,6 @@ $dashboardUrl = '/dashboard';
       </div>
     </div>
 
-    <!-- Scrolling Words -->
     <div class="scrolling-words">
       <div class="scrolling-track">
         <span><i class="fas fa-code"></i> PHP · HTML · CSS · Google Script</span>
@@ -159,13 +150,12 @@ $dashboardUrl = '/dashboard';
       </div>
     </div>
 
-    <!-- Contact + Map + Live Demos -->
     <section class="contact-section" id="contact">
       <div class="contact-card reveal">
         <h2><i class="fas fa-paper-plane"></i> Contact</h2>
-        <div class="contact-detail"><i class="fas fa-envelope"></i> <a href="mailto:info@tektrend">info@tektrend</a></div>
-        <div class="contact-detail"><i class="fas fa-phone-alt"></i> <a href="tel:0707246273">0707246273</a></div>
-        <div class="contact-detail"><i class="fas fa-map-pin"></i> <span>123 Innovation Drive, Tech City</span></div>
+        <div class="contact-detail"><i class="fas fa-envelope"></i> <a href="mailto:<?= sanitize($contactEmail) ?>"><?= sanitize($contactEmail) ?></a></div>
+        <div class="contact-detail"><i class="fas fa-phone-alt"></i> <a href="tel:<?= sanitize($contactPhone) ?>"><?= sanitize($contactPhone) ?></a></div>
+        <div class="contact-detail"><i class="fas fa-map-pin"></i> <span><?= sanitize($contactAddress) ?></span></div>
         <div class="map-container">
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343004!2d-74.00625868459415!3d40.713129745094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316bb7ae4d%3A0xb4b9c8d6d1b5e7c5!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1644262070686!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
         </div>
@@ -175,10 +165,10 @@ $dashboardUrl = '/dashboard';
         <h2><i class="fas fa-rocket"></i> Live Demos</h2>
         <div class="live-demos">
           <div class="demo-item"><span><i class="fas fa-school"></i> School Management System</span> <a href="#contact">request →</a></div>
-          <div class="demo-item"><span><i class="fas fa-chart-line"></i> Analytics Dashboard</span> <a href="/dashboard" target="_blank" rel="noopener noreferrer">demo →</a></div>
+          <div class="demo-item"><span><i class="fas fa-chart-line"></i> Analytics Dashboard</span> <a href="<?= sanitize($dashboardUrl) ?>" target="_blank" rel="noopener noreferrer">demo →</a></div>
           <div class="demo-item"><span><i class="fas fa-google"></i> Google Script Automation</span> <a href="#contact">request →</a></div>
           <div class="demo-item"><span><i class="fas fa-paint-brush"></i> Web Design Showcase</span> <a href="#portfolio">view →</a></div>
-          <div class="demo-item"><span><i class="fas fa-database"></i> PHP CRM Portal</span> <a href="/login" rel="noopener noreferrer">demo →</a></div>
+          <div class="demo-item"><span><i class="fas fa-database"></i> PHP CRM Portal</span> <a href="<?= sanitize($loginUrl) ?>" rel="noopener noreferrer">demo →</a></div>
         </div>
         <p style="margin-top: 2rem; opacity: 0.3; font-size: 0.8rem;"><i class="fas fa-external-link-alt"></i>  click any link to open live project</p>
       </div>
@@ -222,12 +212,14 @@ $dashboardUrl = '/dashboard';
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = (scrollTop / docHeight) * 100;
         progressBar.style.width = progress + '%';
+
         if (!prefersReducedMotion) {
           const parallaxRange = Math.min(scrollTop, window.innerHeight * 1.2);
           heroBackground.style.transform = `translate3d(0, ${parallaxRange * 0.18}px, 0) scale(1.08)`;
           gradientOverlay.style.transform = `translate3d(0, ${parallaxRange * 0.1}px, 0)`;
           document.getElementById('top').style.transform = `translate3d(0, ${parallaxRange * 0.12}px, 0)`;
         }
+
         scrollTicking = false;
       }
 
@@ -317,13 +309,13 @@ $dashboardUrl = '/dashboard';
       sliderContainer.addEventListener('mouseleave', startAutoSlide);
     })();
   </script>
-<footer class="tektrend-footer">
-  <div class="tektrend-footer__brand">Designed by <a href="/">TekTrend</a></div>
-  <div class="tektrend-footer__links">
-    <a href="mailto:info@tektrend"><i class="fas fa-envelope"></i> info@tektrend</a>
-    <a href="tel:0707246273"><i class="fab fa-whatsapp"></i> 0707246273</a>
-    <a href="/"><i class="fas fa-briefcase"></i> Portfolio</a>
-  </div>
-</footer>
+  <footer class="tektrend-footer">
+    <div class="tektrend-footer__brand"><a href="/"><?= sanitize($footerBrand) ?></a></div>
+    <div class="tektrend-footer__links">
+      <a href="mailto:<?= sanitize($footerEmail) ?>"><i class="fas fa-envelope"></i> <?= sanitize($footerEmail) ?></a>
+      <a href="tel:<?= sanitize($footerPhone) ?>"><i class="fab fa-whatsapp"></i> <?= sanitize($footerPhone) ?></a>
+      <a href="/"><i class="fas fa-briefcase"></i> <?= sanitize($footerPortfolio) ?></a>
+    </div>
+  </footer>
 </body>
 </html>
