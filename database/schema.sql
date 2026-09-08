@@ -748,6 +748,7 @@ CREATE TABLE IF NOT EXISTS `portfolio_demos` (
     `tech_stack` VARCHAR(255) DEFAULT 'PHP, HTML, CSS',
     `preview_image` VARCHAR(500) DEFAULT NULL,
     `award_badge` VARCHAR(100) DEFAULT NULL,
+    `price` DECIMAL(10,2) DEFAULT 49.00,
     `is_featured` TINYINT(1) DEFAULT 1,
     `sort_order` INT DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

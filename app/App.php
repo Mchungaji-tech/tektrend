@@ -36,9 +36,13 @@ class App {
      * Register all application routes
      */
     private function registerRoutes() {
-        // Landing page (PHP version of index.html)
-        $this->router->get('/', 'HomeController@index', ['guest']);
+        // Landing page & Public Live Demos
+        $this->router->get('/', 'HomeController@index');
         $this->router->get('/live-demos', 'PortfolioController@showcase');
+        $this->router->get('/live-demo', 'PortfolioController@showcase');
+        $this->router->get('/live_demo', 'PortfolioController@showcase');
+        $this->router->post('/live-demos/request', 'PortfolioController@requestSystem');
+        $this->router->post('/demos/request-system', 'PortfolioController@requestSystem');
         $this->router->post('/book-consultation', 'HomeController@bookConsultation');
         $this->router->post('/place-bid', 'HomeController@placeBid');
         $this->router->post('/api/ai-chat', 'HomeController@apiAiChat');
@@ -203,8 +207,8 @@ class App {
         $this->router->post('/departments/{id}', 'DepartmentController@update', ['auth']);
         $this->router->get('/departments/{id}/delete', 'DepartmentController@delete', ['auth']);
 
-        // Demos & Hosting Projects
-        $this->router->get('/demos', 'PortfolioController@index', ['auth']);
+        // Demos & Hosting Projects (Public showcase for guests, management panel for admins)
+        $this->router->get('/demos', 'PortfolioController@index');
         $this->router->get('/demos/create', 'PortfolioController@create', ['auth']);
         $this->router->post('/demos/store', 'PortfolioController@store', ['auth']);
         $this->router->get('/demos/{id}/edit', 'PortfolioController@edit', ['auth']);

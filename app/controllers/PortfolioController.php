@@ -10,27 +10,82 @@ class PortfolioController extends Controller {
      * Public Live Demos Showcase
      */
     public function showcase() {
+        $this->view->setLayout(null);
+        $this->ensurePortfolioDemosTable();
         $demos = [];
         try {
             $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC");
         } catch (\Throwable $e) {
-            if ($this->ensurePortfolioDemosTable()) {
-                try {
-                    $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC");
-                } catch (\Throwable $ex) {
-                    $demos = [];
-                }
-            }
+            $demos = [];
         }
         $settings = $this->getSettings();
         $this->render('home/demos', ['demos' => $demos, 'settings' => $settings], null);
     }
 
     /**
-     * Admin: List all demos & domain projects
+     * Public handler for Request System & Buy Template inquiries
+     */
+    public function requestSystem() {
+        $templateTitle = trim($_POST['template_title'] ?? 'Custom Web System');
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $company = trim($_POST['company'] ?? '');
+        $actionType = trim($_POST['action_type'] ?? 'request_system'); // 'request_system' or 'buy_template'
+        $license = trim($_POST['license'] ?? 'Standard Turnkey Code');
+        $notes = trim($_POST['notes'] ?? '');
+
+        if (empty($name) || empty($email)) {
+            if ($this->isAjax()) {
+                $this->json(['success' => false, 'message' => 'Please provide both your name and email address.'], 400);
+            }
+            $this->session->flash('error', 'Please provide both your name and email address.');
+            redirect('/live-demos');
+            return;
+        }
+
+        // Record inquiry in leads CRM
+        try {
+            $names = explode(' ', $name, 2);
+            $firstName = $names[0];
+            $lastName = $names[1] ?? 'Client';
+            $combinedNotes = "Action: " . ($actionType === 'buy_template' ? 'Buy Template' : 'Request Custom System') . "\n" .
+                             "Template: " . $templateTitle . "\n" .
+                             "Package/License: " . $license . "\n" .
+                             "Notes: " . $notes;
+
+            $this->db->insert(
+                "INSERT INTO leads (first_name, last_name, email, phone, company, status, priority, notes, created_at) VALUES (?, ?, ?, ?, ?, 'new', 'high', ?, NOW())",
+                [$firstName, $lastName, $email, $phone, $company, $combinedNotes]
+            );
+            auditLog('create', 'leads', null, "Inquiry from Live Demos for '$templateTitle' by $name");
+        } catch (\Throwable $e) {
+            error_log('Failed to store demo inquiry lead: ' . $e->getMessage());
+        }
+
+        $message = ($actionType === 'buy_template')
+            ? "Your template purchase order for '$templateTitle' has been received! Our engineering team will contact you shortly with the turnkey source code package."
+            : "Your custom system request for '$templateTitle' has been submitted! Our solutions architect will contact you shortly.";
+
+        if ($this->isAjax()) {
+            $this->json(['success' => true, 'message' => $message]);
+            return;
+        }
+
+        $this->session->flash('success', $message);
+        redirect('/live-demos');
+    }
+
+    /**
+     * Public Showcase or Admin Management
      */
     public function index() {
-        $this->requireAuth();
+        if (!$this->auth->check()) {
+            $this->showcase();
+            return;
+        }
+
+        $this->ensurePortfolioDemosTable();
         $demos = [];
         try {
             $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos ORDER BY sort_order ASC, id DESC");

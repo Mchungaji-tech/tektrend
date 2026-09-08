@@ -552,8 +552,11 @@
                 </a>
 
                 <div class="nav-group-title">Showcase & Domains</div>
+                <a href="<?= eurl('/live-demos') ?>" target="_blank" class="nav-link" style="color: #60a5fa;">
+                    <i class="fas fa-external-link-alt" style="color: #60a5fa;"></i> Public Live Demos <span class="nav-badge" style="background: rgba(96,165,250,0.15); color: #60a5fa;">Public</span>
+                </a>
                 <a href="<?= eurl('/demos') ?>" class="nav-link <?= ($currentPage ?? '') === 'demos' ? 'active' : '' ?>">
-                    <i class="fas fa-globe"></i> Live Demos & Domains <span class="nav-badge accent">Domains</span>
+                    <i class="fas fa-globe"></i> Manage Demos & Domains <span class="nav-badge accent">Domains</span>
                 </a>
                 <a href="<?= eurl('/marketplace') ?>" class="nav-link <?= ($currentPage ?? '') === 'marketplace' ? 'active' : '' ?>">
                     <i class="fas fa-trophy"></i> Design Marketplace

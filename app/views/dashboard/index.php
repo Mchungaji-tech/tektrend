@@ -44,8 +44,10 @@
         </div>
         <div class="label">Live Demos & Domains</div>
         <div class="value"><?= $stats['total_demos'] ?? 9 ?></div>
-        <div class="footer-text" style="color: var(--text-muted);">
-            <a href="<?= eurl('/demos') ?>" style="color: var(--primary); text-decoration: none; font-weight: 600;">Manage Projects →</a>
+        <div class="footer-text" style="display: flex; gap: 0.75rem; align-items: center;">
+            <a href="<?= eurl('/live-demos') ?>" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600;"><i class="fas fa-external-link-alt"></i> Public Showcase</a>
+            <span style="color: var(--border);">·</span>
+            <a href="<?= eurl('/demos') ?>" style="color: var(--text-muted); text-decoration: none; font-weight: 600;">Manage →</a>
         </div>
     </div>
 
@@ -81,7 +83,10 @@
                 <h3 class="card-title">Live Demos & External Hosting</h3>
                 <p class="card-subtitle">Active project showcases connected across internal & client hosting domains.</p>
             </div>
-            <a href="<?= eurl('/demos') ?>" class="btn btn-sm btn-outline"><i class="fas fa-arrow-right"></i> All Demos</a>
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="<?= eurl('/live-demos') ?>" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Public Showcase</a>
+                <a href="<?= eurl('/demos') ?>" class="btn btn-sm btn-outline"><i class="fas fa-cog"></i> Manage</a>
+            </div>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.85rem;">

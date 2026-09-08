@@ -529,7 +529,11 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
         <a href="<?= eurl('/#portfolio') ?>">Portfolio</a>
         <a href="<?= eurl('/live-demos') ?>"><i class="fas fa-laptop-code"></i> Live Demos</a>
         <a href="<?= eurl('/#contact') ?>">Contact</a>
-        <a href="<?= eurl('/login') ?>" class="highlight"><i class="fas fa-rocket"></i> Portal / Login</a>
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <a href="<?= eurl('/dashboard') ?>" class="highlight"><i class="fas fa-chart-pie"></i> Dashboard</a>
+        <?php else: ?>
+          <a href="<?= eurl('/login') ?>" class="highlight"><i class="fas fa-rocket"></i> Portal / Login</a>
+        <?php endif; ?>
       </div>
     </nav>
 
@@ -592,7 +596,7 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
             <?php foreach (array_slice($portfolioDemos, 0, 5) as $pd): ?>
               <div class="demo-item">
                 <span><i class="<?= sanitize($pd['icon'] ?? 'fas fa-laptop-code') ?>"></i> <?= sanitize($pd['title']) ?></span>
-                <a href="<?= sanitize($pd['demo_url']) ?>" target="_blank">demo →</a>
+                <a href="<?= eurl($pd['demo_url']) ?>" target="_blank">demo →</a>
               </div>
             <?php endforeach; ?>
           <?php else: ?>

@@ -9,11 +9,6 @@ class HomeController extends Controller {
      * Display the public consultancy landing page
      */
     public function index() {
-        if ($this->auth->check()) {
-            redirect('/dashboard');
-            return;
-        }
-
         // Fetch settings
         $settings = [];
         try {
