@@ -21,10 +21,10 @@ function loadEnv($path) {
         }
         list($key, $value) = explode('=', $line, 2);
         $key = trim($key);
-        $value = trim($value);
-        if (!getenv($key)) {
-            putenv($key . '=' . $value);
-        }
+        $value = trim($value, " \t\n\r\0\x0B'\"");
+        putenv($key . '=' . $value);
+        $_ENV[$key] = $value;
+        $_SERVER[$key] = $value;
     }
 }
 
@@ -35,16 +35,19 @@ define('APP_ENV', getenv('APP_ENV') ?: 'production');
 define('APP_DEBUG', filter_var(getenv('APP_DEBUG') ?: false, FILTER_VALIDATE_BOOLEAN));
 define('APP_URL', rtrim(getenv('APP_URL') ?: 'http://localhost', '/'));
 define('BASE_URL', APP_URL);
+define('APP_CURRENCY', getenv('APP_CURRENCY') ?: 'KSh');
+define('APP_CURRENCY_SYMBOL', getenv('APP_CURRENCY_SYMBOL') ?: 'KSh ');
 
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('DB_NAME') ?: 'tektrend_db');
+define('DB_NAME', getenv('DB_NAME') ?: 'tektrend');
 define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
 define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');
 
 // Session Settings
 define('SESSION_LIFETIME', (int)(getenv('SESSION_LIFETIME') ?: 1440));
+define('SESSION_SECURE', filter_var(getenv('SESSION_SECURE') ?: (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'), FILTER_VALIDATE_BOOLEAN));
 
 // Security
 define('SECRET_KEY', getenv('SECRET_KEY') ?: 'default_secret_key_change_me');

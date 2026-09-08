@@ -12,7 +12,7 @@
         <div class="flash-message success"><?= sanitize(flash('success')) ?></div>
     <?php endif; ?>
 
-    <form method="POST" action="/forgot-password">
+    <form method="POST" action="<?= eurl('/forgot-password') ?>">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
 
         <div class="form-group">
@@ -26,6 +26,6 @@
     </form>
 
     <div class="auth-footer">
-        <a href="/login">Back to login</a>
+        <a href="<?= eurl('/login') ?>">Back to login</a>
     </div>
 </div>

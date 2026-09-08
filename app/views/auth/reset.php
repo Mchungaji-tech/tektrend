@@ -9,7 +9,7 @@
         <div class="flash-message"><?= sanitize(flash('error')) ?></div>
     <?php endif; ?>
 
-    <form method="POST" action="/reset-password">
+    <form method="POST" action="<?= eurl('/reset-password') ?>">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
         <input type="hidden" name="token" value="<?= sanitize($token ?? '') ?>">
 
@@ -29,6 +29,6 @@
     </form>
 
     <div class="auth-footer">
-        <a href="/login">Back to login</a>
+        <a href="<?= eurl('/login') ?>">Back to login</a>
     </div>
 </div>

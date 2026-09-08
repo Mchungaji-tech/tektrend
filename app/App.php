@@ -38,6 +38,10 @@ class App {
     private function registerRoutes() {
         // Landing page (PHP version of index.html)
         $this->router->get('/', 'HomeController@index', ['guest']);
+        $this->router->get('/live-demos', 'PortfolioController@showcase');
+        $this->router->post('/book-consultation', 'HomeController@bookConsultation');
+        $this->router->post('/place-bid', 'HomeController@placeBid');
+        $this->router->post('/api/ai-chat', 'HomeController@apiAiChat');
 
         // Authentication routes
         $this->router->get('/login', 'AuthController@login', ['guest']);
@@ -56,8 +60,36 @@ class App {
         $this->router->get('/dashboard/online-users', 'DashboardController@onlineUsers', ['auth']);
         $this->router->get('/dashboard/work-status', 'DashboardController@workStatus', ['auth']);
 
+        // Consultations & Zoom Booking
+        $this->router->get('/consultations', 'ConsultationController@index', ['auth']);
+        $this->router->get('/consultations/{id}', 'ConsultationController@show', ['auth']);
+        $this->router->post('/consultations/{id}/status', 'ConsultationController@updateStatus', ['auth']);
+        $this->router->get('/consultations/{id}/delete', 'ConsultationController@delete', ['auth']);
+
+        // Marketplace & Awwwards Bidding
+        $this->router->get('/marketplace', 'MarketplaceController@index', ['auth']);
+        $this->router->get('/marketplace/create', 'MarketplaceController@create', ['auth']);
+        $this->router->post('/marketplace', 'MarketplaceController@store', ['auth']);
+        $this->router->get('/marketplace/bids', 'MarketplaceController@bids', ['auth']);
+        $this->router->post('/marketplace/bids/{id}/status', 'MarketplaceController@updateBidStatus', ['auth']);
+        $this->router->get('/marketplace/{id}/edit', 'MarketplaceController@edit', ['auth']);
+        $this->router->post('/marketplace/{id}', 'MarketplaceController@update', ['auth']);
+        $this->router->get('/marketplace/{id}/delete', 'MarketplaceController@delete', ['auth']);
+
+        // Contracts & Scope Agreements
+        $this->router->get('/contracts', 'ContractController@index', ['auth']);
+        $this->router->get('/contracts/create', 'ContractController@create', ['auth']);
+        $this->router->post('/contracts', 'ContractController@store', ['auth']);
+        $this->router->get('/contracts/{id}', 'ContractController@show', ['auth']);
+        $this->router->get('/contracts/{id}/edit', 'ContractController@edit', ['auth']);
+        $this->router->post('/contracts/{id}', 'ContractController@update', ['auth']);
+        $this->router->get('/contracts/{id}/print', 'ContractController@printContract', ['auth']);
+        $this->router->get('/contracts/{id}/delete', 'ContractController@delete', ['auth']);
+
         // Leads / CRM
         $this->router->get('/leads', 'LeadController@index', ['auth']);
+        $this->router->get('/leads/pipeline', 'LeadController@pipeline', ['auth']);
+        $this->router->post('/leads/{id}/stage', 'LeadController@updateStage', ['auth']);
         $this->router->get('/leads/create', 'LeadController@create', ['auth']);
         $this->router->post('/leads', 'LeadController@store', ['auth']);
         $this->router->get('/leads/{id}', 'LeadController@show', ['auth']);
@@ -171,13 +203,14 @@ class App {
         $this->router->post('/departments/{id}', 'DepartmentController@update', ['auth']);
         $this->router->get('/departments/{id}/delete', 'DepartmentController@delete', ['auth']);
 
-        // Demos
-        $this->router->get('/demos', 'DemoController@index', ['auth']);
-        $this->router->get('/demos/create', 'DemoController@create', ['auth']);
-        $this->router->post('/demos', 'DemoController@store', ['auth']);
-        $this->router->get('/demos/{id}/edit', 'DemoController@edit', ['auth']);
-        $this->router->post('/demos/{id}', 'DemoController@update', ['auth']);
-        $this->router->get('/demos/{id}/delete', 'DemoController@delete', ['auth']);
+        // Demos & Hosting Projects
+        $this->router->get('/demos', 'PortfolioController@index', ['auth']);
+        $this->router->get('/demos/create', 'PortfolioController@create', ['auth']);
+        $this->router->post('/demos/store', 'PortfolioController@store', ['auth']);
+        $this->router->get('/demos/{id}/edit', 'PortfolioController@edit', ['auth']);
+        $this->router->post('/demos/{id}/update', 'PortfolioController@update', ['auth']);
+        $this->router->post('/demos/{id}/delete', 'PortfolioController@destroy', ['auth']);
+        $this->router->get('/demos/{id}/delete', 'PortfolioController@destroy', ['auth']);
 
         // Content Management
         $this->router->get('/content', 'ContentController@index', ['auth']);

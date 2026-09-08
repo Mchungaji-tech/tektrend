@@ -10,16 +10,17 @@ class ChatController extends Controller {
         $this->requireAuth();
         $userId = $this->auth->id();
         $rooms = $this->db->fetchAll(
-            "SELECT cr.*, crm.role FROM chat_rooms cr LEFT JOIN chat_room_members crm ON cr.id = crm.room_id AND crm.user_id = ? WHERE cr.type IN ('department', 'group', 'broadcast') ORDER BY cr.name"
-        );
-        if (empty($rooms)) {
-            // Create default rooms if none exist
-            $this->db->insert("INSERT INTO chat_rooms (name, type, created_by) VALUES ('General', 'department', 1)");
-        }
-        $rooms = $this->db->fetchAll(
             "SELECT cr.*, crm.role FROM chat_rooms cr LEFT JOIN chat_room_members crm ON cr.id = crm.room_id AND crm.user_id = ? WHERE cr.type IN ('department', 'group', 'broadcast') ORDER BY cr.name",
             [$userId]
         );
+        if (empty($rooms)) {
+            // Create default rooms if none exist
+            $this->db->insert("INSERT INTO chat_rooms (name, type, created_by) VALUES ('General', 'broadcast', 1)");
+            $rooms = $this->db->fetchAll(
+                "SELECT cr.*, crm.role FROM chat_rooms cr LEFT JOIN chat_room_members crm ON cr.id = crm.room_id AND crm.user_id = ? WHERE cr.type IN ('department', 'group', 'broadcast') ORDER BY cr.name",
+                [$userId]
+            );
+        }
         $onlineUsers = $this->auth->getOnlineUsers();
         $this->render('chat/index', ['rooms' => $rooms, 'onlineUsers' => $onlineUsers]);
     }

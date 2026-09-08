@@ -103,14 +103,21 @@ function sanitize($input) {
     if (is_array($input)) {
         return array_map('sanitize', $input);
     }
+    if ($input === null) {
+        return '';
+    }
     return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
 }
 
 /**
  * Format currency
  */
-function formatCurrency($amount, $symbol = '$') {
-    return $symbol . number_format($amount, 2);
+function formatCurrency($amount, $symbol = null) {
+    if ($symbol === null) {
+        $curr = defined('APP_CURRENCY') ? APP_CURRENCY : 'KSh';
+        $symbol = rtrim($curr) . ' ';
+    }
+    return $symbol . number_format((float)$amount, 2);
 }
 
 /**
@@ -211,8 +218,33 @@ function flash($key, $message = null) {
  * Redirect
  */
 function redirect($url = '/') {
-    header('Location: ' . $url);
+    $baseUrl = rtrim(BASE_URL, '/');
+    if (strpos($url, 'http') === 0 || strpos($url, '//') === 0) {
+        header('Location: ' . $url);
+    } else {
+        $url = '/' . ltrim($url, '/');
+        header('Location: ' . $baseUrl . $url);
+    }
     exit;
+}
+
+/**
+ * Generate a URL with base path
+ */
+function url($path = '/') {
+    $baseUrl = rtrim(BASE_URL, '/');
+    if (strpos($path, 'http') === 0 || strpos($path, '//') === 0) {
+        return $path;
+    }
+    $path = '/' . ltrim($path, '/');
+    return $baseUrl . $path;
+}
+
+/**
+ * Output a URL with base path (escaped for HTML attributes)
+ */
+function eurl($path = '/') {
+    return htmlspecialchars(url($path), ENT_QUOTES, 'UTF-8');
 }
 
 /**

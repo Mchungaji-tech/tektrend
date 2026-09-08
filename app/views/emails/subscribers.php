@@ -1,48 +1,97 @@
-<?php $pageTitle = 'Subscribers'; ?>
-<div class="topbar"><div class="greeting"><h1>Email Subscribers</h1><p>Manage email subscribers</p></div>
-    <a href="/emails/subscribers" onclick="document.getElementById('addModal').style.display='block'; return false;" style="color: #b8943c; background: rgba(184,148,60,0.1); padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none;"><i class="fas fa-plus"></i> Add Subscriber</a>
+<?php $pageTitle = 'Email Subscribers'; ?>
+
+<div class="card mb-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+                <i class="fas fa-users" style="color: var(--primary); margin-right: 0.5rem;"></i> Audience Subscribers List
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Manage newsletter contacts, opt-ins, and acquisition sources</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="button" onclick="document.getElementById('addModal').style.display='flex'" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Subscriber
+            </button>
+            <a href="<?= eurl('/emails') ?>" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> All Campaigns
+            </a>
+        </div>
+    </div>
 </div>
-<div class="table-section reveal">
-    <div class="header"><h3>All Subscribers (<?= count($subscribers) ?>)</h3>
-        <form method="GET" style="display: flex;">
-            <input type="text" name="search" placeholder="Search subscribers..." value="<?= sanitize($search) ?>" style="padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.2); color: #f5f0eb;">
+
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title">All Subscribers (<?= count($subscribers) ?>)</h3>
+        </div>
+        <form method="GET" action="<?= eurl('/emails/subscribers') ?>" style="display: flex; gap: 0.5rem;">
+            <input type="text" name="search" placeholder="Search subscribers..." value="<?= sanitize($search ?? '') ?>" class="form-control" style="width: 240px;">
+            <button type="submit" class="btn btn-outline"><i class="fas fa-search"></i></button>
         </form>
     </div>
-    <table>
-        <thead><tr><th>Email</th><th>Name</th><th>Source</th><th>Subscribed</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody>
-            <?php if (empty($subscribers)): ?>
-                <tr><td colspan="6" style="text-align: center; color: rgba(245,240,235,0.3);">No subscribers found</td></tr>
-            <?php else: ?>
-                <?php foreach ($subscribers as $s): ?>
-                    <tr>
-                        <td><?= sanitize($s['email']) ?></td>
-                        <td><?= sanitize(($s['first_name'] ?? '') . ' ' . ($s['last_name'] ?? '')) ?: '-' ?></td>
-                        <td><?= sanitize($s['source'] ?? '-') ?></td>
-                        <td><?= formatDate($s['subscribed_at']) ?></td>
-                        <td><span class="status <?= $s['status'] ?>"><?= ucfirst($s['status']) ?></span></td>
-                        <td><a href="/emails/subscribers/<?= $s['id'] ?>/delete" onclick="return confirm('Remove this subscriber?')" style="color: #ef4444;"><i class="fas fa-trash"></i></a></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Email Address</th>
+                    <th>Subscriber Name</th>
+                    <th>Opt-in Source</th>
+                    <th>Subscribed Date</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($subscribers)): ?>
+                    <tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">No subscribers found.</td></tr>
+                <?php else: ?>
+                    <?php foreach ($subscribers as $s): ?>
+                        <tr>
+                            <td><strong style="color: var(--text-main);"><?= sanitize($s['email']) ?></strong></td>
+                            <td><span style="color: var(--text-main);"><?= sanitize(($s['first_name'] ?? '') . ' ' . ($s['last_name'] ?? '')) ?: '-' ?></span></td>
+                            <td><span style="color: var(--text-muted); font-size: 0.85rem;"><?= sanitize($s['source'] ?? 'Landing Page') ?></span></td>
+                            <td style="color: var(--text-muted);"><?= formatDate($s['subscribed_at'] ?? $s['created_at']) ?></td>
+                            <td><span class="badge <?= sanitize($s['status'] ?? 'active') ?>"><?= ucfirst(sanitize($s['status'] ?? 'active')) ?></span></td>
+                            <td style="text-align: right;">
+                                <a href="<?= eurl('/emails/subscribers/' . $s['id'] . '/delete') ?>" onclick="return confirm('Remove this subscriber?')" class="btn btn-danger" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" title="Remove"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-    <div style="background: #1a1a1a; border-radius: 20px; padding: 2rem; width: 90%; max-width: 500px; margin: 50px auto;">
-        <h3 style="color: #f5f0eb;">Add Subscriber</h3>
-        <form method="POST" action="/emails/subscribers/add">
+
+<!-- Modal -->
+<div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 2rem; width: 90%; max-width: 480px; border: 1px solid var(--border); box-shadow: var(--shadow-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="color: var(--text-main); font-size: 1.2rem; font-weight: 800;">Add Email Subscriber</h3>
+            <button type="button" onclick="document.getElementById('addModal').style.display='none'" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">&times;</button>
+        </div>
+
+        <form method="POST" action="<?= eurl('/emails/subscribers/add') ?>">
             <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
-            <div class="form-group"><label>Email</label><input type="email" name="email" class="form-control" required></div>
-            <div class="form-row">
-                <div class="form-group"><label>First Name</label><input type="text" name="first_name" class="form-control"></div>
-                <div class="form-group"><label>Last Name</label><input type="text" name="last_name" class="form-control"></div>
+            <div class="form-group">
+                <label class="required">Email Address</label>
+                <input type="email" name="email" class="form-control" required placeholder="name@company.com">
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-                <button type="button" onclick="document.getElementById('addModal').style.display='none'" class="btn" style="background: rgba(107,114,128,0.1); color: #9ca3af; border: none; padding: 0.5rem 1rem; border-radius: 8px;">Cancel</button>
-                <button type="submit" class="btn btn-primary">Add</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" class="form-control">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+                <button type="button" onclick="document.getElementById('addModal').style.display='none'" class="btn btn-outline">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Subscriber</button>
             </div>
         </form>
     </div>
 </div>
-<style>.table-section { background: rgba(245,240,235,0.02); border-radius: 20px; padding: 1.8rem; border: 1px solid rgba(245,240,235,0.03); overflow-x: auto; } .table-section .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; } .table-section .header h3 { font-size: 1rem; font-weight: 600; color: #f5f0eb; } table { width: 100%; border-collapse: collapse; font-size: 0.85rem; } table th { text-align: left; padding: 0.8rem 0.5rem; color: rgba(245,240,235,0.15); font-weight: 600; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid rgba(245,240,235,0.03); } table td { padding: 0.8rem 0.5rem; border-bottom: 1px solid rgba(245,240,235,0.02); color: rgba(245,240,235,0.5); } table tr:hover td { background: rgba(245,240,235,0.01); } table .status { display: inline-block; padding: 0.1rem 0.8rem; border-radius: 40px; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } table .status.active { color: #4caf50; background: rgba(76,175,80,0.04); } table .status.unsubscribed { color: #ef5350; background: rgba(239,83,80,0.04); } .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }.form-row .form-group { flex: 1; margin-bottom: 0; }.form-group { margin-bottom: 1rem; }.form-control { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; color: #f5f0eb; font-family: 'Inter', sans-serif; }</style>

@@ -14,7 +14,7 @@
         <div class="flash-message" style="background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2);"><?= sanitize(flash('debug_token')) ?></div>
     <?php endif; ?>
 
-    <form method="POST" action="/login" autocomplete="off">
+    <form method="POST" action="<?= eurl('/login') ?>" autocomplete="off">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
 
         <div class="form-group">
@@ -38,7 +38,11 @@
         </button>
     </form>
 
-    <div class="auth-footer">
-        <a href="/forgot-password">Forgot your password?</a>
+    <div class="auth-footer" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div style="background: rgba(184,148,60,0.1); border: 1px solid rgba(184,148,60,0.25); border-radius: 10px; padding: 0.6rem; margin-bottom: 0.8rem; font-size: 0.78rem; color: #e7ddcc;">
+            <strong>Demo Credentials:</strong><br>
+            Email: <code>admin@tektrend.com</code> &nbsp;|&nbsp; Pass: <code>Admin@12345</code>
+        </div>
+        <a href="<?= eurl('/forgot-password') ?>">Forgot password?</a> · <a href="<?= eurl('/') ?>">← Return to Public Site</a>
     </div>
 </div>

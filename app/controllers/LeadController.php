@@ -188,4 +188,60 @@ class LeadController extends Controller {
         );
         $this->render('leads/followup', ['leads' => $leads]);
     }
+
+    /**
+     * Visual CRM Sales Pipeline (Kanban)
+     */
+    public function pipeline() {
+        $this->requireAuth();
+        $allLeads = $this->db->fetchAll(
+            "SELECT l.*, u.first_name, u.last_name, s.name as source_name 
+             FROM leads l 
+             LEFT JOIN users u ON l.assigned_to = u.id 
+             LEFT JOIN lead_sources s ON l.source_id = s.id 
+             ORDER BY l.value DESC"
+        );
+
+        $stages = [
+            'new'          => ['name' => 'New Inquiries', 'color' => '#3b82f6', 'deals' => [], 'total' => 0],
+            'contacted'    => ['name' => 'Contacted / Zoom', 'color' => '#6366f1', 'deals' => [], 'total' => 0],
+            'qualified'    => ['name' => 'Qualified Scope', 'color' => '#8b5cf6', 'deals' => [], 'total' => 0],
+            'proposal'     => ['name' => 'Proposal Sent', 'color' => '#f59e0b', 'deals' => [], 'total' => 0],
+            'negotiation'  => ['name' => 'Negotiation', 'color' => '#ec4899', 'deals' => [], 'total' => 0],
+            'closed_won'   => ['name' => 'Closed Won', 'color' => '#10b981', 'deals' => [], 'total' => 0],
+            'closed_lost'  => ['name' => 'Closed Lost', 'color' => '#94a3b8', 'deals' => [], 'total' => 0]
+        ];
+
+        foreach ($allLeads as $lead) {
+            $status = $lead['status'] ?? 'new';
+            if (isset($stages[$status])) {
+                $stages[$status]['deals'][] = $lead;
+                $stages[$status]['total'] += (float)$lead['value'];
+            }
+        }
+
+        $this->render('leads/pipeline', [
+            'pageTitle' => 'Sales Pipeline (Kanban)',
+            'stages'    => $stages,
+            'totalLeads'=> count($allLeads)
+        ]);
+    }
+
+    /**
+     * Update Lead Stage from Kanban
+     */
+    public function updateStage($id) {
+        $this->requireAuth();
+        $this->verifyCsrf();
+        $newStage = $_POST['stage'] ?? 'new';
+        $this->db->execute("UPDATE leads SET status = ?, updated_at = NOW() WHERE id = ?", [$newStage, $id]);
+        auditLog('pipeline_move', 'leads', $id, "Moved lead to $newStage");
+
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            $this->json(['success' => true]);
+            return;
+        }
+
+        $this->redirectWithSuccess('/leads/pipeline', 'Lead stage updated!');
+    }
 }

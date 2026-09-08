@@ -618,15 +618,103 @@ CREATE TABLE `login_attempts` (
     KEY `attempted_at` (`attempted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `password_resets` (
+-- ============================================================
+-- CONSULTATIONS & ZOOM BOOKINGS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `consultations` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
-    `token` VARCHAR(255) NOT NULL,
-    `expires_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `used` TINYINT(1) DEFAULT 0,
+    `phone` VARCHAR(30) DEFAULT NULL,
+    `company` VARCHAR(100) DEFAULT NULL,
+    `service_type` VARCHAR(100) NOT NULL DEFAULT 'Web Architecture',
+    `preferred_date` DATE NOT NULL,
+    `preferred_time` VARCHAR(20) NOT NULL DEFAULT '10:00 AM',
+    `duration_minutes` INT DEFAULT 45,
+    `zoom_link` VARCHAR(255) DEFAULT 'https://zoom.us/j/9924883102?pwd=tektrend_consult',
+    `meeting_id` VARCHAR(50) DEFAULT '992-488-3102',
+    `status` ENUM('pending','confirmed','completed','cancelled') DEFAULT 'pending',
+    `notes` TEXT,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    KEY `token` (`token`),
-    KEY `email` (`email`)
+    KEY `email` (`email`),
+    KEY `preferred_date` (`preferred_date`),
+    KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- E-COMMERCE DESIGN MARKETPLACE & AWWWARDS BIDDING
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `design_items` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(200) NOT NULL,
+    `slug` VARCHAR(200) NOT NULL,
+    `category` VARCHAR(100) DEFAULT 'SaaS & Enterprise',
+    `award_badge` VARCHAR(100) DEFAULT 'Site of the Day',
+    `description` TEXT,
+    `short_description` VARCHAR(255) DEFAULT NULL,
+    `image` VARCHAR(255) DEFAULT NULL,
+    `demo_url` VARCHAR(255) DEFAULT NULL,
+    `sale_type` ENUM('bid','buy_now','both') DEFAULT 'both',
+    `starting_bid` DECIMAL(12,2) DEFAULT 500.00,
+    `current_bid` DECIMAL(12,2) DEFAULT 500.00,
+    `buy_now_price` DECIMAL(12,2) DEFAULT 1800.00,
+    `bid_end_date` DATETIME DEFAULT NULL,
+    `total_bids` INT DEFAULT 0,
+    `views_count` INT DEFAULT 0,
+    `status` ENUM('active','sold','ended','draft') DEFAULT 'active',
+    `created_by` INT UNSIGNED DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `slug` (`slug`),
+    KEY `category` (`category`),
+    KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `design_bids` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `design_item_id` INT UNSIGNED NOT NULL,
+    `bidder_name` VARCHAR(100) NOT NULL,
+    `bidder_email` VARCHAR(100) NOT NULL,
+    `bidder_phone` VARCHAR(30) DEFAULT NULL,
+    `bid_amount` DECIMAL(12,2) NOT NULL,
+    `message` TEXT,
+    `status` ENUM('pending','accepted','outbid','rejected') DEFAULT 'pending',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `design_item_id` (`design_item_id`),
+    KEY `bid_amount` (`bid_amount`),
+    KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- CONTRACTS MANAGEMENT
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `contracts` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `contract_number` VARCHAR(50) NOT NULL,
+    `title` VARCHAR(200) NOT NULL,
+    `customer_id` INT UNSIGNED DEFAULT NULL,
+    `lead_id` INT UNSIGNED DEFAULT NULL,
+    `value` DECIMAL(12,2) DEFAULT 0.00,
+    `start_date` DATE NOT NULL,
+    `end_date` DATE DEFAULT NULL,
+    `terms` LONGTEXT,
+    `status` ENUM('draft','sent','signed','active','completed','cancelled') DEFAULT 'draft',
+    `signed_at` DATETIME DEFAULT NULL,
+    `signed_by_name` VARCHAR(100) DEFAULT NULL,
+    `created_by` INT UNSIGNED DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `contract_number` (`contract_number`),
+    KEY `customer_id` (`customer_id`),
+    KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,30 +1,67 @@
-<?php $pageTitle = 'Meetings'; ?>
-<div class="topbar"><div class="greeting"><h1>Meetings</h1><p>Manage video meetings</p></div>
-    <a href="/meetings/create" style="color: #b8943c; background: rgba(184,148,60,0.1); padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none;"><i class="fas fa-plus"></i> Schedule Meeting</a>
+<?php $pageTitle = 'Video Meetings & Teleconferences'; ?>
+
+<div class="card mb-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+                <i class="fas fa-video" style="color: var(--primary); margin-right: 0.5rem;"></i> Video Meetings & Teleconferences
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Host architectural reviews, client teleconferences, and engineering standups</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="<?= eurl('/meetings/create') ?>" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Schedule Meeting
+            </a>
+            <a href="<?= eurl('/chat') ?>" class="btn btn-outline">
+                <i class="fas fa-comments"></i> Virtual Office
+            </a>
+        </div>
+    </div>
 </div>
-<div class="table-section reveal">
-    <div class="header"><h3>All Meetings (<?= count($meetings) ?>)</h3></div>
-    <table>
-        <thead><tr><th>Title</th><th>Host</th><th>Scheduled</th><th>Status</th><th>Room ID</th><th>Actions</th></tr></thead>
-        <tbody>
-            <?php if (empty($meetings)): ?>
-                <tr><td colspan="6" style="text-align: center; color: rgba(245,240,235,0.3);">No meetings scheduled</td></tr>
-            <?php else: ?>
-                <?php foreach ($meetings as $m): ?>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">All Scheduled Meetings (<?= count($meetings) ?>)</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Meeting Title</th>
+                    <th>Meeting Host</th>
+                    <th>Scheduled Slot</th>
+                    <th>Status</th>
+                    <th>Room Key</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($meetings)): ?>
                     <tr>
-                        <td><?= sanitize($m['title']) ?></td>
-                        <td><?= sanitize($m['first_name'] . ' ' . $m['last_name']) ?></td>
-                        <td><?= formatDateTime($m['scheduled_at']) ?></td>
-                        <td><span class="status <?= $m['status'] ?>"><?= ucfirst($m['status']) ?></span></td>
-                        <td><?= sanitize($m['room_id']) ?></td>
-                        <td>
-                            <?php if ($m['status'] === 'scheduled'): ?><a href="/meetings/<?= $m['id'] ?>/start" style="color: #10b981;"><i class="fas fa-video"></i> Start</a><?php endif; ?>
-                            <?php if ($m['status'] === 'in_progress'): ?><a href="/meetings/<?= $m['id'] ?>/join" style="color: #3b82f6; margin-left: 0.5rem;"><i class="fas fa-sign-in-alt"></i> Join</a><?php endif; ?>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                            No video meetings scheduled.
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                <?php else: ?>
+                    <?php foreach ($meetings as $m): ?>
+                        <tr>
+                            <td><strong style="color: var(--text-main);"><?= sanitize($m['title']) ?></strong></td>
+                            <td><span style="color: var(--text-main);"><?= sanitize($m['first_name'] . ' ' . $m['last_name']) ?></span></td>
+                            <td style="color: var(--text-muted);"><?= formatDateTime($m['scheduled_at'] ?? ($m['start_time'] ?? '')) ?></td>
+                            <td><span class="badge <?= sanitize($m['status'] ?? 'scheduled') ?>"><?= ucfirst(sanitize($m['status'] ?? 'scheduled')) ?></span></td>
+                            <td><span style="font-family: monospace; font-size: 0.82rem; color: var(--text-muted);"><?= sanitize($m['room_id'] ?? '-') ?></span></td>
+                            <td style="text-align: right;">
+                                <div style="display: inline-flex; gap: 0.35rem;">
+                                    <?php if (($m['status'] ?? 'scheduled') === 'scheduled'): ?>
+                                        <a href="<?= eurl('/meetings/' . $m['id'] . '/start') ?>" class="btn btn-zoom" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-video"></i> Start</a>
+                                    <?php endif; ?>
+                                    <a href="<?= eurl('/meetings/' . $m['id'] . '/join') ?>" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-sign-in-alt"></i> Join Room</a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
-<style>.table-section { background: rgba(245,240,235,0.02); border-radius: 20px; padding: 1.8rem; border: 1px solid rgba(245,240,235,0.03); overflow-x: auto; } .table-section .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; } .table-section .header h3 { font-size: 1rem; font-weight: 600; color: #f5f0eb; } table { width: 100%; border-collapse: collapse; font-size: 0.85rem; } table th { text-align: left; padding: 0.8rem 0.5rem; color: rgba(245,240,235,0.15); font-weight: 600; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid rgba(245,240,235,0.03); } table td { padding: 0.8rem 0.5rem; border-bottom: 1px solid rgba(245,240,235,0.02); color: rgba(245,240,235,0.5); } table tr:hover td { background: rgba(245,240,235,0.01); } table .status { display: inline-block; padding: 0.1rem 0.8rem; border-radius: 40px; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } table .status.scheduled { color: #f59e0b; background: rgba(245,159,11,0.04); } table .status.in_progress { color: #10b981; background: rgba(16,185,129,0.04); } table .status.ended { color: #6b7280; background: rgba(107,114,128,0.04); }</style>

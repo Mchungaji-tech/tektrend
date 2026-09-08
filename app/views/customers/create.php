@@ -1,32 +1,82 @@
-<?php $pageTitle = 'Create Customer'; ?>
-<div class="topbar"><div class="greeting"><h1>Create Customer</h1><p>Add a new customer</p></div></div>
-<div class="chart-card reveal">
-    <div class="header"><h3>Customer Information</h3></div>
-    <form method="POST" action="/customers">
+<?php $pageTitle = 'Add Customer Account'; ?>
+
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title">Add Client / Customer Account</h3>
+            <p class="card-subtitle">Register new organization, primary contact, and billing details</p>
+        </div>
+        <a href="<?= eurl('/customers') ?>" class="btn btn-outline"><i class="fas fa-arrow-left"></i> All Customers</a>
+    </div>
+
+    <form method="POST" action="<?= eurl('/customers') ?>">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
-        <div class="form-row">
-            <div class="form-group"><label class="required">First Name</label><input type="text" name="first_name" class="form-control" required></div>
-            <div class="form-group"><label class="required">Last Name</label><input type="text" name="last_name" class="form-control" required></div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label class="required">First Name</label>
+                <input type="text" name="first_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label class="required">Last Name</label>
+                <input type="text" name="last_name" class="form-control" required>
+            </div>
         </div>
-        <div class="form-row">
-            <div class="form-group"><label>Email</label><input type="email" name="email" class="form-control"></div>
-            <div class="form-group"><label>Phone</label><input type="text" name="phone" class="form-control"></div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" class="form-control">
+            </div>
         </div>
-        <div class="form-row">
-            <div class="form-group"><label>Company</label><input type="text" name="company" class="form-control"></div>
-            <div class="form-group"><label>Tax ID</label><input type="text" name="tax_id" class="form-control"></div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label>Company / Organization Name</label>
+                <input type="text" name="company" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Tax PIN / VAT ID</label>
+                <input type="text" name="tax_id" class="form-control">
+            </div>
         </div>
-        <div class="form-group"><label>Address</label><input type="text" name="address" class="form-control"></div>
-        <div class="form-row">
-            <div class="form-group"><label>City</label><input type="text" name="city" class="form-control"></div>
-            <div class="form-group"><label>State</label><input type="text" name="state" class="form-control"></div>
+
+        <div class="form-group">
+            <label>Physical / Postal Address</label>
+            <input type="text" name="address" class="form-control">
         </div>
-        <div class="form-row">
-            <div class="form-group"><label>Zip Code</label><input type="text" name="zip_code" class="form-control"></div>
-            <div class="form-group"><label>Country</label><input type="text" name="country" class="form-control"></div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label>City</label>
+                <input type="text" name="city" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>State / Region</label>
+                <input type="text" name="state" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Zip Code</label>
+                <input type="text" name="zip_code" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Country</label>
+                <input type="text" name="country" class="form-control" value="Kenya">
+            </div>
         </div>
-        <div class="form-group"><label>Notes</label><textarea name="notes" class="form-control" rows="3"></textarea></div>
-        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Customer</button>
+
+        <div class="form-group">
+            <label>Internal Notes</label>
+            <textarea name="notes" class="form-control" rows="3" placeholder="Account history, custom retainer terms, preferences..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+            <a href="<?= eurl('/customers') ?>" class="btn btn-outline">Cancel</a>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Customer Account</button>
+        </div>
     </form>
 </div>
-<style>.form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }.form-row .form-group { flex: 1; margin-bottom: 0; }.form-group { margin-bottom: 1rem; }.form-control { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; color: #f5f0eb; font-family: 'Inter', sans-serif; }.chart-card { background: rgba(245,240,235,0.02); border-radius: 20px; padding: 1.8rem; border: 1px solid rgba(245,240,235,0.03); } .chart-card .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; } .chart-card .header h3 { font-size: 1rem; font-weight: 600; color: #f5f0eb; }</style>

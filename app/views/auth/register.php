@@ -9,7 +9,7 @@
         <div class="flash-message"><?= sanitize(flash('error')) ?></div>
     <?php endif; ?>
 
-    <form method="POST" action="/register">
+    <form method="POST" action="<?= eurl('/register') ?>">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
 
         <div class="form-group">
@@ -76,6 +76,6 @@
     </form>
 
     <div class="auth-footer">
-        <a href="/login">Back to login</a>
+        <a href="<?= eurl('/login') ?>">Back to login</a>
     </div>
 </div>

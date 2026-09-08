@@ -1,28 +1,104 @@
-<?php $pageTitle = 'Demos'; ?>
-<div class="topbar"><div class="greeting"><h1>Demo Cards</h1><p>Manage demo cards</p></div>
-    <a href="/demos/create" style="color: #b8943c; background: rgba(184,148,60,0.1); padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none;"><i class="fas fa-plus"></i> Add Demo</a>
+<?php $pageTitle = 'Live Demos & Hosting Projects'; ?>
+
+<div class="card mb-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+                <i class="fas fa-globe" style="color: var(--primary); margin-right: 0.5rem;"></i> Live Demos & Hosting Domains
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Manage showcased web platforms, client hosting domains, and live project linkages</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="<?= eurl('/live-demos') ?>" target="_blank" class="btn btn-secondary">
+                <i class="fas fa-external-link-alt"></i> Public Showcase
+            </a>
+            <a href="<?= eurl('/demos/create') ?>" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Link Project / Domain
+            </a>
+        </div>
+    </div>
 </div>
-<div class="table-section reveal">
-    <div class="header"><h3>All Demos (<?= count($demos) ?>)</h3></div>
-    <table>
-        <thead><tr><th>Demo</th><th>Category</th><th>URL</th><th>Tech</th><th>Status</th><th>Sort Order</th><th>Actions</th></tr></thead>
-        <tbody>
-            <?php if (empty($demos)): ?>
-                <tr><td colspan="7" style="text-align: center; color: rgba(245,240,235,0.3);">No demos found</td></tr>
-            <?php else: ?>
-                <?php foreach ($demos as $d): ?>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Configured Projects & Domains (<?= count($demos ?? []) ?>)</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Category</th>
+                    <th>Hosting Domain / URL</th>
+                    <th>Type</th>
+                    <th>Tech Stack</th>
+                    <th>Featured</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($demos)): ?>
+                    <?php foreach ($demos as $d): ?>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                                        <i class="<?= sanitize($d['icon'] ?? 'fas fa-laptop-code') ?>"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 700; color: var(--text-main);"><?= sanitize($d['title']) ?></div>
+                                        <?php if (!empty($d['award_badge'])): ?>
+                                            <span class="badge" style="background: var(--accent-light); color: var(--accent); font-size: 0.65rem; font-weight: 700;"><?= sanitize($d['award_badge']) ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge" style="background: var(--bg-card-subtle); color: var(--text-main); border: 1px solid var(--border);"><?= sanitize($d['category']) ?></span></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-globe" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+                                    <a href="<?= sanitize($d['demo_url']) ?>" target="_blank" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.85rem;">
+                                        <?= sanitize($d['hosting_domain'] ?: $d['demo_url']) ?>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge <?= $d['demo_type'] === 'external' ? 'active' : 'working' ?>">
+                                    <?= ucfirst(sanitize($d['demo_type'])) ?>
+                                </span>
+                            </td>
+                            <td style="font-size: 0.8rem; color: var(--text-muted); max-width: 180px;">
+                                <?= sanitize($d['tech_stack']) ?>
+                            </td>
+                            <td>
+                                <span class="badge <?= $d['is_featured'] ? 'active' : 'inactive' ?>">
+                                    <?= $d['is_featured'] ? 'Published' : 'Hidden' ?>
+                                </span>
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="display: inline-flex; gap: 0.35rem;">
+                                    <a href="<?= sanitize($d['demo_url']) ?>" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" title="Open Demo">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                    <a href="<?= eurl('/demos/' . $d['id'] . '/edit') ?>" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" title="Edit Link">
+                                        <i class="fas fa-edit" style="color: var(--accent);"></i>
+                                    </a>
+                                    <form action="<?= eurl('/demos/' . $d['id'] . '/delete') ?>" method="POST" onsubmit="return confirm('Are you sure you want to remove this demo?');" style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
+                                        <button type="submit" class="btn btn-danger" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <td><?= sanitize($d['title']) ?></td>
-                        <td><?= sanitize($d['category'] ?? '-') ?></td>
-                        <td><?= sanitize($d['url'] ?? '-') ?></td>
-                        <td><?= sanitize($d['icon'] ?? '-') ?></td>
-                        <td><span class="status <?= $d['is_active'] ? 'active' : 'inactive' ?>"><?= $d['is_active'] ? 'Active' : 'Inactive' ?></span></td>
-                        <td><?= $d['sort_order'] ?></td>
-                        <td><a href="/demos/<?= $d['id'] ?>/edit" style="color: #f59e0b;"><i class="fas fa-edit"></i></a></td>
+                        <td colspan="7" class="text-center py-4" style="color: var(--text-muted); text-align: center; padding: 2rem;">No demo projects configured yet. Click "Link Project / Domain" to add one.</td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
-<style>.table-section { background: rgba(245,240,235,0.02); border-radius: 20px; padding: 1.8rem; border: 1px solid rgba(245,240,235,0.03); overflow-x: auto; } .table-section .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; } .table-section .header h3 { font-size: 1rem; font-weight: 600; color: #f5f0eb; } table { width: 100%; border-collapse: collapse; font-size: 0.85rem; } table th { text-align: left; padding: 0.8rem 0.5rem; color: rgba(245,240,235,0.15); font-weight: 600; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid rgba(245,240,235,0.03); } table td { padding: 0.8rem 0.5rem; border-bottom: 1px solid rgba(245,240,235,0.02); color: rgba(245,240,235,0.5); } table tr:hover td { background: rgba(245,240,235,0.01); } table .status { display: inline-block; padding: 0.1rem 0.8rem; border-radius: 40px; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } table .status.active { color: #4caf50; background: rgba(76,175,80,0.04); } table .status.inactive { color: #ef5350; background: rgba(239,83,80,0.04); }</style>

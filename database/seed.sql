@@ -9,258 +9,211 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ============================================================
 -- DEPARTMENTS
 -- ============================================================
-INSERT INTO departments (name, slug, description, color, status) VALUES
-('Executive', 'executive', 'Executive leadership and management', '#ef4444', 'active'),
-('Engineering', 'engineering', 'Software development and engineering', '#3b82f6', 'active'),
-('Sales', 'sales', 'Sales and business development', '#10b981', 'active'),
-('Marketing', 'marketing', 'Marketing and brand management', '#8b5cf6', 'active'),
-('Finance', 'finance', 'Financial management and accounting', '#f59e0b', 'active'),
-('Human Resources', 'hr', 'Human resources and administration', '#ec4899', 'active'),
-('Support', 'support', 'Customer support and service', '#06b6d4', 'active'),
-('Operations', 'operations', 'Operations and logistics', '#84cc16', 'active');
+TRUNCATE TABLE departments;
+INSERT INTO departments (id, name, slug, description, color, status) VALUES
+(1, 'Executive Board', 'executive', 'Executive leadership, strategic direction and consulting oversight', '#4f46e5', 'active'),
+(2, 'Solutions & Engineering', 'engineering', 'Enterprise software development, cloud systems and AI solutions', '#2563eb', 'active'),
+(3, 'Sales & Client Growth', 'sales', 'Global sales, client partnerships and deal pipeline', '#059669', 'active'),
+(4, 'Design & UI/UX Studio', 'design', 'Award-winning digital experience design and branding', '#d97706', 'active'),
+(5, 'Finance & Contracts', 'finance', 'Financial planning, accounting, invoicing and client agreements', '#7c3aed', 'active'),
+(6, 'Customer Success & Support', 'support', 'Client consulting delivery, technical support and onboarding', '#0891b2', 'active');
 
 -- ============================================================
--- USERS (Admin)
+-- USERS & TEAM (Password: Admin@12345 for all default accounts)
 -- ============================================================
-INSERT INTO users (department_id, employee_id, first_name, last_name, email, phone, password, role, position, status, is_online, work_status, created_at) VALUES
-(1, 'EMP-001', 'Admin', 'User', 'admin@tektrend.com', '0707246273', '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN', 'admin', 'System Administrator', 'active', 0, 'offline', NOW()),
-(2, 'EMP-002', 'John', 'Smith', 'john@tektrend.com', '0707246274', '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN', 'manager', 'Engineering Manager', 'active', 0, 'offline', NOW()),
-(3, 'EMP-003', 'Sarah', 'Johnson', 'sarah@tektrend.com', '0707246275', '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN', 'sales', 'Sales Representative', 'active', 0, 'offline', NOW()),
-(4, 'EMP-004', 'Michael', 'Brown', 'michael@tektrend.com', '0707246276', '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN', 'employee', 'Marketing Specialist', 'active', 0, 'offline', NOW()),
-(5, 'EMP-005', 'Emily', 'Davis', 'emily@tektrend.com', '0707246277', '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN', 'accountant', 'Accountant', 'active', 0, 'offline', NOW());
+TRUNCATE TABLE users;
+INSERT INTO users (id, department_id, employee_id, first_name, last_name, email, phone, password, role, position, status, is_online, work_status, created_at) VALUES
+(1, 1, 'EMP-001', 'David', 'Kimani', 'ceo@tektrend.com', '+254707246273', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'admin', 'Chief Executive Officer & Principal Consultant', 'active', 1, 'working', NOW()),
+(2, 1, 'EMP-002', 'TekTrend', 'Administrator', 'admin@tektrend.com', '+254707246273', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'admin', 'Head of System Administration & Operations', 'active', 1, 'working', NOW()),
+(3, 3, 'EMP-003', 'Sarah', 'Johnson', 'sales@tektrend.com', '+254707246274', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'sales', 'VP of Global Sales & Client Relations', 'active', 1, 'working', NOW()),
+(4, 2, 'EMP-004', 'Alex', 'Morgan', 'engineering@tektrend.com', '+254707246275', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'manager', 'Chief Technology & Solutions Architect', 'active', 1, 'working', NOW()),
+(5, 5, 'EMP-005', 'Emily', 'Davis', 'finance@tektrend.com', '+254707246276', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'accountant', 'Director of Financial Operations & Contracts', 'active', 0, 'offline', NOW()),
+(6, 4, 'EMP-006', 'Liam', 'Vance', 'design@tektrend.com', '+254707246277', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'employee', 'Principal UI/UX & Awwwards Design Lead', 'active', 0, 'offline', NOW());
 
 -- Update department heads
-UPDATE departments SET head_id = 1 WHERE slug = 'executive';
-UPDATE departments SET head_id = 2 WHERE slug = 'engineering';
-UPDATE departments SET head_id = 3 WHERE slug = 'sales';
-UPDATE departments SET head_id = 4 WHERE slug = 'marketing';
-UPDATE departments SET head_id = 5 WHERE slug = 'finance';
+UPDATE departments SET head_id = 1 WHERE id = 1;
+UPDATE departments SET head_id = 4 WHERE id = 2;
+UPDATE departments SET head_id = 3 WHERE id = 3;
+UPDATE departments SET head_id = 6 WHERE id = 4;
+UPDATE departments SET head_id = 5 WHERE id = 5;
 
 -- ============================================================
 -- LEAD SOURCES
 -- ============================================================
+TRUNCATE TABLE lead_sources;
 INSERT INTO lead_sources (name, type, description, status) VALUES
-('Website Contact Form', 'online', 'Leads from website contact form', 'active'),
-('Google Ads', 'online', 'Leads from Google Ads campaigns', 'active'),
-('Facebook', 'social', 'Leads from Facebook', 'active'),
-('LinkedIn', 'social', 'Leads from LinkedIn', 'active'),
-('Referral', 'referral', 'Referral from existing customers', 'active'),
-('Trade Show', 'offline', 'Leads from trade shows and events', 'active'),
-('Email Campaign', 'email', 'Leads from email marketing', 'active'),
-('Cold Call', 'offline', 'Leads from cold calling', 'active');
+('Direct Website & Zoom Booking', 'online', 'Direct consultation booking via website', 'active'),
+('WhatsApp Direct Inquiries', 'online', 'Instant WhatsApp consultation messages', 'active'),
+('Awwwards Design Marketplace', 'online', 'Bids & inquiries from design showcase', 'active'),
+('Google Search & Organic SEO', 'online', 'Organic search engine traffic', 'active'),
+('Executive Referral', 'referral', 'Referrals from enterprise clients', 'active'),
+('Tech Conferences & Keynotes', 'offline', 'Speaking engagements & summits', 'active');
 
 -- ============================================================
--- TAX RATES
+-- LEADS & PIPELINE DEALS
 -- ============================================================
-INSERT INTO tax_rates (name, rate, type, country, state, status) VALUES
-('VAT', 16.00, 'percentage', 'Kenya', NULL, 'active'),
-('Sales Tax', 7.50, 'percentage', 'USA', 'California', 'active'),
-('GST', 5.00, 'percentage', 'Canada', NULL, 'active'),
-('Corporate Tax', 30.00, 'percentage', 'Kenya', NULL, 'active'),
-('Income Tax', 15.00, 'percentage', 'Kenya', NULL, 'active');
+TRUNCATE TABLE leads;
+INSERT INTO leads (id, source_id, assigned_to, first_name, last_name, email, phone, company, position, value, status, priority, notes, next_followup, created_at) VALUES
+(1, 1, 3, 'James', 'Rotich', 'j.rotich@safariholding.com', '+254711223344', 'Safari Holdings Ltd', 'Managing Director', 18500.00, 'proposal', 'urgent', 'Needs enterprise ERP + Google Workspace workflow automation', DATE_ADD(NOW(), INTERVAL 1 DAY), NOW()),
+(2, 2, 3, 'Grace', 'Mwangi', 'grace@peakfintech.co.ke', '+254722334455', 'Peak Fintech Kenya', 'Head of Product', 12000.00, 'qualified', 'high', 'Zoom consultation completed. Preparing custom API architecture scope.', DATE_ADD(NOW(), INTERVAL 2 DAY), NOW()),
+(3, 3, 3, 'Arthur', 'Pendleton', 'arthur@vanguard-us.com', '+14155552671', 'Vanguard Global Real Estate', 'CEO', 25000.00, 'negotiation', 'urgent', 'Bidding on Apex Luxury Portal + Custom CRM backend integration.', DATE_ADD(NOW(), INTERVAL 1 DAY), NOW()),
+(4, 1, 3, 'Fatima', 'Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'VP Innovation', 34000.00, 'contacted', 'high', 'Booked Zoom session on AI Chatbot + Customer Portal.', DATE_ADD(NOW(), INTERVAL 3 DAY), NOW()),
+(5, 5, 3, 'Marcus', 'Chen', 'm.chen@novatech.sg', '+6591234567', 'NovaTech Singapore', 'COO', 45000.00, 'closed_won', 'high', 'Signed enterprise contract for 12-month tech consulting partnership.', NULL, NOW()),
+(6, 4, 3, 'Elena', 'Rostova', 'elena@nordicconsulting.se', '+46812345678', 'Nordic Horizon Media', 'Creative Director', 8500.00, 'new', 'medium', 'Inquired about Awwwards-style interactive agency template.', DATE_ADD(NOW(), INTERVAL 2 DAY), NOW());
+
+-- ============================================================
+-- CUSTOMERS
+-- ============================================================
+TRUNCATE TABLE customers;
+INSERT INTO customers (id, first_name, last_name, email, phone, company, address, city, state, zip_code, country, tax_id, notes, status, created_at) VALUES
+(1, 'Marcus', 'Chen', 'm.chen@novatech.sg', '+6591234567', 'NovaTech Singapore', '79 Anson Road #14-01', 'Singapore', 'Singapore', '079906', 'Singapore', 'SG-20239481A', 'Enterprise client on retainer.', 'active', NOW()),
+(2, 'Arthur', 'Pendleton', 'arthur@vanguard-us.com', '+14155552671', 'Vanguard Global Real Estate', '555 California Street, Suite 3200', 'San Francisco', 'CA', '94104', 'United States', 'US-94812390', 'High-value digital estate platform.', 'active', NOW()),
+(3, 'Grace', 'Mwangi', 'grace@peakfintech.co.ke', '+254722334455', 'Peak Fintech Kenya', 'Delta Corner Annex, Westlands', 'Nairobi', 'Nairobi', '00100', 'Kenya', 'P051239481Z', 'Fintech integration & dashboard client.', 'active', NOW());
+
+-- ============================================================
+-- CONSULTATIONS & ZOOM SESSIONS
+-- ============================================================
+TRUNCATE TABLE consultations;
+INSERT INTO consultations (id, name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, zoom_link, meeting_id, status, notes, created_at) VALUES
+(1, 'Fatima Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'AI & Enterprise Automation', CURDATE(), '03:00 PM', 45, 'https://zoom.us/j/9924883102?pwd=tektrend_consult', '992-488-3102', 'confirmed', 'Exploring automated AI customer service & lead intake workflow.', NOW()),
+(2, 'Dr. Samuel Kariuki', 'samuel@medicareplus.org', '+254733445566', 'MediCare Plus Africa', 'Full Stack PHP Architecture', DATE_ADD(CURDATE(), INTERVAL 1 DAY), '10:00 AM', 60, 'https://zoom.us/j/9924883102?pwd=tektrend_consult', '992-488-3102', 'confirmed', 'Consultation on scaling clinic management system across 8 branches.', NOW()),
+(3, 'Sophie Dubois', 'sophie@luxeparis.fr', '+33140506070', 'Luxe Paris Digital', 'UI/UX & Awwwards Web Design', DATE_ADD(CURDATE(), INTERVAL 2 DAY), '02:30 PM', 45, 'https://zoom.us/j/9924883102?pwd=tektrend_consult', '992-488-3102', 'pending', 'Interested in custom bidding for brand launch web platform.', NOW());
+
+-- ============================================================
+-- E-COMMERCE DESIGN MARKETPLACE & AWWWARDS BIDDING ITEMS
+-- ============================================================
+TRUNCATE TABLE design_items;
+INSERT INTO design_items (id, title, slug, category, award_badge, description, short_description, image, demo_url, sale_type, starting_bid, current_bid, buy_now_price, bid_end_date, total_bids, views_count, status, created_by, created_at) VALUES
+(1, 'Apex Luxury Real Estate Portal', 'apex-luxury-real-estate', 'Real Estate & Architecture', 'Site of the Day', 'Ultra-modern real estate platform with 3D virtual tour support, interactive map filters, agent matrix, and high-conversion lead generation architecture.', 'Luxury property showcase with 3D tours & real-time valuation.', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', 'https://tektrend.com/demos/apex-real-estate', 'both', 1200.00, 2400.00, 4500.00, DATE_ADD(NOW(), INTERVAL 5 DAY), 8, 1420, 'active', 6, NOW()),
+(2, 'Horizon Cloud SaaS & Analytics', 'horizon-saas-analytics', 'Fintech & SaaS', 'Developer Award', 'Dark/Light adaptive dashboard system built for high-scale metrics, subscription billing, API rate monitoring, and automated report generators.', 'Fintech analytics engine with live metric streams.', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80', 'https://tektrend.com/demos/horizon-saas', 'both', 950.00, 1850.00, 3800.00, DATE_ADD(NOW(), INTERVAL 3 DAY), 6, 980, 'active', 6, NOW()),
+(3, 'Aura Creative Studio & Agency Showcase', 'aura-creative-studio', 'Creative & Agency', 'Site of the Month', 'Award-winning smooth kinetic typography, magnetic hover effects, interactive 3D WebGL hero showcases, and instant project booking.', 'High-end agency portfolio with WebGL interactions.', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80', 'https://tektrend.com/demos/aura-studio', 'both', 800.00, 1600.00, 3200.00, DATE_ADD(NOW(), INTERVAL 7 DAY), 5, 1150, 'active', 6, NOW()),
+(4, 'Vanguard Freight & Fleet Enterprise ERP', 'vanguard-freight-erp', 'Logistics & Supply Chain', 'Honorable Mention', 'Comprehensive enterprise logistics suite featuring real-time driver tracking, cargo manifest generators, automated route fuel billing, and client tracking.', 'Supply chain ERP with live dispatch & GPS routing.', 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80', 'https://tektrend.com/demos/vanguard-erp', 'both', 1500.00, 3100.00, 5800.00, DATE_ADD(NOW(), INTERVAL 4 DAY), 9, 870, 'active', 6, NOW());
+
+-- ============================================================
+-- DESIGN BIDS
+-- ============================================================
+TRUNCATE TABLE design_bids;
+INSERT INTO design_bids (id, design_item_id, bidder_name, bidder_email, bidder_phone, bid_amount, message, status, created_at) VALUES
+(1, 1, 'Arthur Pendleton', 'arthur@vanguard-us.com', '+14155552671', 2400.00, 'We want this for our high-end Beverly Hills listing portal.', 'pending', NOW()),
+(2, 1, 'Julian Rossi', 'julian@milanorealestate.it', '+39021234567', 2100.00, 'Placing bid for European rollout.', 'outbid', DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(3, 2, 'Peak Fintech Group', 'invest@peakfintech.co.ke', '+254722334455', 1850.00, 'Integrating with our micro-lending API system.', 'pending', NOW()),
+(4, 3, 'Sophie Dubois', 'sophie@luxeparis.fr', '+33140506070', 1600.00, 'Perfect branding foundation for our Paris fashion studio.', 'pending', NOW());
+
+-- ============================================================
+-- CONTRACTS
+-- ============================================================
+TRUNCATE TABLE contracts;
+INSERT INTO contracts (id, contract_number, title, customer_id, lead_id, value, start_date, end_date, terms, status, signed_at, signed_by_name, created_by, created_at) VALUES
+(1, 'CNT-2026-001', 'Enterprise Technology & AI Architecture Advisory', 1, 5, 45000.00, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 'Tek Trend Innovations shall provide dedicated technology advisory, full-stack PHP architecture oversight, automated CI/CD pipelines, and cloud optimization for NovaTech Singapore.', 'signed', NOW(), 'Marcus Chen', 1, NOW()),
+(2, 'CNT-2026-002', 'Digital Real Estate Bidding Platform Delivery', 2, 3, 25000.00, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 6 MONTH), 'Development, customization, deployment, and 6-month support of the Apex Luxury Estate portal including CRM lead integration.', 'active', NOW(), 'Arthur Pendleton', 1, NOW()),
+(3, 'CNT-2026-003', 'Fintech Payment Gateway & Workflow Automation', 3, 2, 12000.00, DATE_ADD(CURDATE(), INTERVAL 7 DAY), DATE_ADD(CURDATE(), INTERVAL 3 MONTH), 'Custom integration of M-Pesa, card processing, automated receipt generation, and Google Sheets reconciliation system.', 'draft', NULL, NULL, 1, NOW());
+
+-- ============================================================
+-- INVOICES & ITEMS
+-- ============================================================
+TRUNCATE TABLE invoices;
+INSERT INTO invoices (id, customer_id, invoice_number, issue_date, due_date, subtotal, tax_amount, discount_amount, total, tax_rate_id, status, notes, created_by, created_at) VALUES
+(1, 1, 'INV-2026-001', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY), 15000.00, 2400.00, 0.00, 17400.00, 1, 'paid', 'First retainer tranche for Enterprise Tech Architecture.', 1, NOW()),
+(2, 2, 'INV-2026-002', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 7 DAY), 12500.00, 2000.00, 500.00, 14000.00, 1, 'sent', '50% initial milestone for Apex Platform delivery.', 1, NOW()),
+(3, 3, 'INV-2026-003', DATE_SUB(CURDATE(), INTERVAL 5 DAY), DATE_ADD(CURDATE(), INTERVAL 10 DAY), 6000.00, 960.00, 0.00, 6960.00, 1, 'sent', 'Milestone 1 for Fintech automation workflows.', 1, NOW());
+
+TRUNCATE TABLE invoice_items;
+INSERT INTO invoice_items (invoice_id, description, quantity, unit_price, tax_rate, line_total, sort_order) VALUES
+(1, 'Enterprise Advisory Retainer (Q1 2026)', 1.00, 15000.00, 16.00, 15000.00, 1),
+(2, 'Apex Luxury Estate Template & Backend Core', 1.00, 10000.00, 16.00, 10000.00, 1),
+(2, 'Custom Google Sheets & CRM Webhook Integration', 1.00, 2500.00, 16.00, 2500.00, 2),
+(3, 'Fintech Payment Gateway & M-Pesa Integration', 1.00, 6000.00, 16.00, 6000.00, 1);
+
+-- ============================================================
+-- FINANCES & TRANSACTIONS
+-- ============================================================
+TRUNCATE TABLE tax_rates;
+INSERT INTO tax_rates (id, name, rate, type, country, state, status) VALUES
+(1, 'VAT Standard (Kenya)', 16.00, 'percentage', 'Kenya', NULL, 'active'),
+(2, 'Corporate Services Tax (US)', 8.25, 'percentage', 'USA', 'California', 'active'),
+(3, 'GST Digital Services', 8.00, 'percentage', 'Singapore', NULL, 'active'),
+(4, 'Withholding Tax (Consulting)', 5.00, 'percentage', 'Kenya', NULL, 'active');
+
+TRUNCATE TABLE finance_transactions;
+INSERT INTO finance_transactions (type, category, department_id, customer_id, invoice_id, title, description, amount, tax_amount, tax_rate_id, payment_method, reference, transaction_date, created_by) VALUES
+('income', 'Consulting Retainer', 1, 1, 1, 'Client Retainer Payment - NovaTech SG', 'Q1 Advisory tranche settled via wire transfer.', 17400.00, 2400.00, 1, 'bank', 'WIRE-SG-98214', CURDATE(), 1),
+('income', 'Design Marketplace Sale', 4, 2, NULL, 'Design Template Deposit - Vanguard US', 'Downpayment on Apex Luxury Portal.', 5000.00, 800.00, 1, 'bank', 'WIRE-US-11204', DATE_SUB(CURDATE(), INTERVAL 2 DAY), 1),
+('expense', 'Cloud Infrastructure & AWS', 2, NULL, NULL, 'AWS Cloud & Dedicated Server Cluster', 'Monthly server hosting, AI endpoints and GPU instances.', 850.00, 0.00, NULL, 'card', 'CARD-AWS-902', CURDATE(), 1),
+('expense', 'Zoom Enterprise & Video API', 1, NULL, NULL, 'Zoom Pro Enterprise Teleconferencing', 'Annual video consultation licenses.', 240.00, 0.00, NULL, 'card', 'ZOOM-ANN-2026', DATE_SUB(CURDATE(), INTERVAL 10 DAY), 1),
+('expense', 'Design & Typography Licenses', 4, NULL, NULL, 'Awwwards / Foundry Font Licenses', 'Commercial font and 3D asset library pack.', 420.00, 0.00, NULL, 'card', 'FONT-FOUNDRY-33', DATE_SUB(CURDATE(), INTERVAL 15 DAY), 1);
+
+-- ============================================================
+-- BUDGETS
+-- ============================================================
+TRUNCATE TABLE budgets;
+INSERT INTO budgets (department_id, name, category, planned_amount, spent_amount, period, start_date, end_date, status, created_by) VALUES
+(2, 'Cloud AI & Server Infrastructure', 'Technology', 12000.00, 2850.00, 'quarterly', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 90 DAY), 'active', 1),
+(3, 'Global Growth & Client Acquisition', 'Marketing & Sales', 15000.00, 4200.00, 'quarterly', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 90 DAY), 'active', 1),
+(4, 'Awwwards Submissions & Studio Assets', 'Design & UI/UX', 8000.00, 1650.00, 'quarterly', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 90 DAY), 'active', 1);
+
+-- ============================================================
+-- TASKS
+-- ============================================================
+TRUNCATE TABLE tasks;
+INSERT INTO tasks (id, title, description, department_id, created_by, priority, status, due_date, start_date, estimated_hours, spent_hours, progress) VALUES
+(1, 'Deploy Apex Real Estate Live Bidding Demo', 'Finalize interactive 3D floor plan viewer and connect bid modal webhook.', 4, 1, 'high', 'in_progress', DATE_ADD(CURDATE(), INTERVAL 2 DAY), CURDATE(), 12.00, 8.00, 75),
+(2, 'Host Zoom Consultation with Fatima (Dubai Ventures)', 'Prepare custom deck on AI Chatbot customer intake architecture.', 1, 1, 'urgent', 'in_progress', CURDATE(), CURDATE(), 2.00, 1.00, 50),
+(3, 'Draft Scope Agreement for Safari Holdings ERP', 'Breakdown milestones for Google Sheets + PHP custom logistics ERP.', 3, 1, 'medium', 'todo', DATE_ADD(CURDATE(), INTERVAL 3 DAY), CURDATE(), 6.00, 0.00, 0);
+
+TRUNCATE TABLE task_assignments;
+INSERT INTO task_assignments (task_id, user_id, assigned_by) VALUES
+(1, 6, 1),
+(2, 1, 1),
+(2, 3, 1),
+(3, 3, 1);
+
+-- ============================================================
+-- CHAT ROOMS & MESSAGES
+-- ============================================================
+TRUNCATE TABLE chat_rooms;
+INSERT INTO chat_rooms (id, name, type, created_by) VALUES
+(1, 'General & Strategic Overview', 'broadcast', 1),
+(2, 'Consulting & Client Delivery', 'department', 1),
+(3, 'Sales Pipeline & Design Bids', 'department', 3);
+
+TRUNCATE TABLE chat_room_members;
+INSERT INTO chat_room_members (room_id, user_id, role) VALUES
+(1, 1, 'admin'), (1, 2, 'member'), (1, 3, 'member'), (1, 4, 'member'), (1, 5, 'member'), (1, 6, 'member'),
+(2, 1, 'admin'), (2, 4, 'member'), (2, 6, 'member'),
+(3, 1, 'admin'), (3, 3, 'admin'), (3, 6, 'member');
+
+TRUNCATE TABLE chat_messages;
+INSERT INTO chat_messages (room_id, user_id, message, type, created_at) VALUES
+(1, 1, 'Welcome to Tek Trend Virtual Office. All client consultations, design marketplace bids, and contracts are active.', 'text', DATE_SUB(NOW(), INTERVAL 2 HOUR)),
+(3, 3, 'Arthur from Vanguard US just placed a $2,400 bid on the Apex Luxury Estate portal. Following up on Zoom.', 'text', DATE_SUB(NOW(), INTERVAL 1 HOUR)),
+(2, 4, 'Cloud AI demo endpoints are live and integrated on the consultancy frontend.', 'text', DATE_SUB(NOW(), INTERVAL 30 MINUTE));
 
 -- ============================================================
 -- SETTINGS
 -- ============================================================
-INSERT INTO settings (key, value, type, group, description) VALUES
-('company_name', 'Tek Trend Innovations', 'string', 'general', 'Company name'),
-('company_email', 'info@tektrend.com', 'string', 'general', 'Company email'),
-('company_phone', '0707246273', 'string', 'general', 'Company phone'),
-('company_address', '123 Innovation Drive, Tech City', 'string', 'general', 'Company address'),
-('currency_symbol', '$', 'string', 'finance', 'Currency symbol'),
-('currency_code', 'USD', 'string', 'finance', 'Currency code'),
-('timezone', 'Africa/Nairobi', 'string', 'general', 'Timezone'),
-('date_format', 'Y-m-d', 'string', 'general', 'Date format'),
-('items_per_page', '20', 'integer', 'general', 'Items per page'),
-('session_timeout', '1440', 'integer', 'security', 'Session timeout in seconds'),
-('password_min_length', '8', 'integer', 'security', 'Minimum password length'),
-('login_rate_limit', '5', 'integer', 'security', 'Max login attempts before rate limiting'),
-('email_from_name', 'Tek Trend', 'string', 'email', 'Default email from name'),
-('email_from_address', 'info@tektrend.com', 'string', 'email', 'Default email from address'),
-('enable_registration', '0', 'boolean', 'security', 'Enable user registration'),
-('enable_https', '0', 'boolean', 'security', 'Force HTTPS'),
-('maintenance_mode', '0', 'boolean', 'general', 'Maintenance mode'),
-('logo_url', '', 'string', 'general', 'Company logo URL'),
-('favicon_url', '', 'string', 'general', 'Favicon URL');
+TRUNCATE TABLE settings;
+INSERT INTO settings (`key`, `value`, `type`, `group`, `description`) VALUES
+('company_name', 'Tek Trend Innovations', 'string', 'general', 'Company full brand name'),
+('company_tagline', 'World-Class Software Architecture, AI & Design Consultancy', 'string', 'general', 'Company slogan'),
+('company_email', 'info@tektrend.com', 'string', 'general', 'Primary company email'),
+('company_phone', '0707246273', 'string', 'general', 'Direct call phone number'),
+('company_whatsapp', '254707246273', 'string', 'general', 'Official WhatsApp number (international without +)'),
+('company_address', '123 Innovation Drive, Tech City, Nairobi', 'string', 'general', 'Physical office address'),
+('currency_symbol', '$', 'string', 'finance', 'Default display currency symbol'),
+('currency_code', 'USD', 'string', 'finance', 'Default ISO currency code'),
+('timezone', 'Africa/Nairobi', 'string', 'general', 'System timezone'),
+('zoom_default_link', 'https://zoom.us/j/9924883102?pwd=tektrend_consult', 'string', 'general', 'Default Zoom meeting link for consultations'),
+('zoom_meeting_id', '992-488-3102', 'string', 'general', 'Default Zoom meeting ID');
 
 -- ============================================================
--- CONTENT (Site Content for CMS)
+-- CMS CONTENT
 -- ============================================================
-INSERT INTO content (key, title, content, type, page, section, is_active, created_at) VALUES
-('hero_title', 'Hero Title', 'code · design · systems', 'text', 'home', 'hero', 1, NOW()),
-('hero_subtitle', 'Hero Subtitle', 'PHP · HTML · CSS · Google Script · Dashboards · School Management', 'text', 'home', 'hero', 1, NOW()),
-('hero_badge', 'Hero Badge', 'Tek Trend Certified', 'text', 'home', 'hero', 1, NOW()),
-('contact_email', 'Contact Email', 'info@tektrend', 'text', 'home', 'contact', 1, NOW()),
-('contact_phone', 'Contact Phone', '0707246273', 'text', 'home', 'contact', 1, NOW()),
-('contact_address', 'Contact Address', '123 Innovation Drive, Tech City', 'text', 'home', 'contact', 1, NOW()),
-('about_title', 'About Title', 'About Tek Trend', 'text', 'home', 'about', 1, NOW()),
-('about_content', 'About Content', 'We are a world-class technology company specializing in web design, PHP development, and dashboard systems.', 'html', 'home', 'about', 1, NOW()),
-('footer_brand', 'Footer Brand', 'Designed by TekTrend', 'text', 'home', 'footer', 1, NOW()),
-('footer_email', 'Footer Email', 'info@tektrend', 'text', 'home', 'footer', 1, NOW()),
-('footer_phone', 'Footer Phone', '0707246273', 'text', 'home', 'footer', 1, NOW()),
-('footer_portfolio', 'Footer Portfolio', 'Portfolio', 'text', 'home', 'footer', 1, NOW());
-
--- ============================================================
--- DEMOS (Cards)
--- ============================================================
-INSERT INTO demos (title, slug, description, short_description, icon, url, category, visibility, is_active, sort_order, created_at) VALUES
-('Analytics Dashboard', 'analytics-dashboard', 'KPI cards, trend views, navigation and modern admin layout.', 'KPI cards, trend views, navigation and modern admin layout.', 'fas fa-chart-line', 'dashboard.html', 'dashboard', 'public', 1, 1, NOW()),
-('Digital Marketing', 'digital-marketing', 'Landing page demo for marketing services and lead capture.', 'Landing page demo for marketing services and lead capture.', 'fas fa-bullhorn', 'live_demo/digital_markting.html', 'marketing', 'public', 1, 2, NOW()),
-('E-commerce', 'e-commerce', 'Product showcase layout with shop-style sections.', 'Product showcase layout with shop-style sections.', 'fas fa-shopping-cart', 'live_demo/e-commerce.html', 'ecommerce', 'public', 1, 3, NOW()),
-('Engineering', 'engineering', 'Corporate engineering/services style layout.', 'Corporate engineering/services style layout.', 'fas fa-gear', 'live_demo/engineering.html', 'corporate', 'public', 1, 4, NOW()),
-('Graphic Design', 'graphic-design', 'Portfolio-style design layout for creative services.', 'Portfolio-style design layout for creative services.', 'fas fa-pen-nib', 'live_demo/graphic.html', 'portfolio', 'public', 1, 5, NOW()),
-('Law Firm', 'law-firm', 'Professional legal firm layout with strong typography.', 'Professional legal firm layout with strong typography.', 'fas fa-gavel', 'live_demo/law_firm (2).html', 'business', 'public', 1, 6, NOW()),
-('Church Website', 'church', 'Bright church website demo for ministries, events and community updates.', 'Bright church website demo for ministries, events and community updates.', 'fas fa-church', 'live_demo/church.html', 'church', 'public', 1, 7, NOW()),
-('Magazine', 'magazine', 'Editorial layout demo for news, blog, or magazine sites.', 'Editorial layout demo for news, blog, or magazine sites.', 'fas fa-newspaper', 'live_demo/magazine.html', 'editorial', 'public', 1, 8, NOW()),
-('Nexus', 'nexus', 'Modern tech-style landing page template.', 'Modern tech-style landing page template.', 'fas fa-network-wired', 'live_demo/nexus.html', 'tech', 'public', 1, 9, NOW()),
-('Restaurant', 'restaurant', 'Restaurant / food business landing page demo.', 'Restaurant / food business landing page demo.', 'fas fa-utensils', 'live_demo/restaurant.html', 'food', 'public', 1, 10, NOW());
-
--- Demo tech tags
-INSERT INTO demo_tech (demo_id, name, sort_order) VALUES
-(1, 'Dashboard', 1), (1, 'Admin UI', 2), (1, 'Inter', 3),
-(2, 'Landing', 1), (2, 'Marketing', 2), (2, 'UI', 3),
-(3, 'Shop', 1), (3, 'Products', 2), (3, 'UI', 3),
-(4, 'Corporate', 1), (4, 'Services', 2), (4, 'UI', 3),
-(5, 'Portfolio', 1), (5, 'Branding', 2), (5, 'UI', 3),
-(6, 'Business', 1), (6, 'Services', 2), (6, 'UI', 3),
-(7, 'Church', 1), (7, 'Ministry', 2), (7, 'Community', 3),
-(8, 'Editorial', 1), (8, 'Blog', 2), (8, 'UI', 3),
-(9, 'Tech', 1), (9, 'Landing', 2), (9, 'UI', 3),
-(10, 'Food', 1), (10, 'Menu', 2), (10, 'UI', 3);
-
--- ============================================================
--- SAMPLE DATA
--- ============================================================
-
--- Sample customers
-INSERT INTO customers (first_name, last_name, email, phone, company, address, city, state, zip_code, country, status, created_at) VALUES
-('Sarah', 'Chen', 'sarah.chen@example.com', '555-0101', 'Tech Solutions Inc', '123 Tech Street', 'San Francisco', 'CA', '94101', 'USA', 'active', NOW()),
-('Michael', 'Torres', 'michael.torres@example.com', '555-0102', 'Global Systems LLC', '456 Business Ave', 'New York', 'NY', '10001', 'USA', 'active', NOW()),
-('Emily', 'Watson', 'emily.watson@example.com', '555-0103', 'Innovation Labs', '789 Innovation Blvd', 'Austin', 'TX', '73301', 'USA', 'active', NOW()),
-('James', 'Kim', 'james.kim@example.com', '555-0104', 'Digital Dynamics', '321 Digital Way', 'Seattle', 'WA', '98101', 'USA', 'active', NOW()),
-('Lisa', 'Park', 'lisa.park@example.com', '555-0105', 'Future Tech Corp', '654 Future St', 'Boston', 'MA', '02101', 'USA', 'active', NOW());
-
--- Sample leads
-INSERT INTO leads (source_id, assigned_to, first_name, last_name, email, phone, company, position, value, status, priority, notes, next_followup, created_at) VALUES
-(1, 3, 'David', 'Wilson', 'david.wilson@startup.com', '555-0201', 'StartupXYZ', 'CTO', 15000.00, 'new', 'high', 'Interested in our dashboard solution', DATE_ADD(NOW(), INTERVAL 2 DAY), NOW()),
-(2, 3, 'Jennifer', 'Taylor', 'jennifer.taylor@corp.com', '555-0202', 'Corporation Inc', 'IT Director', 25000.00, 'contacted', 'medium', 'Requested demo for CRM system', DATE_ADD(NOW(), INTERVAL 1 DAY), NOW()),
-(3, 3, 'Robert', 'Anderson', 'robert.anderson@agency.com', '555-0203', 'Creative Agency', 'Managing Partner', 8000.00, 'qualified', 'medium', 'Ready for proposal', DATE_ADD(NOW(), INTERVAL 3 DAY), NOW()),
-(4, NULL, 'Maria', 'Garcia', 'maria.garcia@retail.com', '555-0204', 'Retail Chain', 'Operations Manager', 12000.00, 'new', 'low', 'Inquiry about e-commerce solution', DATE_ADD(NOW(), INTERVAL 5 DAY), NOW()),
-(7, 3, 'Thomas', 'Lee', 'thomas.lee@finance.com', '555-0205', 'Finance Group', 'CFO', 30000.00, 'proposal', 'urgent', 'Needs financial dashboard', DATE_ADD(NOW(), INTERVAL 1 DAY), NOW());
-
--- Sample invoices
-INSERT INTO invoices (customer_id, invoice_number, issue_date, due_date, subtotal, tax_amount, discount_amount, total, status, notes, created_by, created_at) VALUES
-(1, 'INV-2026-001', '2026-07-01', '2026-07-15', 2450.00, 0.00, 0.00, 2450.00, 'paid', 'Web design project', 1, NOW()),
-(2, 'INV-2026-002', '2026-07-05', '2026-07-20', 1200.00, 180.00, 0.00, 1380.00, 'sent', 'Dashboard development', 1, NOW()),
-(3, 'INV-2026-003', '2026-07-10', '2026-07-25', 3500.00, 525.00, 200.00, 3825.00, 'partial', 'CRM system - Phase 1', 1, NOW()),
-(4, 'INV-2026-004', '2026-07-15', '2026-07-30', 800.00, 120.00, 0.00, 920.00, 'sent', 'Email marketing setup', 1, NOW()),
-(5, 'INV-2026-005', '2026-07-20', '2026-08-05', 5600.00, 840.00, 0.00, 6440.00, 'draft', 'E-commerce platform', 1, NOW());
-
--- Sample invoice items
-INSERT INTO invoice_items (invoice_id, description, quantity, unit_price, tax_rate, line_total, sort_order) VALUES
-(1, 'Website Design (10 pages)', 1, 2000.00, 0.00, 2000.00, 1),
-(1, 'Responsive Layout', 1, 450.00, 0.00, 450.00, 2),
-(2, 'Dashboard Development', 20, 60.00, 0.00, 1200.00, 1),
-(3, 'CRM System Phase 1', 1, 3500.00, 0.00, 3500.00, 1),
-(4, 'Email Marketing Setup', 1, 800.00, 0.00, 800.00, 1),
-(5, 'E-commerce Platform', 1, 5600.00, 0.00, 5600.00, 1);
-
--- Sample finance transactions
-INSERT INTO finance_transactions (type, category, department_id, customer_id, invoice_id, title, description, amount, tax_amount, payment_method, reference, transaction_date, created_by, created_at) VALUES
-('income', 'Sales', 2, 1, 1, 'Website Design Payment', 'Payment for INV-2026-001', 2450.00, 0.00, 'bank', 'TXN-001', '2026-07-01', 1, NOW()),
-('income', 'Sales', 2, 2, 2, 'Dashboard Development', 'Payment for INV-2026-002', 1380.00, 0.00, 'card', 'TXN-002', '2026-07-05', 1, NOW()),
-('income', 'Sales', 2, 3, 3, 'CRM System Partial Payment', 'Partial payment for INV-2026-003', 2000.00, 0.00, 'bank', 'TXN-003', '2026-07-10', 1, NOW()),
-('expense', 'Software', 2, NULL, NULL, 'Figma Subscription', 'Monthly design tool subscription', 15.00, 0.00, 'card', 'SUB-001', '2026-07-01', 1, NOW()),
-('expense', 'Hosting', 2, NULL, NULL, 'Server Hosting', 'Monthly cloud hosting', 89.00, 0.00, 'card', 'SUB-002', '2026-07-01', 1, NOW()),
-('expense', 'Marketing', 4, NULL, NULL, 'Google Ads', 'PPC campaign', 500.00, 0.00, 'card', 'ADS-001', '2026-07-05', 1, NOW()),
-('expense', 'Office', 1, NULL, NULL, 'Office Supplies', 'Monthly office supplies', 120.00, 0.00, 'card', 'OFF-001', '2026-07-10', 1, NOW()),
-('expense', 'Software', 2, NULL, NULL, 'GitHub Pro', 'Development tool subscription', 7.00, 0.00, 'card', 'SUB-003', '2026-07-15', 1, NOW());
-
--- Sample budgets
-INSERT INTO budgets (department_id, name, category, planned_amount, spent_amount, period, start_date, end_date, status, created_by, created_at) VALUES
-(2, 'Q3 Engineering Budget', 'Development', 25000.00, 12000.00, 'quarterly', '2026-07-01', '2026-09-30', 'active', 1, NOW()),
-(4, 'Q3 Marketing Budget', 'Marketing', 5000.00, 2500.00, 'quarterly', '2026-07-01', '2026-09-30', 'active', 1, NOW()),
-(5, 'Q3 Operations Budget', 'Operations', 3000.00, 800.00, 'quarterly', '2026-07-01', '2026-09-30', 'active', 1, NOW()),
-(2, 'Software Subscriptions', 'Software', 500.00, 251.00, 'monthly', '2026-07-01', '2026-07-31', 'active', 1, NOW());
-
--- Sample email subscribers
-INSERT INTO email_subscribers (email, first_name, last_name, source, status, subscribed_at) VALUES
-('john.doe@example.com', 'John', 'Doe', 'manual', 'active', NOW()),
-('jane.smith@example.com', 'Jane', 'Smith', 'manual', 'active', NOW()),
-('bob.wilson@example.com', 'Bob', 'Wilson', 'website', 'active', NOW()),
-('alice.brown@example.com', 'Alice', 'Brown', 'website', 'active', NOW()),
-('charlie.davis@example.com', 'Charlie', 'Davis', 'referral', 'active', NOW());
-
--- Sample email campaign
-INSERT INTO email_campaigns (name, subject, content_html, content_text, from_name, from_email, status, total_recipients, created_by, created_at) VALUES
-('Welcome Campaign', 'Welcome to Tek Trend!', '<h1>Welcome!</h1><p>Thank you for subscribing to Tek Trend.</p>', 'Welcome! Thank you for subscribing to Tek Trend.', 'Tek Trend', 'info@tektrend.com', 'sent', 5, 1, NOW());
-
--- Sample events
-INSERT INTO events (title, description, type, start_datetime, end_datetime, all_day, location, department_id, created_by, priority, status, color, created_at) VALUES
-('Team Standup', 'Daily team standup meeting', 'meeting', '2026-07-28 09:00:00', '2026-07-28 09:30:00', 0, 'Conference Room A', 2, 2, 'medium', 'scheduled', '#3b82f6', NOW()),
-('Client Presentation', 'Presentation for Tech Solutions Inc', 'meeting', '2026-07-29 14:00:00', '2026-07-29 15:00:00', 0, 'Online', 3, 3, 'high', 'scheduled', '#ef4444', NOW()),
-('Q3 Planning', 'Quarterly planning session', 'meeting', '2026-07-30 10:00:00', '2026-07-30 12:00:00', 0, 'Conference Room B', 1, 1, 'urgent', 'scheduled', '#8b5cf6', NOW()),
-('Team Building', 'Monthly team building activity', 'appointment', '2026-08-05 15:00:00', '2026-08-05 18:00:00', 0, 'Local Restaurant', 2, 2, 'medium', 'scheduled', '#10b981', NOW());
-
--- Sample tasks
-INSERT INTO tasks (title, description, department_id, created_by, priority, status, due_date, start_date, estimated_hours, spent_hours, progress, created_at) VALUES
-('Design Dashboard UI', 'Create UI mockups for the analytics dashboard', 2, 2, 'high', 'in_progress', '2026-07-29 17:00:00', '2026-07-28 09:00:00', 8.00, 4.00, 50, NOW()),
-('Develop CRM Module', 'Build the CRM/leads management module', 2, 2, 'urgent', 'in_progress', '2026-08-05 17:00:00', '2026-07-27 09:00:00', 40.00, 15.00, 35, NOW()),
-('Setup Email Campaign', 'Configure email marketing system', 4, 4, 'medium', 'todo', '2026-07-30 17:00:00', '2026-07-29 09:00:00', 4.00, 0.00, 0, NOW()),
-('Prepare Q3 Reports', 'Generate quarterly financial reports', 5, 5, 'high', 'in_progress', '2026-07-31 17:00:00', '2026-07-28 09:00:00', 6.00, 2.00, 30, NOW()),
-('Update Website Content', 'Update homepage with new projects', 4, 4, 'low', 'completed', '2026-07-27 17:00:00', '2026-07-26 09:00:00', 2.00, 2.00, 100, NOW());
-
--- Task assignments
-INSERT INTO task_assignments (task_id, user_id, assigned_by) VALUES
-(1, 2, 2),
-(2, 2, 2),
-(3, 4, 4),
-(4, 5, 5),
-(5, 4, 4);
-
--- Sample chat rooms
-INSERT INTO chat_rooms (name, type, department_id, created_by, created_at) VALUES
-('General', 'department', 1, 1, NOW()),
-('Engineering', 'department', 2, 1, NOW()),
-('Sales Team', 'department', 3, 1, NOW()),
-('Marketing Hub', 'department', 4, 1, NOW()),
-('Finance Desk', 'department', 5, 1, NOW()),
-('HR Corner', 'department', 6, 1, NOW()),
-('Support Channel', 'department', 7, 1, NOW()),
-('All Staff', 'broadcast', NULL, 1, NOW());
-
--- Chat room members
-INSERT INTO chat_room_members (room_id, user_id, role) VALUES
-(1, 1, 'owner'), (1, 2, 'member'), (1, 3, 'member'), (1, 4, 'member'), (1, 5, 'member'),
-(2, 2, 'owner'), (2, 1, 'member'),
-(3, 3, 'owner'), (3, 1, 'member'),
-(4, 4, 'owner'), (4, 1, 'member'),
-(5, 5, 'owner'), (5, 1, 'member'),
-(6, 1, 'owner'), (6, 2, 'member'),
-(7, 1, 'owner'), (7, 2, 'member'), (7, 3, 'member'),
-(8, 1, 'owner'), (8, 2, 'member'), (8, 3, 'member'), (8, 4, 'member'), (8, 5, 'member');
-
--- Sample chat messages
-INSERT INTO chat_messages (room_id, user_id, message, type, created_at) VALUES
-(1, 1, 'Welcome to the General channel!', 'system', NOW()),
-(1, 2, 'Good morning team! Ready for the standup?', 'text', NOW()),
-(1, 3, 'Yes, ready!', 'text', NOW()),
-(1, 4, 'Me too!', 'text', NOW()),
-(1, 5, 'Good morning everyone!', 'text', NOW()),
-(2, 2, 'Working on the CRM module today', 'text', NOW()),
-(2, 1, 'Great! Let me know if you need any help', 'text', NOW());
-
--- Sample lead activities
-INSERT INTO lead_activities (lead_id, user_id, type, subject, description, activity_at) VALUES
-(1, 3, 'note', 'Initial Contact', 'Left voicemail for David. Will follow up tomorrow.', NOW()),
-(2, 3, 'call', 'Follow-up Call', 'Spoke with Jennifer. She is interested in the dashboard.', NOW()),
-(3, 3, 'email', 'Proposal Sent', 'Sent proposal for CRM system.', NOW()),
-(4, 3, 'note', 'New Lead', 'Lead assigned. Will contact within 24 hours.', NOW()),
-(5, 3, 'meeting', 'Demo Scheduled', 'Scheduled demo for financial dashboard.', NOW());
-
--- Sample tax records
-INSERT INTO tax_records (tax_rate_id, period, taxable_amount, tax_amount, status, due_date, created_at) VALUES
-(1, '2026-07', 15000.00, 2400.00, 'pending', '2026-08-15', NOW()),
-(4, '2026-07', 15000.00, 4500.00, 'pending', '2026-08-20', NOW());
+TRUNCATE TABLE content;
+INSERT INTO content (`key`, `title`, `content`, `type`, `page`, `section`, `is_active`, `created_at`) VALUES
+('hero_title', 'Hero Title', 'High-Impact Software Architecture & Design Consultancy', 'text', 'home', 'hero', 1, NOW()),
+('hero_subtitle', 'Hero Subtitle', 'We engineer world-class PHP systems, Google Script enterprise workflows, AI chatbots, and Awwwards-caliber digital platforms for ambitious global companies.', 'text', 'home', 'hero', 1, NOW()),
+('hero_badge', 'Hero Badge', 'Certified Enterprise Tech Consultancy', 'text', 'home', 'hero', 1, NOW()),
+('about_title', 'About Tek Trend', 'Transforming Ideas Into Precision Engineering', 'text', 'home', 'about', 1, NOW()),
+('about_content', 'About Content', 'Tek Trend Innovations is a premier software engineering and design consultancy. From full-scale SaaS dashboards and school/enterprise ERPs to real-time AI automation and award-winning design templates, we deliver mission-critical solutions.', 'html', 'home', 'about', 1, NOW());
 
 SET FOREIGN_KEY_CHECKS = 1;
