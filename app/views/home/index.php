@@ -603,7 +603,7 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
             <div class="demo-item"><span><i class="fas fa-palette"></i> Graphic Design Studio</span> <a href="<?= eurl('/live_demo/graphic.html') ?>" target="_blank">demo →</a></div>
             <div class="demo-item"><span><i class="fas fa-chart-line"></i> Marketing Agency</span> <a href="<?= eurl('/live_demo/digital_markting.html') ?>" target="_blank">demo →</a></div>
             <div class="demo-item"><span><i class="fas fa-store"></i> E-Commerce Platform</span> <a href="<?= eurl('/live_demo/e-commerce.html') ?>" target="_blank">demo →</a></div>
-            <div class="demo-item"><span><i class="fas fa-scale-balanced"></i> Law Firm & Attorneys</span> <a href="<?= eurl('/live_demo/law_firm (2).html') ?>" target="_blank">demo →</a></div>
+            <div class="demo-item"><span><i class="fas fa-scale-balanced"></i> Law Firm & Attorneys</span> <a href="<?= eurl('/live_demo/law_firm.html') ?>" target="_blank">demo →</a></div>
             <div class="demo-item"><span><i class="fas fa-church"></i> Community Center</span> <a href="<?= eurl('/live_demo/church.html') ?>" target="_blank">demo →</a></div>
           <?php endif; ?>
         </div>

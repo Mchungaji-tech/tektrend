@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sterling &amp; Associates · Law Firm</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f7f5f2;
+      color: #1a1a2e;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* --- Scrollbar --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f7f5f2; }
+    ::-webkit-scrollbar-thumb { background: #b8943c; border-radius: 10px; }
+
+    /* --- Scroll Animations --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* --- Navigation --- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 2px solid rgba(184, 148, 60, 0.15);
+      transition: 0.3s;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f7f5f2;
+      letter-spacing: -0.5px;
+    }
+    .logo span {
+      color: #b8943c;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(247, 245, 242, 0.6);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover { color: #b8943c; }
+
+    .nav-cta {
+      background: #b8943c;
+      color: #1a1a2e !important;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      transition: 0.3s;
+      text-transform: uppercase;
+      font-size: 0.7rem !important;
+      letter-spacing: 1px !important;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover {
+      background: #d4a84a;
+      color: #1a1a2e !important;
+    }
+
+    /* --- Hero --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      background: linear-gradient(135deg, #1a1a2e 0%, #252540 50%, #1a1a2e 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(184, 148, 60, 0.04) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(184, 148, 60, 0.03) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 700px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(184, 148, 60, 0.12);
+      border: 1px solid rgba(184, 148, 60, 0.15);
+      padding: 0.3rem 1.5rem;
+      border-radius: 60px;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #b8943c;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 8vw, 5.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #f7f5f2;
+    }
+
+    .hero h1 .highlight {
+      color: #b8943c;
+      position: relative;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(184, 148, 60, 0.2);
+      border-radius: 10px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(247, 245, 242, 0.5);
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #b8943c;
+      color: #1a1a2e;
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .btn-primary:hover {
+      background: #d4a84a;
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(184, 148, 60, 0.2);
+    }
+
+    .btn-secondary {
+      background: rgba(247, 245, 242, 0.05);
+      border: 1px solid rgba(247, 245, 242, 0.08);
+      color: rgba(247, 245, 242, 0.6);
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-secondary:hover {
+      background: rgba(247, 245, 242, 0.08);
+      color: #f7f5f2;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(247, 245, 242, 0.04);
+      flex-wrap: wrap;
+    }
+    .stat-item .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #b8943c;
+    }
+    .stat-item .label {
+      font-size: 0.8rem;
+      color: rgba(247, 245, 242, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.2rem;
+    }
+
+    /* --- Hero Image (large picture) --- */
+    .hero-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      min-height: 400px;
+    }
+
+    .hero-image .image-placeholder {
+      width: 100%;
+      max-width: 500px;
+      height: 420px;
+      background: linear-gradient(145deg, rgba(184, 148, 60, 0.04), rgba(184, 148, 60, 0.01));
+      border-radius: 30px;
+      border: 1px solid rgba(184, 148, 60, 0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-placeholder .grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(rgba(184, 148, 60, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184, 148, 60, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .image-placeholder .big-icon {
+      font-size: 5rem;
+      color: rgba(184, 148, 60, 0.12);
+      z-index: 1;
+    }
+
+    .image-placeholder .badge-float {
+      position: absolute;
+      background: rgba(26, 26, 46, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(184, 148, 60, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      z-index: 2;
+    }
+    .badge-float.top-right {
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+    .badge-float.bottom-left {
+      bottom: 1.5rem;
+      left: 1.5rem;
+    }
+    .badge-float .badge-icon {
+      font-size: 1.2rem;
+      color: #b8943c;
+    }
+    .badge-float .badge-text {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #f7f5f2;
+    }
+    .badge-float .badge-text small {
+      display: block;
+      font-weight: 300;
+      color: rgba(247, 245, 242, 0.4);
+      font-size: 0.65rem;
+    }
+
+    /* --- Practice Areas --- */
+    .practice-areas {
+      padding: 5rem 4rem;
+      background: #f7f5f2;
+      border-top: 1px solid rgba(26, 26, 46, 0.04);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-header .sub {
+      color: #b8943c;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin: 0.5rem 0;
+    }
+    .section-header h2 span { color: #b8943c; }
+    .section-header p {
+      color: rgba(26, 26, 46, 0.5);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .areas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .area-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(26, 26, 46, 0.04);
+      transition: 0.4s;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(26, 26, 46, 0.02);
+    }
+    .area-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(26, 26, 46, 0.06);
+      border-color: rgba(184, 148, 60, 0.15);
+    }
+    .area-card .icon {
+      font-size: 2.2rem;
+      color: #b8943c;
+      margin-bottom: 1rem;
+      display: inline-block;
+      background: rgba(184, 148, 60, 0.06);
+      width: 65px;
+      height: 65px;
+      line-height: 65px;
+      border-radius: 20px;
+    }
+    .area-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+    .area-card p {
+      color: rgba(26, 26, 46, 0.5);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* --- Attorney Profiles --- */
+    .attorneys {
+      padding: 5rem 4rem;
+      background: #fff;
+      border-top: 1px solid rgba(26, 26, 46, 0.04);
+    }
+
+    .attorney-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .attorney-card {
+      text-align: center;
+      transition: 0.3s;
+      padding: 1.5rem;
+      border-radius: 24px;
+      background: #f7f5f2;
+      border: 1px solid rgba(26, 26, 46, 0.03);
+    }
+    .attorney-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(184, 148, 60, 0.1);
+    }
+    .attorney-card .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 60px;
+      margin: 0 auto 1rem;
+      background: linear-gradient(135deg, rgba(184, 148, 60, 0.08), rgba(184, 148, 60, 0.02));
+      border: 2px solid rgba(184, 148, 60, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: rgba(184, 148, 60, 0.15);
+    }
+    .attorney-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #1a1a2e;
+    }
+    .attorney-card .title {
+      font-size: 0.8rem;
+      color: #b8943c;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .attorney-card p {
+      color: rgba(26, 26, 46, 0.4);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+
+    /* --- Testimonial --- */
+    .testimonial {
+      padding: 5rem 4rem;
+      background: #1a1a2e;
+      border-top: 1px solid rgba(247, 245, 242, 0.03);
+    }
+    .testimonial blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: rgba(247, 245, 242, 0.7);
+      max-width: 750px;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .testimonial blockquote::before {
+      content: '"';
+      font-size: 4rem;
+      color: #b8943c;
+      opacity: 0.2;
+      display: block;
+      margin-bottom: -1rem;
+    }
+    .testimonial .author {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: rgba(247, 245, 242, 0.3);
+    }
+    .testimonial .author strong { color: #b8943c; font-weight: 600; }
+
+    /* --- Footer --- */
+    .footer {
+      padding: 2.5rem 4rem;
+      background: #1a1a2e;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      color: rgba(247, 245, 242, 0.15);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(247, 245, 242, 0.03);
+    }
+    .footer a {
+      color: rgba(247, 245, 242, 0.15);
+      text-decoration: none;
+      transition: 0.3s;
+      margin-left: 1.5rem;
+    }
+    .footer a:hover { color: #b8943c; }
+
+    .back-link {
+      display: inline-block;
+      margin: 1.5rem 4rem 0;
+      color: rgba(26, 26, 46, 0.2);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+    .back-link:hover { color: #b8943c; }
+
+    /* --- Responsive --- */
+    @media (max-width: 1024px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 8rem 2rem 3rem;
+        gap: 2rem;
+      }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-image .image-placeholder { height: 300px; max-width: 100%; }
+      .navbar { padding: 1rem 1.5rem; flex-wrap: wrap; }
+      .nav-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+      .practice-areas { padding: 3rem 1.5rem; }
+      .attorneys { padding: 3rem 1.5rem; }
+      .testimonial { padding: 3rem 1.5rem; }
+      .footer { padding: 1.5rem; flex-direction: column; align-items: center; text-align: center; }
+      .footer a { margin: 0 0.8rem; }
+      .back-link { margin: 0 1.5rem 1rem; }
+      .section-header h2 { font-size: 2.2rem; }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.5rem; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .stat-item .number { font-size: 1.6rem; }
+      .areas-grid { grid-template-columns: 1fr; }
+      .attorney-grid { grid-template-columns: 1fr; }
+      .testimonial blockquote { font-size: 1.3rem; }
+      .badge-float.top-right, .badge-float.bottom-left { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">Sterling <span>&amp;</span> Associates</div>
+    <ul class="nav-links">
+      <li><a href="#">Practice Areas</a></li>
+      <li><a href="#">Attorneys</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" class="nav-cta">Free Consultation</a></li>
+    </ul>
+  </nav>
+
+  <!-- Back to Portfolio -->
+  <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag"><i class="fas fa-scale-balanced"></i> Trusted Legal Counsel</span>
+      <h1>Justice <span class="highlight">served</span><br>with integrity</h1>
+      <p>We fight for your rights with relentless dedication, strategic expertise, and a commitment to excellence.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary"><i class="fas fa-handshake"></i> Free Consultation</a>
+        <a href="#" class="btn-secondary">Our Results</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="number">98%</div><div class="label">Success Rate</div></div>
+        <div class="stat-item"><div class="number">50+</div><div class="label">Years Combined Experience</div></div>
+        <div class="stat-item"><div class="number">4.9★</div><div class="label">Client Rating</div></div>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <div class="image-placeholder reveal-scale">
+        <div class="grid-overlay"></div>
+        <i class="fas fa-scale-balanced big-icon"></i>
+        <div class="badge-float top-right">
+          <div class="badge-icon"><i class="fas fa-gavel"></i></div>
+          <div class="badge-text">Excellence<small>Award-winning firm</small></div>
+        </div>
+        <div class="badge-float bottom-left">
+          <div class="badge-icon"><i class="fas fa-users"></i></div>
+          <div class="badge-text">500+ Cases<small>Successfully resolved</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Practice Areas -->
+  <section class="practice-areas">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-star"></i> Expertise</span>
+      <h2>Practice <span>Areas</span></h2>
+      <p>Comprehensive legal services tailored to your needs with precision and care.</p>
+    </div>
+    <div class="areas-grid">
+      <div class="area-card reveal">
+        <div class="icon"><i class="fas fa-gavel"></i></div>
+        <h4>Criminal Defense</h4>
+        <p>Aggressive representation for state and federal criminal charges.</p>
+      </div>
+      <div class="area-card reveal">
+        <div class="icon"><i class="fas fa-handshake"></i></div>
+        <h4>Corporate Law</h4>
+        <p>Business formation, contracts, mergers, and compliance.</p>
+      </div>
+      <div class="area-card reveal">
+        <div class="icon"><i class="fas fa-family"></i></div>
+        <h4>Family Law</h4>
+        <p>Divorce, custody, child support, and mediation services.</p>
+      </div>
+      <div class="area-card reveal">
+        <div class="icon"><i class="fas fa-file-contract"></i></div>
+        <h4>Real Estate</h4>
+        <p>Property transactions, leases, disputes, and zoning matters.</p>
+      </div>
+      <div class="area-card reveal">
+        <div class="icon"><i class="fas fa-user-injured"></i></div>
+        <h4>Personal Injury</h4>
+        <p>Compensation for accidents, negligence, and wrongful death.</p>
+      </div>
+      <div class="area-card reveal">
+        <div class="icon"><i class="fas fa-balance-scale"></i></div>
+        <h4>Civil Litigation</h4>
+        <p>Complex commercial and civil disputes resolved efficiently.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Attorneys -->
+  <section class="attorneys">
+    <div class="section-header reveal">
+      <span class="sub"><i class="fas fa-user-tie"></i> Team</span>
+      <h2>Our <span>Attorneys</span></h2>
+      <p>Dedicated legal professionals with a proven track record of success.</p>
+    </div>
+    <div class="attorney-grid">
+      <div class="attorney-card reveal">
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <h4>John Sterling</h4>
+        <div class="title">Founding Partner</div>
+        <p>30 years of experience in corporate law and litigation.</p>
+      </div>
+      <div class="attorney-card reveal">
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <h4>Sarah Mitchell</h4>
+        <div class="title">Partner</div>
+        <p>Specializing in family law and mediation services.</p>
+      </div>
+      <div class="attorney-card reveal">
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <h4>David Chen</h4>
+        <div class="title">Senior Associate</div>
+        <p>Expert in criminal defense and personal injury cases.</p>
+      </div>
+      <div class="attorney-card reveal">
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <h4>Emily Rodriguez</h4>
+        <div class="title">Associate</div>
+        <p>Focus on real estate and corporate transactional law.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="testimonial">
+    <blockquote class="reveal">
+      Sterling &amp; Associates represented me with exceptional professionalism and achieved a far better outcome than I ever expected.
+    </blockquote>
+    <div class="author">— <strong>Michael Thompson</strong> · Corporate Client</div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+  <span>Designed by <a href="../index.html">TekTrend</a></span>
+  <span>
+    <a href="mailto:info@tektrend">info@tektrend</a>
+    <a href="tel:0707246273">0707246273</a>
+    <a href="../index.html">Portfolio</a>
+  </span>
+</footer>
+
+  <!-- Scroll Animation Script -->
+  <script>
+    (function() {
+      const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -30px 0px'
+      });
+
+      reveals.forEach(el => observer.observe(el));
+
+      setTimeout(() => {
+        reveals.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            el.classList.add('visible');
+          }
+        });
+      }, 200);
+    })();
+  </script>
+
+</body>
+</html>

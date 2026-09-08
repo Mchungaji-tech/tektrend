@@ -18,6 +18,9 @@ class PortfolioController extends Controller {
         } catch (\Throwable $e) {
             $demos = [];
         }
+        if (empty($demos)) {
+            $demos = self::getDefaultPrototypes();
+        }
         $settings = $this->getSettings();
         $this->render('home/demos', ['demos' => $demos, 'settings' => $settings], null);
     }
@@ -239,11 +242,157 @@ class PortfolioController extends Controller {
     }
 
     private function getSettings() {
-        $rows = $this->db->fetchAll("SELECT `key`, `value` FROM settings");
         $settings = [];
-        foreach ($rows as $row) {
-            $settings[$row['key']] = $row['value'];
+        try {
+            $rows = $this->db->fetchAll("SELECT `key`, `value` FROM settings");
+            if (!empty($rows)) {
+                foreach ($rows as $row) {
+                    $settings[$row['key']] = $row['value'];
+                }
+            }
+        } catch (\Throwable $e) {
+            $settings = [];
         }
         return $settings;
+    }
+
+    public static function getDefaultPrototypes() {
+        return [
+            [
+                'id' => 1,
+                'title' => 'Studio Maven · Creative Studio',
+                'category' => 'Creative & Design',
+                'short_description' => 'Minimalist luxury branding portfolio with case studies, smooth motion reels, interactive typography, and instant project booking.',
+                'icon' => 'fas fa-palette',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/graphic.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, CSS3, GSAP, Responsive',
+                'preview_image' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Site of the Day',
+                'price' => 49.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 2,
+                'title' => 'GrowthPulse · Marketing Agency',
+                'category' => 'Marketing & SEO',
+                'short_description' => 'Growth-driven marketing agency portal featuring live campaign tracking, analytics metrics, interactive ROI calculator, and lead generation.',
+                'icon' => 'fas fa-chart-line',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/digital_markting.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, Bootstrap, CSS3, Chart.js',
+                'preview_image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Top Conversion',
+                'price' => 59.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 3,
+                'title' => 'LuxeCart · Modern E-Commerce',
+                'category' => 'E-Commerce & Retail',
+                'short_description' => 'High-speed storefront with dynamic category filtering, cart management, instant checkout flow, customer wishlist, and payment readiness.',
+                'icon' => 'fas fa-store',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/e-commerce.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, CSS3, JavaScript, eCommerce UI',
+                'preview_image' => 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Best Architecture',
+                'price' => 79.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 4,
+                'title' => 'Vanguard & Sterling · Law Firm',
+                'category' => 'Legal & Corporate',
+                'short_description' => 'High-trust legal advisory platform with practice areas directory, attorney profiles, consultation booking vaults, and case study breakdowns.',
+                'icon' => 'fas fa-scale-balanced',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/law_firm.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, Modern CSS, JavaScript, Legal Portal',
+                'preview_image' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Corporate Elite',
+                'price' => 69.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 5,
+                'title' => 'Grace Fellowship · Community Hub',
+                'category' => 'Non-Profit & Community',
+                'short_description' => 'Welcoming community portal with sermon live broadcast layout, event timetables, online donation workflows, and member connection registry.',
+                'icon' => 'fas fa-church',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/church.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, CSS3, Audio Stream UI, Grid',
+                'preview_image' => 'https://images.unsplash.com/photo-1548625361-195b0662d083?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Community Choice',
+                'price' => 39.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 6,
+                'title' => 'Titan Engineering · Industrial Systems',
+                'category' => 'Engineering & Tech',
+                'short_description' => 'Industrial automation showcase with technical specification viewers, interactive blueprint galleries, equipment catalogs, and RFQ request forms.',
+                'icon' => 'fas fa-cogs',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/engineering.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, Canvas, WebGL, Industrial CSS',
+                'preview_image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Industry Benchmark',
+                'price' => 79.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 7,
+                'title' => 'Le Jardin · Gourmet Restaurant',
+                'category' => 'Hospitality & Dining',
+                'short_description' => 'Atmospheric dining experience platform with seasonal menu showcases, chef stories, interactive table reservation system, and food gallery.',
+                'icon' => 'fas fa-utensils',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/restaurant.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, Playfair Display, CSS Animations',
+                'preview_image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Michelin Aesthetic',
+                'price' => 49.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 8,
+                'title' => 'Verve · Modern Tech Magazine',
+                'category' => 'Publishing & Media',
+                'short_description' => 'Ultra-sleek editorial platform designed for high readership with dark-mode aesthetic, typography hierarchy, category tabs, and newsletter forms.',
+                'icon' => 'fas fa-newspaper',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/magazine.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, Modern Typography, Responsive Grid',
+                'preview_image' => 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Editorial Pick',
+                'price' => 39.00,
+                'is_featured' => 1
+            ],
+            [
+                'id' => 9,
+                'title' => 'Nexus Commercial · Enterprise SaaS',
+                'category' => 'Fintech & SaaS',
+                'short_description' => 'Enterprise-grade technology portal with interactive software feature matrices, live pricing tiers, API doc viewer, and sales funnel.',
+                'icon' => 'fas fa-network-wired',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/nexus.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, CSS3, Inter Font, SaaS UI',
+                'preview_image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Developer Award',
+                'price' => 89.00,
+                'is_featured' => 1
+            ]
+        ];
     }
 }
