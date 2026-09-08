@@ -216,4 +216,16 @@ INSERT INTO content (`key`, `title`, `content`, `type`, `page`, `section`, `is_a
 ('about_title', 'About Tek Trend', 'Transforming Ideas Into Precision Engineering', 'text', 'home', 'about', 1, NOW()),
 ('about_content', 'About Content', 'Tek Trend Innovations is a premier software engineering and design consultancy. From full-scale SaaS dashboards and school/enterprise ERPs to real-time AI automation and award-winning design templates, we deliver mission-critical solutions.', 'html', 'home', 'about', 1, NOW());
 
+-- ============================================================
+-- PORTFOLIO DEMOS
+-- ============================================================
+INSERT INTO portfolio_demos (id, title, category, short_description, icon, demo_type, demo_url, hosting_domain, tech_stack, preview_image, award_badge, is_featured, sort_order, created_at) VALUES
+(1, 'Graphic Design Studio', 'Creative & Design', 'Bespoke branding showcase with smooth layouts, typography, and interactive client portfolio showcases.', 'fas fa-palette', 'local', '/live_demo/graphic.html', 'Local Showcase', 'HTML5, CSS3, GSAP, JS', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80', 'Site of the Day', 1, 1, NOW()),
+(2, 'Digital Marketing Agency', 'Marketing & SEO', 'High-conversion marketing agency portal featuring live campaign tracking, analytics, and instant funnel booking.', 'fas fa-chart-line', 'local', '/live_demo/digital_markting.html', 'Local Showcase', 'PHP, Bootstrap, JS', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80', 'Top Conversion', 1, 2, NOW()),
+(3, 'E-Commerce Multi-Vendor Platform', 'E-Commerce & Retail', 'Ultra-fast scalable storefront with category filtering, cart management, instant checkout, and payment gateways.', 'fas fa-store', 'local', '/live_demo/e-commerce.html', 'Local Showcase', 'PHP, MySQL, JavaScript', 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80', 'Best Architecture', 1, 3, NOW()),
+(4, 'Law Firm & Legal Advisory', 'Legal & Corporate', 'Prestigious law firm web platform with confidential attorney booking, case study directories, and consultation vaults.', 'fas fa-scale-balanced', 'local', '/live_demo/law_firm (2).html', 'Local Showcase', 'HTML5, CSS3, JavaScript', 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80', 'Corporate Elite', 1, 4, NOW()),
+(5, 'Community & Worship Center', 'Non-Profit & Community', 'Modern community hub with live media broadcasting, event calendars, donation workflows, and member registries.', 'fas fa-church', 'local', '/live_demo/church.html', 'Local Showcase', 'HTML5, CSS3, Media Player', 'https://images.unsplash.com/photo-1548625361-195b0662d083?auto=format&fit=crop&w=800&q=80', 'Community Choice', 1, 5, NOW()),
+(6, 'Engineering & Industrial Systems', 'Engineering & Tech', 'Industrial machinery portfolio, technical specification viewers, blueprints gallery, and RFQ submission system.', 'fas fa-cogs', 'local', '/live_demo/engineering.html', 'Local Showcase', 'HTML5, Canvas, WebGL', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80', 'Industry Benchmark', 1, 6, NOW())
+ON DUPLICATE KEY UPDATE title = VALUES(title);
+
 SET FOREIGN_KEY_CHECKS = 1;

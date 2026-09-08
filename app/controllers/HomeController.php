@@ -16,36 +16,67 @@ class HomeController extends Controller {
 
         // Fetch settings
         $settings = [];
-        $rows = $this->db->fetchAll("SELECT `key`, `value` FROM settings");
-        foreach ($rows as $row) {
-            $settings[$row['key']] = $row['value'];
+        try {
+            $rows = $this->db->fetchAll("SELECT `key`, `value` FROM settings");
+            foreach ($rows as $row) {
+                $settings[$row['key']] = $row['value'];
+            }
+        } catch (\Throwable $e) {
+            $settings = [];
         }
 
         // Fetch active design bidding items (Awwwards-style)
-        $designItems = $this->db->fetchAll(
-            "SELECT * FROM design_items WHERE status = 'active' ORDER BY id DESC"
-        );
-
-        // Fetch leadership & team members
-        $team = $this->db->fetchAll(
-            "SELECT u.first_name, u.last_name, u.position, u.role, u.email, u.avatar, d.name as department_name 
-             FROM users u 
-             LEFT JOIN departments d ON u.department_id = d.id 
-             WHERE u.status = 'active' 
-             ORDER BY u.id ASC"
-        );
-
-        // Fetch CMS content
-        $contentRows = $this->db->fetchAll("SELECT `key`, `content` FROM content WHERE is_active = 1");
-        $cms = [];
-        foreach ($contentRows as $cr) {
-            $cms[$cr['key']] = $cr['content'];
+        $designItems = [];
+        try {
+            $designItems = $this->db->fetchAll(
+                "SELECT * FROM design_items WHERE status = 'active' ORDER BY id DESC"
+            );
+        } catch (\Throwable $e) {
+            $designItems = [];
         }
 
-        // Fetch portfolio demos
-        $portfolioDemos = $this->db->fetchAll(
-            "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 12"
-        );
+        // Fetch leadership & team members
+        $team = [];
+        try {
+            $team = $this->db->fetchAll(
+                "SELECT u.first_name, u.last_name, u.position, u.role, u.email, u.avatar, d.name as department_name 
+                 FROM users u 
+                 LEFT JOIN departments d ON u.department_id = d.id 
+                 WHERE u.status = 'active' 
+                 ORDER BY u.id ASC"
+            );
+        } catch (\Throwable $e) {
+            $team = [];
+        }
+
+        // Fetch CMS content
+        $cms = [];
+        try {
+            $contentRows = $this->db->fetchAll("SELECT `key`, `content` FROM content WHERE is_active = 1");
+            foreach ($contentRows as $cr) {
+                $cms[$cr['key']] = $cr['content'];
+            }
+        } catch (\Throwable $e) {
+            $cms = [];
+        }
+
+        // Fetch portfolio demos safely with auto-creation fallback
+        $portfolioDemos = [];
+        try {
+            $portfolioDemos = $this->db->fetchAll(
+                "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 12"
+            );
+        } catch (\Throwable $e) {
+            if ($this->ensurePortfolioDemosTable()) {
+                try {
+                    $portfolioDemos = $this->db->fetchAll(
+                        "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 12"
+                    );
+                } catch (\Throwable $ex) {
+                    $portfolioDemos = [];
+                }
+            }
+        }
 
         // Disable dashboard layout for standalone luxury landing page
         $this->view->setLayout(null);

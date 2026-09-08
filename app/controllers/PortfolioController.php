@@ -10,7 +10,18 @@ class PortfolioController extends Controller {
      * Public Live Demos Showcase
      */
     public function showcase() {
-        $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC");
+        $demos = [];
+        try {
+            $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC");
+        } catch (\Throwable $e) {
+            if ($this->ensurePortfolioDemosTable()) {
+                try {
+                    $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC");
+                } catch (\Throwable $ex) {
+                    $demos = [];
+                }
+            }
+        }
         $settings = $this->getSettings();
         $this->render('home/demos', ['demos' => $demos, 'settings' => $settings], null);
     }
@@ -20,7 +31,18 @@ class PortfolioController extends Controller {
      */
     public function index() {
         $this->requireAuth();
-        $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos ORDER BY sort_order ASC, id DESC");
+        $demos = [];
+        try {
+            $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos ORDER BY sort_order ASC, id DESC");
+        } catch (\Throwable $e) {
+            if ($this->ensurePortfolioDemosTable()) {
+                try {
+                    $demos = $this->db->fetchAll("SELECT * FROM portfolio_demos ORDER BY sort_order ASC, id DESC");
+                } catch (\Throwable $ex) {
+                    $demos = [];
+                }
+            }
+        }
         $this->render('demos/index', ['demos' => $demos]);
     }
 
@@ -29,6 +51,7 @@ class PortfolioController extends Controller {
      */
     public function create() {
         $this->requireAuth();
+        $this->ensurePortfolioDemosTable();
         $this->render('demos/create');
     }
 
@@ -38,6 +61,7 @@ class PortfolioController extends Controller {
     public function store() {
         $this->requireAuth();
         $this->verifyCsrf();
+        $this->ensurePortfolioDemosTable();
 
         $rules = [
             'title' => ['required' => true, 'label' => 'Project Title'],
@@ -81,6 +105,7 @@ class PortfolioController extends Controller {
      */
     public function edit($id) {
         $this->requireAuth();
+        $this->ensurePortfolioDemosTable();
         $demo = $this->db->fetch("SELECT * FROM portfolio_demos WHERE id = ?", [$id]);
         if (!$demo) {
             $this->session->flash('error', 'Demo project not found.');
@@ -145,6 +170,7 @@ class PortfolioController extends Controller {
     public function destroy($id) {
         $this->requireAuth();
         $this->verifyCsrf();
+        $this->ensurePortfolioDemosTable();
 
         $demo = $this->db->fetch("SELECT * FROM portfolio_demos WHERE id = ?", [$id]);
         if ($demo) {

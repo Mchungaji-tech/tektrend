@@ -619,6 +619,21 @@ CREATE TABLE `login_attempts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
+-- PASSWORD RESETS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `password_resets` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(100) NOT NULL,
+    `token` VARCHAR(255) NOT NULL,
+    `expires_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `used` TINYINT(1) DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `token` (`token`),
+    KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
 -- CONSULTATIONS & ZOOM BOOKINGS
 -- ============================================================
 
@@ -715,6 +730,32 @@ CREATE TABLE IF NOT EXISTS `contracts` (
     UNIQUE KEY `contract_number` (`contract_number`),
     KEY `customer_id` (`customer_id`),
     KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- PORTFOLIO & LIVE DEMO SHOWCASES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `portfolio_demos` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `category` VARCHAR(100) NOT NULL,
+    `short_description` TEXT DEFAULT NULL,
+    `icon` VARCHAR(100) DEFAULT 'fas fa-laptop-code',
+    `demo_type` VARCHAR(50) DEFAULT 'external',
+    `demo_url` VARCHAR(500) NOT NULL,
+    `hosting_domain` VARCHAR(255) DEFAULT NULL,
+    `tech_stack` VARCHAR(255) DEFAULT 'PHP, HTML, CSS',
+    `preview_image` VARCHAR(500) DEFAULT NULL,
+    `award_badge` VARCHAR(100) DEFAULT NULL,
+    `is_featured` TINYINT(1) DEFAULT 1,
+    `sort_order` INT DEFAULT 0,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `category` (`category`),
+    KEY `is_featured` (`is_featured`),
+    KEY `sort_order` (`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
