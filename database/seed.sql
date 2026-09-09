@@ -203,7 +203,8 @@ INSERT INTO settings (`key`, `value`, `type`, `group`, `description`) VALUES
 ('currency_code', 'USD', 'string', 'finance', 'Default ISO currency code'),
 ('timezone', 'Africa/Nairobi', 'string', 'general', 'System timezone'),
 ('zoom_default_link', 'https://zoom.us/j/9924883102?pwd=tektrend_consult', 'string', 'general', 'Default Zoom meeting link for consultations'),
-('zoom_meeting_id', '992-488-3102', 'string', 'general', 'Default Zoom meeting ID');
+('zoom_meeting_id', '992-488-3102', 'string', 'general', 'Default Zoom meeting ID'),
+('google_api_key', '', 'password', 'ai', 'Google Gemini Generative AI API Key for Live AI Assistant');
 
 -- ============================================================
 -- CMS CONTENT

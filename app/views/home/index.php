@@ -5,16 +5,57 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
 $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech City';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tek Trend Innovations · World Class</title>
+  <title>Tek Trend Innovations · World Class Software Architecture</title>
+  
+  <!-- Anti-flicker Theme Script -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('tektrend_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts (Inter) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts (Inter & Outfit) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root, [data-theme="dark"] {
+      --bg-page: #0b0d0f;
+      --bg-navbar: rgba(8, 10, 14, 0.65);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --card-bg: rgba(14, 18, 24, 0.6);
+      --card-border: rgba(255, 215, 150, 0.04);
+      --accent-gold: #d6c29d;
+      --accent-gold-glow: rgba(214, 194, 157, 0.12);
+      --slider-card-bg: rgba(18, 22, 30, 0.5);
+      --slider-border: rgba(255, 255, 255, 0.03);
+      --demo-item-bg: rgba(0, 0, 0, 0.2);
+      --footer-bg: rgba(8, 10, 14, 0.85);
+      --footer-border: rgba(214, 194, 157, 0.16);
+    }
+
+    [data-theme="light"] {
+      --bg-page: #f8fafc;
+      --bg-navbar: rgba(255, 255, 255, 0.92);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --accent-gold: #b8860b;
+      --accent-gold-glow: rgba(184, 134, 11, 0.12);
+      --slider-card-bg: #ffffff;
+      --slider-border: #e2e8f0;
+      --demo-item-bg: #f1f5f9;
+      --footer-bg: #ffffff;
+      --footer-border: #e2e8f0;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -22,10 +63,11 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
     }
 
     body {
-      background: #0b0d0f;
-      color: #fff;
+      background: var(--bg-page);
+      color: var(--text-primary);
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     @media (hover: hover) and (pointer: fine) {
       body { cursor: none; }
@@ -120,9 +162,9 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
       justify-content: space-between;
       align-items: center;
       padding: 1.2rem 3rem;
-      background: rgba(8, 10, 14, 0.5);
+      background: var(--bg-navbar);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid var(--card-border);
       flex-wrap: wrap;
       gap: 1rem;
       position: sticky;
@@ -142,41 +184,90 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
       display: inline-flex;
       align-items: center;
     }
-    .logo i { margin-right: 8px; color: #c7b18b; -webkit-text-fill-color: #c7b18b; }
+    [data-theme="light"] .logo {
+      background: linear-gradient(135deg, #0f172a, #b8860b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo i { margin-right: 8px; color: var(--accent-gold); -webkit-text-fill-color: var(--accent-gold); }
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 1.8rem;
       font-weight: 500;
       font-size: 0.95rem;
       align-items: center;
       flex-wrap: wrap;
     }
     .nav-links a {
-      color: rgba(255,255,255,0.7);
+      color: var(--text-secondary);
       text-decoration: none;
       transition: 0.3s;
       letter-spacing: 0.5px;
       border-bottom: 2px solid transparent;
       padding-bottom: 4px;
     }
-    .nav-links a:hover { color: #fff; border-bottom-color: #d6c29d; }
+    .nav-links a:hover { color: var(--text-primary); border-bottom-color: var(--accent-gold); }
     .nav-links a:focus-visible,
     .demo-item a:focus-visible,
     button:focus-visible {
-      outline: 2px solid #d6c29d;
+      outline: 2px solid var(--accent-gold);
       outline-offset: 4px;
     }
     .nav-links .highlight {
-      background: rgba(214, 194, 157, 0.12);
+      background: var(--accent-gold-glow);
       padding: 0.5rem 1.5rem;
       border-radius: 40px;
-      border: 1px solid rgba(214, 194, 157, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
       transition: 0.3s;
     }
     .nav-links .highlight:hover {
-      background: rgba(214, 194, 157, 0.25);
-      border-color: #d6c29d;
+      background: var(--accent-gold);
+      color: #0c0e12;
       transform: scale(1.02);
+    }
+
+    /* Light Mode Overrides */
+    [data-theme="light"] .hero-background {
+      opacity: 0.12;
+      filter: grayscale(1) brightness(1.1);
+    }
+    [data-theme="light"] .gradient-overlay {
+      background: radial-gradient(circle at 30% 40%, rgba(240, 244, 248, 0.92) 0%, rgba(248, 250, 252, 0.98) 90%);
+    }
+    [data-theme="light"] .hero-text h1 {
+      color: #0f172a;
+      text-shadow: none;
+    }
+    [data-theme="light"] .hero-text p {
+      color: #475569;
+    }
+    [data-theme="light"] .slide-card,
+    [data-theme="light"] .contact-card {
+      background: var(--card-bg);
+      border-color: var(--card-border);
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+    }
+    [data-theme="light"] .slide-card h3,
+    [data-theme="light"] .contact-card h2 {
+      color: #0f172a;
+    }
+    [data-theme="light"] .slide-card p,
+    [data-theme="light"] .contact-detail a {
+      color: #475569;
+    }
+    [data-theme="light"] .demo-item {
+      background: var(--demo-item-bg);
+      border-color: var(--card-border);
+    }
+    [data-theme="light"] .demo-item span {
+      color: #0f172a;
+    }
+    [data-theme="light"] .tektrend-footer {
+      background: var(--footer-bg);
+      border-top-color: var(--footer-border);
+      color: #475569;
     }
 
     /* ----- HERO (with tilt) ----- */
@@ -529,6 +620,11 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
         <a href="<?= eurl('/#portfolio') ?>">Portfolio</a>
         <a href="<?= eurl('/live-demos') ?>"><i class="fas fa-laptop-code"></i> Live Demos</a>
         <a href="<?= eurl('/#contact') ?>">Contact</a>
+        <!-- Theme Toggle Button -->
+        <button id="homeThemeToggleBtn" onclick="toggleTheme()" title="Toggle Light / Dark Mode" aria-label="Toggle Theme" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--accent-gold); background: var(--accent-gold-glow); color: var(--accent-gold); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: transform 0.25s;">
+          <i class="fas fa-sun" id="homeThemeIcon"></i>
+        </button>
+
         <?php if (isset($_SESSION['user_id'])): ?>
           <a href="<?= eurl('/dashboard') ?>" class="highlight"><i class="fas fa-chart-pie"></i> Dashboard</a>
         <?php else: ?>
@@ -772,5 +868,30 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
     <a href="<?= eurl('/login') ?>"><i class="fas fa-lock"></i> Portal</a>
   </div>
 </footer>
+
+<!-- Include Google Gemini AI Chatbot -->
+<?php require_once BASE_PATH . '/app/views/partials/ai_chat.php'; ?>
+
+<script>
+  // Theme Toggle Functionality
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('tektrend_theme', next);
+    updateHomeThemeIcon(next);
+  }
+
+  function updateHomeThemeIcon(theme) {
+    const icon = document.getElementById('homeThemeIcon');
+    if (!icon) return;
+    icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    updateHomeThemeIcon(current);
+  });
+</script>
 </body>
 </html>

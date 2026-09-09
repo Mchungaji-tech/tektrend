@@ -4,324 +4,494 @@ $companyWhatsApp = $settings['company_whatsapp'] ?? '254707246273';
 $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tek Trend · Live HTML Prototypes & Turnkey Template Showcase</title>
+  <title>Tek Trend · Live Demo Prototypes & Turnkey Templates</title>
+  <meta name="description" content="Explore real production HTML prototypes, interactive web architectures, and turnkey source code templates by Tek Trend. Review live demos, commission custom builds, or purchase templates instantly.">
+
+  <!-- Anti-flicker Theme Script -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('tektrend_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Google Fonts: Inter & Outfit -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --primary: #d6c29d;
-      --primary-hover: #e5d4b4;
-      --accent: #38bdf8;
-      --accent-hover: #0ea5e9;
-      --bg-dark: #080a0c;
-      --bg-card: rgba(18, 22, 28, 0.7);
-      --border-card: rgba(214, 194, 157, 0.15);
+    /* CSS Variables: Dark & Light Mode */
+    :root, [data-theme="dark"] {
+      --bg-canvas: #07090d;
+      --bg-navbar: rgba(11, 15, 22, 0.82);
+      --bg-card: rgba(15, 20, 28, 0.72);
+      --bg-card-hover: rgba(22, 30, 42, 0.9);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(214, 194, 157, 0.4);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --text-soft: #cbd5e1;
+      --accent: #d6c29d;
+      --accent-hover: #e8dbbf;
+      --accent-glow: rgba(214, 194, 157, 0.15);
+      --modal-bg: #0f141c;
+      --input-bg: rgba(255, 255, 255, 0.05);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --strip-bg: rgba(255, 255, 255, 0.025);
+      --shadow-card: 0 15px 35px -10px rgba(0, 0, 0, 0.7);
+      --shadow-nav: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    [data-theme="light"] {
+      --bg-canvas: #f8fafc;
+      --bg-navbar: rgba(255, 255, 255, 0.9);
+      --bg-card: #ffffff;
+      --bg-card-hover: #ffffff;
+      --border-color: #e2e8f0;
+      --border-hover: #b89547;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-soft: #334155;
+      --accent: #b8860b;
+      --accent-hover: #996f08;
+      --accent-glow: rgba(184, 134, 11, 0.12);
+      --modal-bg: #ffffff;
+      --input-bg: #f8fafc;
+      --input-border: #cbd5e1;
+      --strip-bg: #f1f5f9;
+      --shadow-card: 0 10px 30px -5px rgba(15, 23, 42, 0.07);
+      --shadow-nav: 0 4px 20px rgba(15, 23, 42, 0.06);
     }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: var(--bg-dark);
+      background: var(--bg-canvas);
       color: var(--text-main);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
-      padding: 1.5rem;
       min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Ambient background glow */
-    body::before {
-      content: '';
+    /* Ambient atmospheric glow */
+    .ambient-glow {
       position: fixed;
       top: -20%;
-      left: -20%;
-      width: 140%;
-      height: 140%;
-      background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 70%, rgba(214, 194, 157, 0.06) 0%, transparent 50%);
-      z-index: -1;
+      left: -15%;
+      width: 130%;
+      height: 130%;
+      background: radial-gradient(circle at 20% 25%, rgba(56, 189, 248, 0.06) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 75%, var(--accent-glow) 0%, transparent 55%);
       pointer-events: none;
+      z-index: 0;
     }
 
     .container {
       max-width: 1440px;
       margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Header */
-    .header {
+    /* ============================================================
+       TOP STICKY NAVBAR (WELL-ORGANIZED, NEVER WRAPS AWKWARDLY)
+       ============================================================ */
+    .navbar-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--bg-navbar);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-nav);
+      transition: all 0.3s ease;
+    }
+
+    .navbar-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      height: 74px;
       gap: 1.5rem;
-      padding: 1rem 0 2rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      margin-bottom: 3rem;
     }
 
-    .logo {
+    /* Logo */
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-brand-logo {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.85rem;
+      font-size: 1.7rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #f0e9d0, #b7a88b);
+      background: linear-gradient(135deg, var(--text-main) 20%, var(--accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.5px;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
+      gap: 0.6rem;
     }
-    .logo i {
-      margin-right: 12px;
-      color: #d6c29d;
-      -webkit-text-fill-color: #d6c29d;
+    .nav-brand-logo i {
+      color: var(--accent);
+      -webkit-text-fill-color: var(--accent);
+      font-size: 1.5rem;
     }
 
-    .header-actions {
+    /* Center Navigation Menu */
+    .nav-menu {
       display: flex;
-      gap: 1.25rem;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.35rem 0.6rem;
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
     }
-    .header-actions a {
-      color: rgba(255,255,255,0.75);
+    [data-theme="light"] .nav-menu {
+      background: rgba(15, 23, 42, 0.03);
+    }
+    .nav-link {
+      color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 500;
-      transition: 0.25s ease;
+      padding: 0.45rem 1rem;
+      border-radius: 30px;
+      transition: all 0.25s ease;
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
+      white-space: nowrap;
     }
-    .header-actions a:hover {
-      color: #fff;
+    .nav-link:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
     }
-    .header-actions .btn-outline {
-      border: 1px solid rgba(214, 194, 157, 0.3);
-      padding: 0.5rem 1.3rem;
-      border-radius: 40px;
-      background: rgba(214, 194, 157, 0.08);
-      color: #e5d4b4;
+    [data-theme="light"] .nav-link:hover {
+      background: rgba(15, 23, 42, 0.06);
     }
-    .header-actions .btn-outline:hover {
-      background: rgba(214, 194, 157, 0.2);
-      border-color: #d6c29d;
-      color: #fff;
-    }
-    .header-actions .btn-whatsapp {
-      border: 1px solid rgba(37, 211, 102, 0.3);
-      background: rgba(37, 211, 102, 0.1);
-      color: #25d366;
-    }
-    .header-actions .btn-whatsapp:hover {
-      background: rgba(37, 211, 102, 0.2);
-      color: #4ade80;
+    .nav-link.active {
+      color: var(--accent);
+      background: var(--accent-glow);
+      font-weight: 600;
     }
 
-    /* Hero / Intro Banner */
+    /* Right Action Group */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    [data-theme="light"] .theme-toggle-btn {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #b8860b;
+    }
+    .theme-toggle-btn:hover {
+      transform: rotate(20deg) scale(1.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    /* Buttons in Nav */
+    .btn-nav-outline {
+      border: 1px solid var(--border-color);
+      padding: 0.55rem 1.25rem;
+      border-radius: 40px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+    .btn-nav-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .btn-nav-whatsapp {
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+    }
+    .btn-nav-whatsapp:hover {
+      background: rgba(34, 197, 94, 0.22);
+      border-color: #22c55e;
+      color: #fff;
+    }
+    [data-theme="light"] .btn-nav-whatsapp {
+      background: rgba(22, 163, 74, 0.1);
+      color: #16a34a;
+      border-color: rgba(22, 163, 74, 0.3);
+    }
+    [data-theme="light"] .btn-nav-whatsapp:hover {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    /* Mobile Hamburger */
+    .mobile-nav-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 1.2rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      display: none;
+      flex-direction: column;
+      gap: 0.85rem;
+      padding: 1.25rem 0 1.5rem;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-navbar);
+    }
+    .mobile-drawer.open {
+      display: flex;
+    }
+    .mobile-drawer a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+    }
+    .mobile-drawer a:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       INTRO / HERO BANNER
+       ============================================================ */
     .intro-banner {
       text-align: center;
-      max-width: 900px;
-      margin: 0 auto 3rem auto;
-      padding: 0 1rem;
+      max-width: 920px;
+      margin: 3.5rem auto 3rem;
     }
     .intro-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.4rem 1.1rem;
-      border-radius: 30px;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      color: #38bdf8;
-      font-size: 0.82rem;
+      padding: 0.4rem 1.4rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-bottom: 1.25rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-hover);
+      color: var(--accent);
+      margin-bottom: 1.2rem;
     }
     .intro-banner h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
       font-weight: 800;
-      letter-spacing: -1px;
       line-height: 1.15;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+      background: linear-gradient(135deg, var(--text-main) 40%, var(--accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.1rem;
     }
     .intro-banner p {
       color: var(--text-muted);
-      font-size: 1.08rem;
-      line-height: 1.7;
-      margin-bottom: 2rem;
+      font-size: 1.12rem;
+      line-height: 1.65;
     }
 
-    /* Category Filter */
+    /* Category Filter Buttons */
     .filter-bar {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.55rem;
       margin-bottom: 3.5rem;
     }
     .filter-btn {
-      background: rgba(255, 255, 255, 0.04);
-      color: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.55rem 1.2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.55rem 1.25rem;
       border-radius: 30px;
-      font-size: 0.86rem;
-      font-weight: 600;
+      font-size: 0.88rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: 0.25s ease;
+      transition: all 0.25s ease;
     }
-    .filter-btn:hover, .filter-btn.active {
-      background: rgba(214, 194, 157, 0.15);
-      border-color: #d6c29d;
-      color: #f8fafc;
-      transform: translateY(-1px);
+    .filter-btn:hover {
+      color: var(--text-main);
+      border-color: var(--border-hover);
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--accent), #bba377);
+      color: #0c0e12;
+      font-weight: 700;
+      border-color: var(--accent);
+      box-shadow: 0 4px 15px var(--accent-glow);
     }
 
-    /* Demo Grid */
+    /* ============================================================
+       PROTOTYPE CARDS GRID
+       ============================================================ */
     .demo-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       gap: 2rem;
-      margin-bottom: 4rem;
+      margin-bottom: 5rem;
     }
 
-    /* Card */
     .demo-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 20px;
-      padding: 2rem;
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 1.85rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
+      box-shadow: var(--shadow-card);
       position: relative;
-      transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
     .demo-card:hover {
       transform: translateY(-6px);
-      border-color: rgba(214, 194, 157, 0.4);
-      box-shadow: 0 20px 40px -15px rgba(214, 194, 157, 0.12);
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.4);
     }
 
     .card-top-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       margin-bottom: 1.25rem;
     }
     .icon-wrap {
       width: 52px;
       height: 52px;
-      border-radius: 14px;
-      background: rgba(214, 194, 157, 0.1);
-      border: 1px solid rgba(214, 194, 157, 0.2);
-      color: #d6c29d;
+      border-radius: 16px;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-hover);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
+      color: var(--accent);
     }
     .award-pill {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 0.3rem 0.85rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.25rem 0.8rem;
       border-radius: 20px;
-      background: rgba(56, 189, 248, 0.12);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--border-hover);
     }
 
     .demo-card h3 {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-bottom: 0.4rem;
-      color: #fff;
+      margin-bottom: 0.35rem;
+      color: var(--text-main);
     }
     .demo-card .category {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #d6c29d;
-      margin-bottom: 0.9rem;
-      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
     }
     .demo-card p {
       color: var(--text-muted);
       font-size: 0.92rem;
-      line-height: 1.65;
-      margin-bottom: 1.5rem;
-      flex: 1;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
     }
 
-    /* Tech tags */
     .tech-stack {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-bottom: 1.5rem;
+      gap: 0.4rem;
+      margin-bottom: 1.35rem;
     }
     .tech-stack span {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.25rem 0.8rem;
-      border-radius: 30px;
+      background: var(--strip-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
       font-size: 0.72rem;
-      color: #cbd5e1;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      font-weight: 500;
+      color: var(--text-soft);
     }
 
-    /* Pricing & Action Bar */
+    /* Pricing strip */
     .pricing-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.85rem 1rem;
+      padding: 0.75rem 1rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      margin-bottom: 1.25rem;
+      background: var(--strip-bg);
+      border: 1px solid var(--border-color);
+      margin-bottom: 1.2rem;
     }
     .price-tag {
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       color: var(--text-muted);
     }
     .price-tag strong {
       font-size: 1.15rem;
-      color: #fff;
+      color: var(--text-main);
       font-family: 'Outfit', sans-serif;
-      font-weight: 800;
     }
 
-    /* Card Action Buttons (3 actions) */
+    /* 3 Action Buttons */
     .action-group {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -333,77 +503,76 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
       align-items: center;
       justify-content: center;
       gap: 0.55rem;
-      background: linear-gradient(135deg, rgba(214,194,157,0.18), rgba(214,194,157,0.08));
-      color: #f5efe2;
-      border: 1px solid rgba(214, 194, 157, 0.35);
+      background: linear-gradient(135deg, var(--accent-glow), rgba(214,194,157,0.06));
+      color: var(--text-main);
+      border: 1px solid var(--border-hover);
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       padding: 0.75rem 1rem;
       border-radius: 12px;
       text-decoration: none;
-      transition: 0.25s ease;
+      transition: all 0.25s ease;
     }
     .btn-preview:hover {
-      background: linear-gradient(135deg, rgba(214,194,157,0.3), rgba(214,194,157,0.18));
-      border-color: #d6c29d;
-      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #bba377);
+      color: #0c0e12;
       transform: translateY(-1px);
     }
-
     .btn-action-sub {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.45rem;
-      font-size: 0.82rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
       font-weight: 600;
-      padding: 0.65rem 0.75rem;
-      border-radius: 10px;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: 0.25s ease;
+      transition: all 0.25s ease;
       text-decoration: none;
+      border: none;
     }
     .btn-request {
-      background: rgba(56, 189, 248, 0.1);
-      border-color: rgba(56, 189, 248, 0.25);
-      color: #38bdf8;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      color: #3b82f6;
     }
     .btn-request:hover {
-      background: rgba(56, 189, 248, 0.22);
-      border-color: #38bdf8;
-      color: #fff;
+      background: rgba(59, 130, 246, 0.22);
+      color: #2563eb;
     }
+    [data-theme="dark"] .btn-request { color: #93c5fd; }
+    [data-theme="dark"] .btn-request:hover { color: #fff; }
+
     .btn-buy {
-      background: rgba(34, 197, 94, 0.1);
-      border-color: rgba(34, 197, 94, 0.25);
-      color: #4ade80;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      color: #16a34a;
     }
     .btn-buy:hover {
       background: rgba(34, 197, 94, 0.22);
-      border-color: #22c55e;
-      color: #fff;
+      color: #15803d;
     }
+    [data-theme="dark"] .btn-buy { color: #86efac; }
+    [data-theme="dark"] .btn-buy:hover { color: #fff; }
 
-    /* Modal Overlay */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(8px);
-      z-index: 1000;
+      z-index: 10000;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 1rem;
     }
-    .modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
     .modal-box {
-      background: #0f1318;
-      border: 1px solid rgba(214, 194, 157, 0.3);
-      border-radius: 20px;
+      background: var(--modal-bg);
+      border: 1px solid var(--border-hover);
+      border-radius: 24px;
       max-width: 580px;
       width: 100%;
       padding: 2.25rem;
@@ -422,113 +591,82 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       cursor: pointer;
-      padding: 0.5rem;
-      transition: 0.2s;
+      transition: color 0.2s;
     }
-    .modal-close:hover { color: #fff; }
-
+    .modal-close:hover { color: var(--text-main); }
     .modal-header h2 {
       font-family: 'Outfit', sans-serif;
       font-size: 1.6rem;
-      color: #fff;
-      margin-bottom: 0.4rem;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
     }
     .modal-header p {
       color: var(--text-muted);
       font-size: 0.88rem;
       margin-bottom: 1.5rem;
     }
-
-    .form-group {
-      margin-bottom: 1.1rem;
-    }
+    .form-group { margin-bottom: 1.1rem; }
     .form-group label {
       display: block;
       font-size: 0.82rem;
       font-weight: 600;
-      color: #cbd5e1;
+      color: var(--text-soft);
       margin-bottom: 0.4rem;
     }
+    .form-group label.required::after { content: ' *'; color: #ef4444; }
     .form-control {
       width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #fff;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
       padding: 0.75rem 1rem;
       border-radius: 10px;
       font-family: inherit;
       font-size: 0.92rem;
-      transition: 0.2s;
     }
     .form-control:focus {
       outline: none;
-      border-color: #d6c29d;
-      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent);
     }
-
     .modal-actions {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
     }
     .btn-submit-modal {
-      background: linear-gradient(135deg, #d6c29d, #b7a88b);
-      color: #0b0d0f;
-      border: none;
-      padding: 0.85rem;
+      width: 100%;
+      padding: 0.95rem;
       border-radius: 12px;
+      font-size: 1rem;
       font-weight: 700;
-      font-size: 0.95rem;
       cursor: pointer;
-      transition: 0.25s;
-    }
-    .btn-submit-modal:hover {
-      background: linear-gradient(135deg, #e5d4b4, #c7b18b);
-      transform: translateY(-1px);
+      border: none;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
     }
     .btn-wa-modal {
-      background: rgba(37, 211, 102, 0.12);
-      border: 1px solid rgba(37, 211, 102, 0.3);
-      color: #25d366;
-      padding: 0.8rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.9rem;
       text-align: center;
-      text-decoration: none;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      transition: 0.25s;
-    }
-    .btn-wa-modal:hover {
-      background: rgba(37, 211, 102, 0.25);
-      color: #fff;
-    }
-
-    /* Flash Notice */
-    .flash-alert {
-      max-width: 800px;
-      margin: 0 auto 2rem auto;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      color: #4ade80;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.95rem;
+      color: #22c55e;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.5rem;
     }
 
     /* Footer */
     .footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 2.5rem 0 1rem 0;
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 0 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -537,42 +675,89 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
       color: var(--text-muted);
       font-size: 0.88rem;
     }
-    .footer a {
-      color: #d6c29d;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-    .footer a:hover { color: #fff; }
+    .footer a { color: var(--accent); text-decoration: none; }
+    .footer a:hover { color: var(--text-main); }
 
-    @media (max-width: 800px) {
+    /* Flash alert */
+    .flash-alert {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+      padding: 1rem 1.4rem;
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 992px) {
+      .nav-menu { display: none; }
+      .mobile-nav-toggle { display: flex; }
       .demo-grid { grid-template-columns: 1fr; }
-      .header { flex-direction: column; align-items: flex-start; }
-      .header-actions { width: 100%; flex-wrap: wrap; }
-      body { padding: 1.2rem; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <!-- HEADER (100% PUBLIC, ZERO DASHBOARD OVERLAY) -->
-    <header class="header">
-      <a href="<?= eurl('/') ?>" class="logo"><i class="fas fa-code"></i> Tek Trend</a>
-      <div class="header-actions">
+  <div class="ambient-glow"></div>
+
+  <!-- STICKY NAVBAR -->
+  <header class="navbar-sticky">
+    <div class="container">
+      <div class="navbar-inner">
+        <!-- Logo -->
+        <a href="<?= eurl('/') ?>" class="nav-brand">
+          <span class="nav-brand-logo"><i class="fas fa-code"></i> Tek Trend</span>
+        </a>
+
+        <!-- Center Menu -->
+        <nav class="nav-menu">
+          <a href="<?= eurl('/') ?>" class="nav-link"><i class="fas fa-home"></i> Home</a>
+          <a href="<?= eurl('/#portfolio') ?>" class="nav-link"><i class="fas fa-layer-group"></i> Services</a>
+          <a href="<?= eurl('/#consultation') ?>" class="nav-link"><i class="fas fa-calendar-check"></i> Consultation</a>
+          <a href="<?= eurl('/#contact') ?>" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
+          <a href="#demoGrid" class="nav-link active"><i class="fas fa-rocket"></i> Prototypes (<?= count($demos) ?>)</a>
+        </nav>
+
+        <!-- Right Actions -->
+        <div class="nav-actions">
+          <!-- Light / Dark Mode Toggle -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+            <i class="fas fa-sun" id="themeIcon"></i>
+          </button>
+
+          <!-- WhatsApp Us -->
+          <a href="https://wa.me/<?= $companyWhatsApp ?>?text=Hello%20Tek%20Trend,%20I%20am%20exploring%20your%20Live%20Demo%20Prototypes%20and%20turnkey%20systems." target="_blank" class="btn-nav-outline btn-nav-whatsapp">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+
+          <!-- Portal Login / Dashboard -->
+          <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="<?= eurl('/dashboard') ?>" class="btn-nav-outline"><i class="fas fa-chart-pie"></i> Portal</a>
+          <?php else: ?>
+            <a href="<?= eurl('/login') ?>" class="btn-nav-outline"><i class="fas fa-lock"></i> Login</a>
+          <?php endif; ?>
+
+          <!-- Mobile Toggle -->
+          <button class="mobile-nav-toggle" onclick="toggleMobileDrawer()" aria-label="Toggle Navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Drawer -->
+      <div class="mobile-drawer" id="mobileDrawer">
         <a href="<?= eurl('/') ?>"><i class="fas fa-home"></i> Home</a>
         <a href="<?= eurl('/#portfolio') ?>"><i class="fas fa-layer-group"></i> Services</a>
         <a href="<?= eurl('/#consultation') ?>"><i class="fas fa-calendar-check"></i> Book Consultation</a>
         <a href="<?= eurl('/#contact') ?>"><i class="fas fa-envelope"></i> Contact</a>
-        <?php if (isset($_SESSION['user_id'])): ?>
-          <a href="<?= eurl('/dashboard') ?>" class="btn-outline"><i class="fas fa-chart-pie"></i> Portal Dashboard</a>
-        <?php else: ?>
-          <a href="<?= eurl('/login') ?>" class="btn-outline"><i class="fas fa-lock"></i> Portal Login</a>
-        <?php endif; ?>
-        <a href="https://wa.me/<?= $companyWhatsApp ?>?text=Hello%20Tek%20Trend,%20I%20am%20exploring%20your%20Live%20Demo%20Prototypes%20and%20turnkey%20systems." target="_blank" class="btn-outline btn-whatsapp">
-          <i class="fab fa-whatsapp"></i> WhatsApp Us
-        </a>
+        <a href="#demoGrid"><i class="fas fa-rocket"></i> All Prototypes (<?= count($demos) ?>)</a>
       </div>
-    </header>
+    </div>
+  </header>
+
+  <div class="container">
 
     <?php if (flash('success')): ?>
       <div class="flash-alert">
@@ -647,7 +832,7 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
             <div style="font-size: 0.76rem; color: #38bdf8;"><i class="fas fa-shield-alt"></i> Clean Source Code</div>
           </div>
 
-          <!-- 3 Customer Actions: 1. Review/Preview | 2. Request System | 3. Buy Template -->
+          <!-- 3 Actions -->
           <div class="action-group">
             <a href="<?= eurl($demo['demo_url']) ?>" class="btn-preview" target="_blank">
               <i class="fas fa-eye"></i> Review Live Prototype <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
@@ -669,7 +854,7 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
 
     <!-- FOOTER -->
     <footer class="footer">
-      <span>&copy; <?= date('Y') ?> <a href="<?= eurl('/') ?>">Tek Trend Innovations</a> · Premium Web Architecture Consultancy</span>
+      <span>&copy; <?= date('Y') ?> <a href="<?= eurl('/') ?>">Tek Trend Innovations</a> · Premium Software Architecture & Design Consultancy</span>
       <span style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
         <a href="mailto:<?= sanitize($companyEmail) ?>"><i class="fas fa-envelope"></i> <?= sanitize($companyEmail) ?></a>
         <a href="tel:<?= sanitize($companyPhone) ?>"><i class="fas fa-phone-alt"></i> <?= sanitize($companyPhone) ?></a>
@@ -695,7 +880,7 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
         
         <div class="form-group">
           <label>Selected Prototype / Template</label>
-          <input type="text" name="template_title" id="requestTemplateTitle" class="form-control" readonly style="background: rgba(214,194,157,0.08); border-color: rgba(214,194,157,0.25); color: #d6c29d; font-weight: 700;">
+          <input type="text" name="template_title" id="requestTemplateTitle" class="form-control" readonly style="background: var(--accent-glow); border-color: var(--border-hover); color: var(--accent); font-weight: 700;">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
@@ -726,7 +911,9 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
         </div>
 
         <div class="modal-actions">
-          <button type="submit" class="btn-submit-modal"><i class="fas fa-paper-plane"></i> Submit System Architecture Request</button>
+          <button type="submit" class="btn-submit-modal" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff;">
+            <i class="fas fa-paper-plane"></i> Submit System Architecture Request
+          </button>
           <a href="#" id="requestWhatsAppLink" target="_blank" class="btn-wa-modal">
             <i class="fab fa-whatsapp"></i> Request Instantly via WhatsApp
           </a>
@@ -755,7 +942,7 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
 
         <div class="form-group">
           <label>Select Purchase Option</label>
-          <select name="license" id="buyLicenseSelect" class="form-control" onchange="updateBuyPrice()">
+          <select name="license" id="buyLicenseSelect" class="form-control">
             <option value="Standard Turnkey Source Code">Turnkey HTML/CSS/JS Source Code Package</option>
             <option value="Source Code + Domain & Hosting Deployment">Source Code + cPanel / Domain Deployment (+$99)</option>
             <option value="Enterprise Customization + Retainer">Turnkey Code + Dedicated 1-Month Engineering Support</option>
@@ -790,7 +977,41 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
     </div>
   </div>
 
+  <!-- Include Google Gemini AI Chatbot -->
+  <?php require_once BASE_PATH . '/app/views/partials/ai_chat.php'; ?>
+
   <script>
+    // Theme Toggle Functionality
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('tektrend_theme', next);
+      updateThemeIcon(next);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('themeIcon');
+      if (!icon) return;
+      if (theme === 'light') {
+        icon.className = 'fas fa-moon';
+      } else {
+        icon.className = 'fas fa-sun';
+      }
+    }
+
+    // Initialize Theme Icon on Load
+    document.addEventListener('DOMContentLoaded', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      updateThemeIcon(current);
+    });
+
+    // Mobile Navigation Drawer Toggle
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobileDrawer');
+      drawer.classList.toggle('open');
+    }
+
     // Filter Demos
     function filterDemos(cat) {
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));

@@ -233,9 +233,22 @@ function redirect($url = '/') {
  */
 function url($path = '/') {
     $baseUrl = rtrim(BASE_URL, '/');
-    if (strpos($path, 'http') === 0 || strpos($path, '//') === 0) {
+    $isSecure = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1))
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+        || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+        || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+
+    if (strpos($path, 'http://') === 0) {
+        return $isSecure ? ('https://' . substr($path, 7)) : $path;
+    }
+    if (strpos($path, 'https://') === 0 || strpos($path, '//') === 0) {
         return $path;
     }
+
+    if ($isSecure && strpos($baseUrl, 'http://') === 0) {
+        $baseUrl = 'https://' . substr($baseUrl, 7);
+    }
+
     $path = '/' . ltrim($path, '/');
     return $baseUrl . $path;
 }

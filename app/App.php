@@ -45,7 +45,8 @@ class App {
         $this->router->post('/demos/request-system', 'PortfolioController@requestSystem');
         $this->router->post('/book-consultation', 'HomeController@bookConsultation');
         $this->router->post('/place-bid', 'HomeController@placeBid');
-        $this->router->post('/api/ai-chat', 'HomeController@apiAiChat');
+        $this->router->post('/api/ai/chat', 'AiChatController@chat');
+        $this->router->post('/api/ai-chat', 'AiChatController@chat');
 
         // Authentication routes
         $this->router->get('/login', 'AuthController@login', ['guest']);

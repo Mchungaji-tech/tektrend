@@ -33,10 +33,35 @@ loadEnv(BASE_PATH . '/.env');
 // Application Settings
 define('APP_ENV', getenv('APP_ENV') ?: 'production');
 define('APP_DEBUG', filter_var(getenv('APP_DEBUG') ?: false, FILTER_VALIDATE_BOOLEAN));
-define('APP_URL', rtrim(getenv('APP_URL') ?: 'http://localhost', '/'));
+
+// Auto-detect secure scheme and host to prevent mixed-content/insecure form warnings
+$isSecure = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1))
+    || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+    || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+    || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+$scheme = $isSecure ? 'https' : 'http';
+
+$envAppUrl = getenv('APP_URL');
+if ($envAppUrl && $envAppUrl !== 'http://localhost') {
+    if ($isSecure && strpos($envAppUrl, 'http://') === 0) {
+        $envAppUrl = 'https://' . substr($envAppUrl, 7);
+    }
+    $appUrl = $envAppUrl;
+} elseif (isset($_SERVER['HTTP_HOST'])) {
+    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+    $subfolder = ($scriptDir === '/' || $scriptDir === '.') ? '' : rtrim($scriptDir, '/');
+    $appUrl = $scheme . '://' . $_SERVER['HTTP_HOST'] . $subfolder;
+} else {
+    $appUrl = 'http://localhost';
+}
+
+define('APP_URL', rtrim($appUrl, '/'));
 define('BASE_URL', APP_URL);
 define('APP_CURRENCY', getenv('APP_CURRENCY') ?: 'KSh');
 define('APP_CURRENCY_SYMBOL', getenv('APP_CURRENCY_SYMBOL') ?: 'KSh ');
+
+// Google Gemini AI API Configuration
+define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: (getenv('GEMINI_API_KEY') ?: ''));
 
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
@@ -47,7 +72,7 @@ define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');
 
 // Session Settings
 define('SESSION_LIFETIME', (int)(getenv('SESSION_LIFETIME') ?: 1440));
-define('SESSION_SECURE', filter_var(getenv('SESSION_SECURE') ?: (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'), FILTER_VALIDATE_BOOLEAN));
+define('SESSION_SECURE', filter_var(getenv('SESSION_SECURE') ?: $isSecure, FILTER_VALIDATE_BOOLEAN));
 
 // Security
 define('SECRET_KEY', getenv('SECRET_KEY') ?: 'default_secret_key_change_me');
