@@ -266,12 +266,4 @@ class DashboardController extends Controller {
         $stats = $this->getDashboardStats();
         $this->json($stats);
     }
-
-    /**
-     * Check if request is AJAX
-     */
-    private function isAjax() {
-        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-               strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
-    }
 }
