@@ -57,16 +57,15 @@ A comprehensive PHP-based virtual company management platform with CRM, finance,
 
 6. **Access the application**
    - Visit `https://your-domain.com/`
-   - Login with: `admin@tektrend.com` / password from seed data
+   - Login with your administrator account: `tektrend.softwares@gmail.com`
 
-## Default Credentials
+## Administration Credentials
 
-- **Email**: `admin@tektrend.com`
-- **Password**: The seed data uses a bcrypt hash. After importing, reset the password:
+- **Email**: `tektrend.softwares@gmail.com`
+- Set or reset your administrator password via the password reset feature or using a bcrypt hash:
   ```sql
-  UPDATE users SET password = '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN' WHERE email = 'admin@tektrend.com';
+  UPDATE users SET password = '$2y$12$LQvKT3hYJ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN7pM2rQ1wEeQ8sN' WHERE email = 'tektrend.softwares@gmail.com';
   ```
-  Or use the password reset feature.
 
 ## Project Structure
 

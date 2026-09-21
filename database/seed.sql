@@ -19,12 +19,12 @@ INSERT INTO departments (id, name, slug, description, color, status) VALUES
 (6, 'Customer Success & Support', 'support', 'Client consulting delivery, technical support and onboarding', '#0891b2', 'active');
 
 -- ============================================================
--- USERS & TEAM (Password: Admin@12345 for all default accounts)
+-- USERS & TEAM
 -- ============================================================
 TRUNCATE TABLE users;
 INSERT INTO users (id, department_id, employee_id, first_name, last_name, email, phone, password, role, position, status, is_online, work_status, created_at) VALUES
 (1, 1, 'EMP-001', 'David', 'Kimani', 'ceo@tektrend.com', '+254707246273', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'admin', 'Chief Executive Officer & Principal Consultant', 'active', 1, 'working', NOW()),
-(2, 1, 'EMP-002', 'TekTrend', 'Administrator', 'admin@tektrend.com', '+254707246273', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'admin', 'Head of System Administration & Operations', 'active', 1, 'working', NOW()),
+(2, 1, 'EMP-002', 'TekTrend', 'Administrator', 'tektrend.softwares@gmail.com', '+254707246273', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'admin', 'Head of System Administration & Operations', 'active', 1, 'working', NOW()),
 (3, 3, 'EMP-003', 'Sarah', 'Johnson', 'sales@tektrend.com', '+254707246274', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'sales', 'VP of Global Sales & Client Relations', 'active', 1, 'working', NOW()),
 (4, 2, 'EMP-004', 'Alex', 'Morgan', 'engineering@tektrend.com', '+254707246275', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'manager', 'Chief Technology & Solutions Architect', 'active', 1, 'working', NOW()),
 (5, 5, 'EMP-005', 'Emily', 'Davis', 'finance@tektrend.com', '+254707246276', '$2y$12$npYX0ZIuU5UKVj5amKd/u.MToAK/U7KZBkBSMXEyBBZ7Msx1VAfDW', 'accountant', 'Director of Financial Operations & Contracts', 'active', 0, 'offline', NOW()),
