@@ -1,8 +1,10 @@
 <?php
 $companyPhone = $settings['company_phone'] ?? '0707246273';
 $companyWhatsApp = $settings['company_whatsapp'] ?? '254707246273';
-$companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
-$companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech City';
+$companyEmail = $settings['company_email'] ?? 'tektrend.softwares@gmail.com';
+$companyAddress = $settings['company_address'] ?? 'Tek Cyber, Roadblock, Eldoret';
+$siteCanonicalUrl = url('/');
+$metaDescription = "Tek Trend Innovations designs and builds world-class software architectures, high-performance web systems, cloud dashboards, Google Workspace automation, and enterprise solutions.";
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -10,6 +12,88 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tek Trend Innovations · World Class Software Architecture</title>
+  <meta name="description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
+  <meta name="keywords" content="Tek Trend, software architecture, web development, custom software, PHP 8, MySQL, Google Apps Script, dashboards, school management system, turnkey web templates, Eldoret, Kenya">
+  <meta name="author" content="Tek Trend Innovations">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="<?= eurl('/') ?>">
+  <meta name="theme-color" content="#0b0d0f">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tek Trend Innovations">
+  <meta property="og:url" content="<?= eurl('/') ?>">
+  <meta property="og:title" content="Tek Trend Innovations · World Class Software Architecture">
+  <meta property="og:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="<?= eurl('/') ?>">
+  <meta name="twitter:title" content="Tek Trend Innovations · World Class Software Architecture">
+  <meta name="twitter:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop">
+
+  <!-- Structured Data: Organization & ProfessionalService -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Tek Trend Innovations",
+    "url": <?= json_encode($siteCanonicalUrl) ?>,
+    "logo": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
+    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop",
+    "description": <?= json_encode($metaDescription) ?>,
+    "email": <?= json_encode($companyEmail) ?>,
+    "telephone": <?= json_encode($companyPhone) ?>,
+    "priceRange": "$$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": <?= json_encode($companyAddress) ?>,
+      "addressLocality": "Eldoret",
+      "addressRegion": "Uasin Gishu",
+      "addressCountry": "KE"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Software Engineering Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Enterprise Web Applications & Systems Architecture"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Google Apps Script & GSuite Automation"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Real-time Dashboards & School Management Systems"
+          }
+        }
+      ]
+    }
+  }
+  </script>
+  
+  <!-- Structured Data: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tek Trend Innovations",
+    "url": <?= json_encode($siteCanonicalUrl) ?>
+  }
+  </script>
   
   <!-- Anti-flicker Theme Script -->
   <script>
@@ -636,7 +720,7 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
     <!-- Hero (with tilt) -->
     <section class="hero-section" id="heroTilt">
       <div class="hero-text reveal">
-        <h1>code · design · systems</h1>
+        <h1 title="Tek Trend Innovations - World Class Software Architecture">code · design · systems</h1>
         <p>PHP · HTML · CSS · Google Script · Dashboards · School Management</p>
         <div class="badge"><i class="fas fa-certificate"></i>  Tek Trend Certified</div>
       </div>
@@ -653,8 +737,8 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
           <div class="slide-card reveal"><i class="fas fa-chart-pie"></i><h3>Dashboards</h3><p>Interactive data visualization, real‑time KPI, admin panels.</p><div class="tech-tag"><span>Chart.js</span><span>Vue</span><span>CSS Grid</span></div></div>
         </div>
         <div class="slider-controls">
-          <button id="prevSlide"><i class="fas fa-chevron-left"></i></button>
-          <button id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+          <button id="prevSlide" aria-label="Previous Slide"><i class="fas fa-chevron-left"></i></button>
+          <button id="nextSlide" aria-label="Next Slide"><i class="fas fa-chevron-right"></i></button>
         </div>
         <div class="slider-dots" id="sliderDots"></div>
       </div>
@@ -678,10 +762,10 @@ $companyAddress = $settings['company_address'] ?? '123 Innovation Drive, Tech Ci
         <h2><i class="fas fa-paper-plane"></i> Contact</h2>
         <div class="contact-detail"><i class="fas fa-envelope"></i> <a href="mailto:<?= sanitize($companyEmail) ?>"><?= sanitize($companyEmail) ?></a></div>
         <div class="contact-detail"><i class="fas fa-phone-alt"></i> <a href="tel:<?= sanitize($companyPhone) ?>"><?= sanitize($companyPhone) ?></a></div>
-        <div class="contact-detail"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/<?= $companyWhatsApp ?>" target="_blank">+<?= $companyWhatsApp ?> (WhatsApp)</a></div>
+        <div class="contact-detail"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/<?= $companyWhatsApp ?>" target="_blank" rel="noopener noreferrer">+<?= $companyWhatsApp ?> (WhatsApp)</a></div>
         <div class="contact-detail"><i class="fas fa-map-pin"></i> <span><?= sanitize($companyAddress) ?></span></div>
         <div class="map-container">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343004!2d-74.00625868459415!3d40.713129745094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316bb7ae4d%3A0xb4b9c8d6d1b5e7c5!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1644262070686!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+          <iframe src="https://maps.google.com/maps?q=Roadblock,+Eldoret,+Kenya&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" allowfullscreen loading="lazy" title="Tek Cyber Location, Roadblock, Eldoret, Kenya"></iframe>
         </div>
       </div>
 

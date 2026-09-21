@@ -1,0 +1,46 @@
+# Tek Trend Innovations - Robots Configuration
+# https://tektrend.com
+
+User-agent: *
+Allow: /
+Allow: /live-demos
+Allow: /live-demo
+Allow: /live_demo/
+Allow: /sitemap.xml
+
+# Protect back-office modules, authentication, and API endpoints
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /leads
+Disallow: /leads/
+Disallow: /finances
+Disallow: /finances/
+Disallow: /invoices
+Disallow: /invoices/
+Disallow: /contracts
+Disallow: /contracts/
+Disallow: /marketplace
+Disallow: /marketplace/
+Disallow: /consultations
+Disallow: /consultations/
+Disallow: /users
+Disallow: /users/
+Disallow: /settings
+Disallow: /settings/
+Disallow: /tasks
+Disallow: /tasks/
+Disallow: /chat
+Disallow: /chat/
+Disallow: /departments
+Disallow: /departments/
+Disallow: /employees
+Disallow: /employees/
+Disallow: /emails
+Disallow: /emails/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /api/
+
+Sitemap: https://tektrend.com/sitemap.xml

@@ -48,6 +48,8 @@ RewriteRule ^(.*)$ index.php [QSA,L]
     ExpiresByType text/css "access plus 1 week"
     ExpiresByType application/javascript "access plus 1 week"
     ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType text/xml "access plus 1 day"
+    ExpiresByType application/xml "access plus 1 day"
 </IfModule>
 
 # Compress output

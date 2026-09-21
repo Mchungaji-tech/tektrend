@@ -98,7 +98,8 @@ class AiChatController extends Controller {
             "- Turnkey Templates: Ready-to-deploy clean source code with commercial usage rights.\n" .
             "- Consultations: Free 45-min Zoom consultations can be booked directly on our homepage.\n" .
             "- WhatsApp: Instant direct chat available at +254 707 246 273.\n" .
-            "- Email: info@tektrend.com.\n\n" .
+            "- Email: tektrend.softwares@gmail.com.\n" .
+            "- Physical Location: Tek Cyber, Roadblock, Eldoret, Kenya.\n\n" .
             "Guidelines: Keep answers helpful, concise, well-structured (use bullet points and bolding), warm, and authoritative. Suggest relevant prototypes, booking a Zoom session, or messaging on WhatsApp where helpful.";
 
         $payload = [
@@ -175,9 +176,10 @@ class AiChatController extends Controller {
                    "You can book directly with our Principal Solutions Architect right from our homepage! Pick your preferred date and 45-minute slot, and you'll receive your instant Zoom invitation.";
         } elseif (str_contains($m, 'whatsapp') || str_contains($m, 'contact') || str_contains($m, 'call') || str_contains($m, 'phone')) {
             $res = "📱 **Direct Contact Channels**:\n\n" .
-                   "• **WhatsApp**: [+254 707 246 273](https://wa.me/254707246273)\n" .
-                   "• **Email**: [info@tektrend.com](mailto:info@tektrend.com)\n" .
-                   "• **Direct Call**: +254 707 246 273\n\n" .
+                    "• **WhatsApp**: [+254 707 246 273](https://wa.me/254707246273)\n" .
+                    "• **Email**: [tektrend.softwares@gmail.com](mailto:tektrend.softwares@gmail.com)\n" .
+                    "• **Location**: Tek Cyber, Roadblock, Eldoret, Kenya\n" .
+                    "• **Direct Call**: +254 707 246 273\n\n" .
                    "Our solutions architects respond within minutes during business hours.";
         } elseif (str_contains($m, 'custom') || str_contains($m, 'system') || str_contains($m, 'build') || str_contains($m, 'software')) {
             $res = "🛠️ **Custom System Engineering**:\n\n" .

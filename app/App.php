@@ -48,6 +48,10 @@ class App {
         $this->router->post('/api/ai/chat', 'AiChatController@chat');
         $this->router->post('/api/ai-chat', 'AiChatController@chat');
 
+        // SEO discovery endpoints
+        $this->router->get('/sitemap.xml', 'HomeController@sitemap');
+        $this->router->get('/robots.txt', 'HomeController@robots');
+
         // Authentication routes
         $this->router->get('/login', 'AuthController@login', ['guest']);
         $this->router->post('/login', 'AuthController@authenticate');

@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
                 <label>Sender Email</label>
-                <input type="email" name="from_email" class="form-control" value="info@tektrend.com">
+                <input type="email" name="from_email" class="form-control" value="tektrend.softwares@gmail.com">
             </div>
         </div>
 

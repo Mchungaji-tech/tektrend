@@ -195,10 +195,10 @@ TRUNCATE TABLE settings;
 INSERT INTO settings (`key`, `value`, `type`, `group`, `description`) VALUES
 ('company_name', 'Tek Trend Innovations', 'string', 'general', 'Company full brand name'),
 ('company_tagline', 'World-Class Software Architecture, AI & Design Consultancy', 'string', 'general', 'Company slogan'),
-('company_email', 'info@tektrend.com', 'string', 'general', 'Primary company email'),
+('company_email', 'tektrend.softwares@gmail.com', 'string', 'general', 'Primary company email'),
 ('company_phone', '0707246273', 'string', 'general', 'Direct call phone number'),
 ('company_whatsapp', '254707246273', 'string', 'general', 'Official WhatsApp number (international without +)'),
-('company_address', '123 Innovation Drive, Tech City, Nairobi', 'string', 'general', 'Physical office address'),
+('company_address', 'Tek Cyber, Roadblock, Eldoret', 'string', 'general', 'Physical office address'),
 ('currency_symbol', '$', 'string', 'finance', 'Default display currency symbol'),
 ('currency_code', 'USD', 'string', 'finance', 'Default ISO currency code'),
 ('timezone', 'Africa/Nairobi', 'string', 'general', 'System timezone'),

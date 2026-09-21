@@ -225,4 +225,128 @@ class HomeController extends Controller {
         ]);
         exit;
     }
+
+    /**
+     * XML Sitemap endpoint for Search Engines
+     */
+    public function sitemap() {
+        header('Content-Type: application/xml; charset=UTF-8');
+        header('X-Robots-Tag: noindex');
+
+        $baseUrl = rtrim(url('/'), '/');
+        $demos = [];
+        try {
+            $demos = $this->db->fetchAll("SELECT demo_url, updated_at FROM portfolio_demos WHERE is_featured = 1");
+        } catch (\Throwable $e) {
+            $demos = [];
+        }
+
+        $staticDemos = [
+            '/live_demo/graphic.html',
+            '/live_demo/digital_markting.html',
+            '/live_demo/e-commerce.html',
+            '/live_demo/law_firm.html',
+            '/live_demo/church.html',
+            '/live_demo/restaurant.html',
+            '/live_demo/nexus.html',
+            '/live_demo/engineering.html',
+            '/live_demo/magazine.html'
+        ];
+
+        $today = date('Y-m-d');
+
+        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
+        echo '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' . "\n";
+        echo '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . "\n";
+
+        // Home page
+        echo "  <url>\n";
+        echo "    <loc>" . htmlspecialchars($baseUrl . '/', ENT_XML1) . "</loc>\n";
+        echo "    <lastmod>" . $today . "</lastmod>\n";
+        echo "    <changefreq>weekly</changefreq>\n";
+        echo "    <priority>1.0</priority>\n";
+        echo "  </url>\n";
+
+        // Live Demos Showcase
+        echo "  <url>\n";
+        echo "    <loc>" . htmlspecialchars($baseUrl . '/live-demos', ENT_XML1) . "</loc>\n";
+        echo "    <lastmod>" . $today . "</lastmod>\n";
+        echo "    <changefreq>weekly</changefreq>\n";
+        echo "    <priority>0.9</priority>\n";
+        echo "  </url>\n";
+
+        // Dynamic or static prototypes
+        $seen = [];
+        if (!empty($demos)) {
+            foreach ($demos as $demo) {
+                $rawUrl = $demo['demo_url'] ?? '';
+                if (empty($rawUrl)) continue;
+                $fullUrl = strpos($rawUrl, 'http') === 0 ? $rawUrl : ($baseUrl . '/' . ltrim($rawUrl, '/'));
+                if (isset($seen[$fullUrl])) continue;
+                $seen[$fullUrl] = true;
+                $modDate = !empty($demo['updated_at']) ? date('Y-m-d', strtotime($demo['updated_at'])) : $today;
+                echo "  <url>\n";
+                echo "    <loc>" . htmlspecialchars($fullUrl, ENT_XML1) . "</loc>\n";
+                echo "    <lastmod>" . $modDate . "</lastmod>\n";
+                echo "    <changefreq>monthly</changefreq>\n";
+                echo "    <priority>0.8</priority>\n";
+                echo "  </url>\n";
+            }
+        }
+
+        foreach ($staticDemos as $sDemo) {
+            $fullUrl = $baseUrl . $sDemo;
+            if (isset($seen[$fullUrl])) continue;
+            $seen[$fullUrl] = true;
+            echo "  <url>\n";
+            echo "    <loc>" . htmlspecialchars($fullUrl, ENT_XML1) . "</loc>\n";
+            echo "    <lastmod>" . $today . "</lastmod>\n";
+            echo "    <changefreq>monthly</changefreq>\n";
+            echo "    <priority>0.8</priority>\n";
+            echo "  </url>\n";
+        }
+
+        echo '</urlset>';
+        exit;
+    }
+
+    /**
+     * robots.txt dynamic endpoint
+     */
+    public function robots() {
+        header('Content-Type: text/plain; charset=UTF-8');
+        $baseUrl = rtrim(url('/'), '/');
+        echo "# Tek Trend Innovations - Robots Configuration\n";
+        echo "# " . $baseUrl . "\n\n";
+        echo "User-agent: *\n";
+        echo "Allow: /\n";
+        echo "Allow: /live-demos\n";
+        echo "Allow: /live-demo\n";
+        echo "Allow: /live_demo/\n";
+        echo "Allow: /sitemap.xml\n\n";
+        echo "# Protected Back-office & Private Modules\n";
+        echo "Disallow: /dashboard\n";
+        echo "Disallow: /dashboard/\n";
+        echo "Disallow: /leads\n";
+        echo "Disallow: /finances\n";
+        echo "Disallow: /invoices\n";
+        echo "Disallow: /contracts\n";
+        echo "Disallow: /marketplace\n";
+        echo "Disallow: /consultations\n";
+        echo "Disallow: /users\n";
+        echo "Disallow: /settings\n";
+        echo "Disallow: /tasks\n";
+        echo "Disallow: /chat\n";
+        echo "Disallow: /departments\n";
+        echo "Disallow: /employees\n";
+        echo "Disallow: /emails\n";
+        echo "Disallow: /login\n";
+        echo "Disallow: /register\n";
+        echo "Disallow: /forgot-password\n";
+        echo "Disallow: /reset-password\n";
+        echo "Disallow: /api/\n\n";
+        echo "Sitemap: " . $baseUrl . "/sitemap.xml\n";
+        exit;
+    }
 }

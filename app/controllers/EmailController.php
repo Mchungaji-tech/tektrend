@@ -31,7 +31,7 @@ class EmailController extends Controller {
         $data = $validation['data'];
         $campaignId = $this->db->insert(
             "INSERT INTO email_campaigns (name, subject, content_html, content_text, from_name, from_email, status, scheduled_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [$data['name'], $data['subject'], $_POST['content_html'] ?? null, $_POST['content_text'] ?? null, $_POST['from_name'] ?? 'Tek Trend', $_POST['from_email'] ?? 'info@tektrend.com', $_POST['status'] ?? 'draft', $_POST['scheduled_at'] ?? null, $this->auth->id()]
+            [$data['name'], $data['subject'], $_POST['content_html'] ?? null, $_POST['content_text'] ?? null, $_POST['from_name'] ?? 'Tek Trend', $_POST['from_email'] ?? 'tektrend.softwares@gmail.com', $_POST['status'] ?? 'draft', $_POST['scheduled_at'] ?? null, $this->auth->id()]
         );
         auditLog('create', 'email_campaigns', $campaignId, 'Created campaign: ' . $data['name']);
         $this->redirectWithSuccess('/emails', 'Email campaign created successfully!');

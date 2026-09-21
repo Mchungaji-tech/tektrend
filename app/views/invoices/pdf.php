@@ -45,7 +45,7 @@
             <div>
                 <h1>Tek Trend Innovations</h1>
                 <p style="font-size: 0.85rem; color: #64748b;">Enterprise Software Architecture & Technology Consultancy</p>
-                <p style="font-size: 0.85rem; color: #64748b;">Nairobi, Kenya · info@tektrend.com</p>
+                <p style="font-size: 0.85rem; color: #64748b;">Tek Cyber, Roadblock, Eldoret · tektrend.softwares@gmail.com</p>
             </div>
             <div class="meta">
                 <div class="inv-no"><?= sanitize($invoice['invoice_number']) ?></div>

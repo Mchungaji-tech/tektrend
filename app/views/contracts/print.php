@@ -39,7 +39,7 @@
             <div>
                 <h1>Tek Trend Innovations</h1>
                 <p style="font-size: 0.85rem; color: #64748b;">Enterprise Software Architecture & Technology Consultancy</p>
-                <p style="font-size: 0.85rem; color: #64748b;">123 Innovation Drive, Tech City, Nairobi · info@tektrend.com</p>
+                <p style="font-size: 0.85rem; color: #64748b;">Tek Cyber, Roadblock, Eldoret · tektrend.softwares@gmail.com</p>
             </div>
             <div class="meta">
                 <div style="font-size: 1.1rem; font-weight: 800; color: #4f46e5;"><?= sanitize($contract['contract_number']) ?></div>
@@ -56,7 +56,7 @@
                 <h3>Service Provider</h3>
                 <p><strong>Tek Trend Innovations Ltd.</strong></p>
                 <p>David Kimani, Chief Executive Officer</p>
-                <p>Email: info@tektrend.com</p>
+                <p>Email: tektrend.softwares@gmail.com</p>
                 <p>Phone: +254 707 246 273</p>
             </div>
             <div>

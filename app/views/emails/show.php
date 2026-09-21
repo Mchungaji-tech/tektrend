@@ -37,7 +37,7 @@
         <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem;">
             <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
                 <span style="color: var(--text-muted);">From:</span>
-                <strong style="color: var(--text-main);"><?= sanitize($campaign['from_name'] ?? 'Tek Trend') ?> &lt;<?= sanitize($campaign['from_email'] ?? 'info@tektrend.com') ?>&gt;</strong>
+                <strong style="color: var(--text-main);"><?= sanitize($campaign['from_name'] ?? 'Tek Trend') ?> &lt;<?= sanitize($campaign['from_email'] ?? 'tektrend.softwares@gmail.com') ?>&gt;</strong>
             </div>
             <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
                 <span style="color: var(--text-muted);">Sent Timestamp:</span>

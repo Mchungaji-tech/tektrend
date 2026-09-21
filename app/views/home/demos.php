@@ -1,7 +1,33 @@
 <?php
 $companyPhone = $settings['company_phone'] ?? '0707246273';
 $companyWhatsApp = $settings['company_whatsapp'] ?? '254707246273';
-$companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
+$companyEmail = $settings['company_email'] ?? 'tektrend.softwares@gmail.com';
+$canonicalUrl = url('/live-demos');
+$demoListJson = [];
+if (!empty($demos)) {
+    $idx = 1;
+    foreach (array_slice($demos, 0, 15) as $d) {
+        $priceVal = !empty($d['price']) ? (float)$d['price'] : 49.00;
+        $demoListJson[] = [
+            '@type' => 'ListItem',
+            'position' => $idx++,
+            'item' => [
+                '@type' => 'SoftwareApplication',
+                'name' => $d['title'] ?? 'Software Prototype',
+                'applicationCategory' => $d['category'] ?? 'BusinessApplication',
+                'operatingSystem' => 'Web Browser',
+                'description' => $d['short_description'] ?? 'Production HTML and software prototype.',
+                'url' => url($d['demo_url'] ?? '/live-demos'),
+                'offers' => [
+                    '@type' => 'Offer',
+                    'price' => $priceVal,
+                    'priceCurrency' => 'USD',
+                    'availability' => 'https://schema.org/InStock'
+                ]
+            ]
+        ];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -10,6 +36,49 @@ $companyEmail = $settings['company_email'] ?? 'info@tektrend.com';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tek Trend · Live Demo Prototypes & Turnkey Templates</title>
   <meta name="description" content="Explore real production HTML prototypes, interactive web architectures, and turnkey source code templates by Tek Trend. Review live demos, commission custom builds, or purchase templates instantly.">
+  <meta name="keywords" content="turnkey web templates, live demos, software prototypes, HTML prototypes, PHP systems, web templates, custom software commission, Tek Trend">
+  <meta name="author" content="Tek Trend Innovations">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="<?= eurl('/live-demos') ?>">
+  <meta name="theme-color" content="#07090d">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tek Trend Innovations">
+  <meta property="og:url" content="<?= eurl('/live-demos') ?>">
+  <meta property="og:title" content="Tek Trend · Live Demo Prototypes & Turnkey Templates">
+  <meta property="og:description" content="Explore real production HTML prototypes, interactive web architectures, and turnkey source code templates by Tek Trend. Review live demos, commission custom builds, or purchase templates instantly.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="<?= eurl('/live-demos') ?>">
+  <meta name="twitter:title" content="Tek Trend · Live Demo Prototypes & Turnkey Templates">
+  <meta name="twitter:description" content="Explore real production HTML prototypes, interactive web architectures, and turnkey source code templates by Tek Trend. Review live demos, commission custom builds, or purchase templates instantly.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop">
+
+  <!-- Structured Data: CollectionPage & ItemList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Live Demo Prototypes & Turnkey Systems",
+    "url": <?= json_encode($canonicalUrl) ?>,
+    "description": "Production HTML prototypes, turnkey templates, and custom enterprise software architectures.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Tek Trend Innovations",
+      "email": <?= json_encode($companyEmail) ?>,
+      "url": <?= json_encode(url('/')) ?>
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": <?= count($demoListJson) ?>,
+      "itemListElement": <?= json_encode($demoListJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) ?>
+    }
+  }
+  </script>
 
   <!-- Anti-flicker Theme Script -->
   <script>
