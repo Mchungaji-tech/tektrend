@@ -25,13 +25,29 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
+                <label>Employee ID *</label>
+                <input type="text" name="employee_id" class="form-control" value="<?= sanitize($user['employee_id'] ?? '') ?>" placeholder="e.g. EMP-001" required>
+            </div>
+            <div class="form-group">
+                <label>Job Position / Title</label>
+                <input type="text" name="position" class="form-control" value="<?= sanitize($user['position'] ?? '') ?>" placeholder="e.g. Senior Software Architect">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
                 <label>Email Address *</label>
                 <input type="email" name="email" class="form-control" value="<?= sanitize($user['email']) ?>" required>
             </div>
             <div class="form-group">
-                <label>New Password (Leave blank to keep current)</label>
-                <input type="password" name="password" class="form-control" placeholder="••••••••">
+                <label>Phone Number</label>
+                <input type="text" name="phone" class="form-control" value="<?= sanitize($user['phone'] ?? '') ?>" placeholder="+254...">
             </div>
+        </div>
+
+        <div class="form-group">
+            <label>New Password (Leave blank to keep current)</label>
+            <input type="password" name="password" class="form-control" placeholder="••••••••">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">

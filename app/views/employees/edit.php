@@ -24,19 +24,35 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
+                <label class="required">Employee ID</label>
+                <input type="text" name="employee_id" class="form-control" value="<?= sanitize($employee['employee_id'] ?? '') ?>" placeholder="e.g. EMP-010" required>
+            </div>
+            <div class="form-group">
                 <label class="required">Work Email Address</label>
                 <input type="email" name="email" class="form-control" value="<?= sanitize($employee['email']) ?>" required>
             </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label>Position / Title</label>
+                <input type="text" name="position" class="form-control" value="<?= sanitize($employee['position'] ?? '') ?>" placeholder="e.g. Senior Software Architect">
+            </div>
             <div class="form-group">
                 <label>Phone / WhatsApp</label>
-                <input type="text" name="phone" class="form-control" value="<?= sanitize($employee['phone'] ?? '') ?>">
+                <input type="text" name="phone" class="form-control" value="<?= sanitize($employee['phone'] ?? '') ?>" placeholder="+254...">
             </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-                <label>Position / Title</label>
-                <input type="text" name="position" class="form-control" value="<?= sanitize($employee['position'] ?? '') ?>">
+                <label>Department</label>
+                <select name="department_id" class="form-control">
+                    <option value="">Select Department...</option>
+                    <?php foreach (($departments ?? []) as $d): ?>
+                        <option value="<?= $d['id'] ?>" <?= ($employee['department_id'] ?? null) == $d['id'] ? 'selected' : '' ?>><?= sanitize($d['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
                 <label>Role</label>

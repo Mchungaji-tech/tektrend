@@ -25,13 +25,29 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
+                <label>Employee ID</label>
+                <input type="text" name="employee_id" class="form-control" placeholder="Auto-generated if left blank (e.g. EMP-010)">
+            </div>
+            <div class="form-group">
+                <label>Job Position / Title</label>
+                <input type="text" name="position" class="form-control" placeholder="e.g. Lead Software Engineer">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
                 <label>Email Address *</label>
                 <input type="email" name="email" class="form-control" required>
             </div>
             <div class="form-group">
-                <label>Password *</label>
-                <input type="password" name="password" class="form-control" required>
+                <label>Phone Number</label>
+                <input type="text" name="phone" class="form-control" placeholder="+254...">
             </div>
+        </div>
+
+        <div class="form-group">
+            <label>Password *</label>
+            <input type="password" name="password" class="form-control" required minlength="8" placeholder="Minimum 8 characters">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
