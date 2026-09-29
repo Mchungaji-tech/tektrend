@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($pageTitle) ? $pageTitle . ' · ' : '' ?>Tek Trend Virtual Office</title>
     <meta name="robots" content="noindex, nofollow, noarchive">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="<?= eurl('/favicon.svg') ?>">
+    <link rel="alternate icon" href="<?= eurl('/favicon.svg') ?>">
+    <link rel="apple-touch-icon" href="<?= eurl('/favicon.svg') ?>">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>

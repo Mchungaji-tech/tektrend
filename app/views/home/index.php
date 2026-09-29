@@ -91,9 +91,13 @@ $featuredShowcase = [
   <meta name="description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="keywords" content="Tektrend Softwares, Tektrend Softwares Eldoret Kenya, We are Tektrend Softwares, software architecture, web development, custom software, PHP 8 MVC, Google Apps Script, dashboards, Eldoret, Kenya, creative agency">
   <meta name="author" content="Tektrend Softwares">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="<?= eurl('/') ?>">
   <meta name="theme-color" content="#0e0e0e">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="<?= eurl('/favicon.svg') ?>">
+  <link rel="alternate icon" href="<?= eurl('/favicon.svg') ?>">
+  <link rel="apple-touch-icon" href="<?= eurl('/favicon.svg') ?>">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -158,6 +162,19 @@ $featuredShowcase = [
         <i class="fas fa-chart-line"></i>
         <span class="akar-invest-label">Invest</span>
       </button>
+
+      <!-- Company Portal / Sign In or Dashboard -->
+      <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Company Dashboard" aria-label="Company Dashboard">
+          <i class="fas fa-chart-pie"></i>
+          <span class="akar-login-label">Dashboard</span>
+        </a>
+      <?php else: ?>
+        <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Company Portal / Sign In" aria-label="Sign In to Dashboard">
+          <i class="fas fa-arrow-right-to-bracket"></i>
+          <span class="akar-login-label">Sign In</span>
+        </a>
+      <?php endif; ?>
 
       <!-- Color Palette Switcher Pill -->
       <button class="akar-palette-pill" onclick="togglePaletteModal()" title="Select Color Theme" aria-label="Select Color Theme">
@@ -431,11 +448,11 @@ $featuredShowcase = [
         <li class="akar-nav-item" data-teaser="portal">
           <?php if (isset($_SESSION['user_id'])): ?>
             <a href="<?= eurl('/dashboard') ?>" class="akar-nav-link">
-              06 / Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
+              06 / Company Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
             </a>
           <?php else: ?>
             <a href="<?= eurl('/login') ?>" class="akar-nav-link">
-              06 / Client Portal <span class="akar-nav-arrow"><i class="fas fa-lock"></i></span>
+              06 / Sign In / Portal <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
             </a>
           <?php endif; ?>
         </li>

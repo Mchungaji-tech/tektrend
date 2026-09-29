@@ -826,6 +826,54 @@ img {
   }
 }
 
+/* Login / Sign In / Dashboard Header Pill */
+.akar-login-pill {
+  height: 4.4rem;
+  padding: 0 1.8rem;
+  border-radius: 10rem;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.akar-login-pill:hover {
+  transform: translateY(-2px);
+  border-color: var(--terra);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  color: var(--text-primary);
+}
+
+.akar-login-pill i {
+  color: var(--terra);
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.akar-login-pill:hover i {
+  transform: translateX(2px);
+}
+
+@media (max-width: 640px) {
+  .akar-login-pill .akar-login-label {
+    display: none;
+  }
+  .akar-login-pill {
+    padding: 0;
+    width: 4.4rem;
+    justify-content: center;
+  }
+}
+
 .akar-invest-modal-overlay {
   position: fixed;
   inset: 0;

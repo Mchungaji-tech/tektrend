@@ -1,7 +1,7 @@
 <div class="auth-card">
     <div class="auth-header">
-        <div class="logo"><i class="fas fa-code"></i> Tek Trend</div>
-        <p>Virtual Company Management System</p>
+        <div class="logo"><i class="fas fa-layer-group"></i> Tektrend<span style="color: #e49366;">.</span></div>
+        <p>Tektrend Softwares · Enterprise Management & Operations Portal</p>
     </div>
 
     <?php if (flash('error')): ?>
