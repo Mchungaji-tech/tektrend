@@ -2,980 +2,872 @@
 $companyPhone = $settings['company_phone'] ?? '0707246273';
 $companyWhatsApp = $settings['company_whatsapp'] ?? '254707246273';
 $companyEmail = $settings['company_email'] ?? 'tektrend.softwares@gmail.com';
-$companyAddress = $settings['company_address'] ?? 'Tek Cyber, Roadblock, Eldoret';
+$companyAddress = $settings['company_address'] ?? 'Tektrend Softwares, Eldoret, Kenya';
 $siteCanonicalUrl = url('/');
-$metaDescription = "Tek Trend Innovations designs and builds world-class software architectures, high-performance web systems, cloud dashboards, Google Workspace automation, and enterprise solutions.";
+$metaDescription = "Tektrend Softwares · Enterprise software architecture, digital innovation, cloud dashboards, and turnkey production platforms based in Eldoret, Kenya. We are Tektrend Softwares.";
+
+// Default curated featured projects inspired by Akaru
+$featuredShowcase = [
+    [
+        'id' => 1,
+        'title' => 'Nexus Commercial ERP',
+        'category' => 'Enterprise Architecture',
+        'color' => 'terra',
+        'year' => '2026',
+        'short_desc' => 'High-performance cloud management system with real-time financial tracking, multi-tenant RBAC, and executive reporting suite.',
+        'image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
+        'demo_url' => url('/live_demo/nexus.html'),
+        'tech' => 'PHP 8.2, MySQL 8, Redis, Chart.js, Tailwind MVC',
+        'price' => 89.00
+    ],
+    [
+        'id' => 2,
+        'title' => 'Titan Industrial Automation',
+        'category' => 'Industrial & Engineering',
+        'color' => 'green',
+        'year' => '2026',
+        'short_desc' => 'Industrial equipment telemetry and blueprint management platform featuring interactive 3D technical viewer and procurement RFQ pipelines.',
+        'image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=85',
+        'demo_url' => url('/live_demo/engineering.html'),
+        'tech' => 'HTML5 Canvas, WebGL, Modern CSS, REST APIs',
+        'price' => 79.00
+    ],
+    [
+        'id' => 3,
+        'title' => 'LuxeCart Modern Storefront',
+        'category' => 'E-Commerce & Retail',
+        'color' => 'pink',
+        'year' => '2025',
+        'short_desc' => 'Ultra-fast headless commerce platform with instantaneous client filtering, dynamic cart drawer, multi-currency pricing, and M-Pesa readiness.',
+        'image' => 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=85',
+        'demo_url' => url('/live_demo/e-commerce.html'),
+        'tech' => 'JavaScript ES6+, Modern CSS Grid, Checkout Engine',
+        'price' => 79.00
+    ],
+    [
+        'id' => 4,
+        'title' => 'Vanguard & Sterling Legal',
+        'category' => 'Corporate & Advisory',
+        'color' => 'blue',
+        'year' => '2025',
+        'short_desc' => 'High-trust corporate legal portal featuring confidential case study archives, attorney directory, and encrypted consultation scheduling vaults.',
+        'image' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=85',
+        'demo_url' => url('/live_demo/law_firm.html'),
+        'tech' => 'Semantic HTML5, CSS3 Variables, Booking Vault',
+        'price' => 69.00
+    ],
+    [
+        'id' => 5,
+        'title' => 'GrowthPulse Media & SEO',
+        'category' => 'Marketing & Analytics',
+        'color' => 'terra',
+        'year' => '2026',
+        'short_desc' => 'Growth-driven marketing agency portal with live campaign tracking, interactive ROI calculation models, and automated lead capture funnel.',
+        'image' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85',
+        'demo_url' => url('/live_demo/digital_markting.html'),
+        'tech' => 'Chart.js, GSAP Animations, Responsive Grid',
+        'price' => 59.00
+    ],
+    [
+        'id' => 6,
+        'title' => 'Le Jardin Gourmet Bistro',
+        'category' => 'Hospitality & Dining',
+        'color' => 'green',
+        'year' => '2025',
+        'short_desc' => 'Atmospheric culinary experience portal with seasonal degustation menu showcases, wine pairing guides, and real-time reservation desk.',
+        'image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85',
+        'demo_url' => url('/live_demo/restaurant.html'),
+        'tech' => 'Playfair Typography, CSS Motion, Booking Form',
+        'price' => 49.00
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tek Trend Innovations · World Class Software Architecture</title>
+  <title>Tektrend Softwares · Eldoret, Kenya · Software Architecture & Creative Studio</title>
   <meta name="description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="keywords" content="Tek Trend, software architecture, web development, custom software, PHP 8, MySQL, Google Apps Script, dashboards, school management system, turnkey web templates, Eldoret, Kenya">
-  <meta name="author" content="Tek Trend Innovations">
+  <meta name="keywords" content="Tektrend Softwares, Tektrend Softwares Eldoret Kenya, We are Tektrend Softwares, software architecture, web development, custom software, PHP 8 MVC, Google Apps Script, dashboards, Eldoret, Kenya, creative agency">
+  <meta name="author" content="Tektrend Softwares">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="<?= eurl('/') ?>">
-  <meta name="theme-color" content="#0b0d0f">
+  <meta name="theme-color" content="#0e0e0e">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Tek Trend Innovations">
+  <meta property="og:site_name" content="Tektrend Softwares">
   <meta property="og:url" content="<?= eurl('/') ?>">
-  <meta property="og:title" content="Tek Trend Innovations · World Class Software Architecture">
+  <meta property="og:title" content="Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares">
   <meta property="og:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85">
   <meta property="og:locale" content="en_US">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="<?= eurl('/') ?>">
-  <meta name="twitter:title" content="Tek Trend Innovations · World Class Software Architecture">
+  <meta name="twitter:title" content="Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares">
   <meta name="twitter:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85">
 
-  <!-- Structured Data: Organization & ProfessionalService -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Tek Trend Innovations",
-    "url": <?= json_encode($siteCanonicalUrl) ?>,
-    "logo": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
-    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop",
-    "description": <?= json_encode($metaDescription) ?>,
-    "email": <?= json_encode($companyEmail) ?>,
-    "telephone": <?= json_encode($companyPhone) ?>,
-    "priceRange": "$$$",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": <?= json_encode($companyAddress) ?>,
-      "addressLocality": "Eldoret",
-      "addressRegion": "Uasin Gishu",
-      "addressCountry": "KE"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Software Engineering Services",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Enterprise Web Applications & Systems Architecture"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Google Apps Script & GSuite Automation"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Real-time Dashboards & School Management Systems"
-          }
-        }
-      ]
-    }
-  }
-  </script>
-  
-  <!-- Structured Data: WebSite -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Tek Trend Innovations",
-    "url": <?= json_encode($siteCanonicalUrl) ?>
-  }
-  </script>
-  
-  <!-- Anti-flicker Theme Script -->
+  <!-- Anti-flicker Theme & Palette Script -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('tektrend_theme') || 'dark';
+      const savedPalette = localStorage.getItem('tektrend_palette') || 'terracotta';
       document.documentElement.setAttribute('data-theme', savedTheme);
+      document.documentElement.setAttribute('data-palette', savedPalette);
     })();
   </script>
+
+  <!-- Google Fonts: Syne & Plus Jakarta Sans (Akaru Typography Hierarchy) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts (Inter & Outfit) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root, [data-theme="dark"] {
-      --bg-page: #0b0d0f;
-      --bg-navbar: rgba(8, 10, 14, 0.65);
-      --text-primary: #ffffff;
-      --text-secondary: rgba(255, 255, 255, 0.7);
-      --card-bg: rgba(14, 18, 24, 0.6);
-      --card-border: rgba(255, 215, 150, 0.04);
-      --accent-gold: #d6c29d;
-      --accent-gold-glow: rgba(214, 194, 157, 0.12);
-      --slider-card-bg: rgba(18, 22, 30, 0.5);
-      --slider-border: rgba(255, 255, 255, 0.03);
-      --demo-item-bg: rgba(0, 0, 0, 0.2);
-      --footer-bg: rgba(8, 10, 14, 0.85);
-      --footer-border: rgba(214, 194, 157, 0.16);
-    }
 
-    [data-theme="light"] {
-      --bg-page: #f8fafc;
-      --bg-navbar: rgba(255, 255, 255, 0.92);
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --card-bg: #ffffff;
-      --card-border: #e2e8f0;
-      --accent-gold: #b8860b;
-      --accent-gold-glow: rgba(184, 134, 11, 0.12);
-      --slider-card-bg: #ffffff;
-      --slider-border: #e2e8f0;
-      --demo-item-bg: #f1f5f9;
-      --footer-bg: #ffffff;
-      --footer-border: #e2e8f0;
-    }
+  <!-- Design System Stylesheet -->
+  <link rel="stylesheet" href="<?= eurl('/assets/css/main.css') ?>">
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <!-- Lenis Smooth Inertia Scroll (Akaru Physics) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 
-    body {
-      background: var(--bg-page);
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    @media (hover: hover) and (pointer: fine) {
-      body { cursor: none; }
-    }
-
-    /* ----- CUSTOM CURSOR ----- */
-    .cursor-dot {
-      width: 8px;
-      height: 8px;
-      background: #d6c29d;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.15s ease, width 0.2s, height 0.2s, background 0.2s;
-      transform: translate(-50%, -50%);
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      width: 40px;
-      height: 40px;
-      border: 1.5px solid rgba(214, 194, 157, 0.3);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s, transform 0.15s ease;
-      transform: translate(-50%, -50%);
-      backdrop-filter: blur(2px);
-    }
-    /* Enlarge cursor on hoverable elements */
-    a:hover ~ .cursor-ring, 
-    button:hover ~ .cursor-ring,
-    .slide-card:hover ~ .cursor-ring {
-      width: 60px;
-      height: 60px;
-      border-color: #d6c29d;
-      background: rgba(214, 194, 157, 0.05);
-    }
-
-    /* ----- SCROLL PROGRESS BAR ----- */
-    .progress-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #d6c29d, #f0e9d0);
-      z-index: 999;
-      transition: width 0.1s ease;
-      width: 0%;
-    }
-
-    /* ----- BACKGROUND WITH ANIMATED GRADIENT ----- */
-    .hero-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
-      filter: brightness(0.5) saturate(1.1);
-      z-index: 0;
-      transform: translate3d(0, 0, 0) scale(1.08);
-      transform-origin: center top;
-      will-change: transform;
-    }
-    .gradient-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(circle at 30% 40%, rgba(40, 50, 80, 0.4) 0%, rgba(10, 12, 18, 0.8) 90%);
-      z-index: 1;
-      animation: pulseGradient 10s ease-in-out infinite alternate;
-      will-change: transform;
-    }
-    @keyframes pulseGradient {
-      0% { opacity: 0.6; }
-      100% { opacity: 1; }
-    }
-
-    .content {
-      position: relative;
-      z-index: 10;
-      min-height: 100vh;
-    }
-
-    /* ----- NAVBAR ----- */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 3rem;
-      background: var(--bg-navbar);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
-      gap: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 99;
-      transition: background 0.3s;
-    }
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #f0e9d0, #b7a88b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-    }
-    [data-theme="light"] .logo {
-      background: linear-gradient(135deg, #0f172a, #b8860b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .logo i { margin-right: 8px; color: var(--accent-gold); -webkit-text-fill-color: var(--accent-gold); }
-    .nav-links {
-      display: flex;
-      gap: 1.8rem;
-      font-weight: 500;
-      font-size: 0.95rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: 0.3s;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid transparent;
-      padding-bottom: 4px;
-    }
-    .nav-links a:hover { color: var(--text-primary); border-bottom-color: var(--accent-gold); }
-    .nav-links a:focus-visible,
-    .demo-item a:focus-visible,
-    button:focus-visible {
-      outline: 2px solid var(--accent-gold);
-      outline-offset: 4px;
-    }
-    .nav-links .highlight {
-      background: var(--accent-gold-glow);
-      padding: 0.5rem 1.5rem;
-      border-radius: 40px;
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
-      transition: 0.3s;
-    }
-    .nav-links .highlight:hover {
-      background: var(--accent-gold);
-      color: #0c0e12;
-      transform: scale(1.02);
-    }
-
-    /* Light Mode Overrides */
-    [data-theme="light"] .hero-background {
-      opacity: 0.12;
-      filter: grayscale(1) brightness(1.1);
-    }
-    [data-theme="light"] .gradient-overlay {
-      background: radial-gradient(circle at 30% 40%, rgba(240, 244, 248, 0.92) 0%, rgba(248, 250, 252, 0.98) 90%);
-    }
-    [data-theme="light"] .hero-text h1 {
-      color: #0f172a;
-      text-shadow: none;
-    }
-    [data-theme="light"] .hero-text p {
-      color: #475569;
-    }
-    [data-theme="light"] .slide-card,
-    [data-theme="light"] .contact-card {
-      background: var(--card-bg);
-      border-color: var(--card-border);
-      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
-    }
-    [data-theme="light"] .slide-card h3,
-    [data-theme="light"] .contact-card h2 {
-      color: #0f172a;
-    }
-    [data-theme="light"] .slide-card p,
-    [data-theme="light"] .contact-detail a {
-      color: #475569;
-    }
-    [data-theme="light"] .demo-item {
-      background: var(--demo-item-bg);
-      border-color: var(--card-border);
-    }
-    [data-theme="light"] .demo-item span {
-      color: #0f172a;
-    }
-    [data-theme="light"] .tektrend-footer {
-      background: var(--footer-bg);
-      border-top-color: var(--footer-border);
-      color: #475569;
-    }
-
-    /* ----- HERO (with tilt) ----- */
-    .hero-section {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 2rem 6rem;
-      min-height: 80vh;
-      text-align: center;
-      perspective: 800px;
-      will-change: transform;
-    }
-    .hero-text {
-      max-width: 900px;
-      background: rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px);
-      padding: 3.5rem 4.5rem;
-      border-radius: 50px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-      transform-style: preserve-3d;
-      transition: transform 0.2s ease-out;
-    }
-    .hero-text h1 {
-      font-size: clamp(3rem, 10vw, 5.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      background: linear-gradient(to right, #f5efe2, #cfbc9a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-text p {
-      font-size: 1.2rem;
-      margin: 1.5rem 0 2rem;
-      opacity: 0.8;
-      font-weight: 300;
-      color: #d6d0c4;
-    }
-    .hero-text .badge {
-      display: inline-block;
-      background: rgba(214, 194, 157, 0.15);
-      border-radius: 100px;
-      padding: 0.4rem 2rem;
-      border: 1px solid rgba(214, 194, 157, 0.2);
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      color: #e7ddcc;
-    }
-
-    /* ----- SLIDER (enhanced) ----- */
-    .slider-wrapper {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(4px);
-      padding: 4rem 0;
-      margin: 2rem 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    }
-    .slider-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      overflow: hidden;
-      position: relative;
-    }
-    .slider-track {
-      display: flex;
-      transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
-      gap: 2rem;
-    }
-    .slide-card {
-      min-width: calc(33.333% - 1.4rem);
-      background: rgba(18, 22, 28, 0.6);
-      backdrop-filter: blur(8px);
-      border-radius: 30px;
-      padding: 2.5rem 2rem;
-      border: 1px solid rgba(255, 215, 150, 0.06);
-      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.7);
-      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      display: flex;
-      flex-direction: column;
-      transform: translateY(0);
-    }
-    .slide-card:hover {
-      background: rgba(28, 34, 44, 0.8);
-      border-color: rgba(214, 194, 157, 0.25);
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: 0 30px 60px -15px rgba(0,0,0,0.8);
-    }
-    .slide-card i {
-      font-size: 2.8rem;
-      color: #d6c29d;
-      margin-bottom: 1.2rem;
-    }
-    .slide-card h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .slide-card p { opacity: 0.7; font-size: 1rem; line-height: 1.6; margin-bottom: 1.2rem; }
-    .slide-card .tech-tag { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
-    .tech-tag span {
-      background: rgba(214, 194, 157, 0.1);
-      padding: 0.3rem 1.2rem;
-      border-radius: 40px;
-      font-size: 0.7rem;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(255,255,255,0.03);
-      color: #cfc3ad;
-    }
-
-    .slider-controls { display: flex; justify-content: center; gap: 1.2rem; margin: 2rem 0 0.5rem; }
-    .slider-controls button {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: #d6d0c4;
-      width: 50px; height: 50px;
-      border-radius: 60px;
-      font-size: 1.2rem;
-      cursor: none;
-      transition: 0.3s;
-      backdrop-filter: blur(4px);
-    }
-    .slider-controls button:hover {
-      background: rgba(214, 194, 157, 0.15);
-      border-color: #d6c29d;
-      color: #fff;
-      transform: scale(1.05);
-    }
-    .slider-dots { display: flex; justify-content: center; gap: 0.6rem; margin-top: 1.2rem; }
-    .dot {
-      width: 10px; height: 10px;
-      border-radius: 30px;
-      background: rgba(255,255,255,0.1);
-      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      cursor: none;
-    }
-    .dot.active { background: #d6c29d; width: 35px; }
-
-    /* ----- SCROLLING WORDS (enhanced) ----- */
-    .scrolling-words {
-      overflow: hidden;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(6px);
-      padding: 2rem 0;
-      border-top: 1px solid rgba(255, 215, 150, 0.04);
-      border-bottom: 1px solid rgba(255, 215, 150, 0.04);
-      margin: 2rem 0 0;
-      white-space: nowrap;
-    }
-    .scrolling-track {
-      display: inline-flex;
-      gap: 5rem;
-      animation: scrollLeft 30s linear infinite;
-      font-size: 2.2rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.8);
-    }
-    .scrolling-track span { display: inline-flex; align-items: center; gap: 0.8rem; }
-    .scrolling-track i { color: #d6c29d; opacity: 0.6; }
-    @keyframes scrollLeft {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* ----- CONTACT (enhanced) ----- */
-    .contact-section {
-      max-width: 1400px;
-      margin: 4rem auto;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      width: 100%;
-    }
-    .contact-card {
-      background: rgba(14, 18, 24, 0.6);
-      backdrop-filter: blur(8px);
-      border-radius: 40px;
-      padding: 2.8rem;
-      border: 1px solid rgba(255, 215, 150, 0.04);
-      box-shadow: 0 20px 50px -10px rgba(0,0,0,0.6);
-      transition: transform 0.3s ease, border-color 0.3s;
-    }
-    .contact-card:hover { border-color: rgba(214, 194, 157, 0.15); transform: translateY(-2px); }
-    .contact-card h2 {
-      font-size: 2rem; margin-bottom: 2rem; font-weight: 600;
-      border-bottom: 1px solid rgba(214, 194, 157, 0.1);
-      padding-bottom: 1rem;
-    }
-    .contact-card h2 i { color: #d6c29d; margin-right: 12px; }
-    .contact-detail {
-      display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; font-size: 1.05rem;
-    }
-    .contact-detail i { width: 30px; color: #d6c29d; font-size: 1.4rem; }
-    .contact-detail a {
-      color: rgba(255,255,255,0.7); text-decoration: none;
-      border-bottom: 1px dotted rgba(214, 194, 157, 0.15);
-      transition: 0.3s;
-    }
-    .contact-detail a:hover { color: #fff; border-bottom-color: #d6c29d; }
-
-    .map-container {
-      margin-top: 1.5rem;
-      border-radius: 30px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.04);
-      height: 200px;
-      background: #1a1e26;
-    }
-    .map-container iframe {
-      width: 100%; height: 100%; border: 0;
-      filter: invert(0.85) hue-rotate(180deg) saturate(0.5);
-    }
-
-    .live-demos { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.8rem; }
-    .demo-item {
-      background: rgba(0,0,0,0.2);
-      padding: 1.2rem 1.8rem;
-      border-radius: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid rgba(255,255,255,0.03);
-      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .demo-item:hover {
-      background: rgba(214, 194, 157, 0.06);
-      border-color: rgba(214, 194, 157, 0.2);
-      transform: translateX(4px);
-    }
-    .demo-item span { font-weight: 400; }
-    .demo-item i { color: #d6c29d; margin-right: 10px; }
-    .demo-item a {
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      background: rgba(214, 194, 157, 0.06);
-      padding: 0.4rem 1.4rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      border: 1px solid rgba(214, 194, 157, 0.06);
-      transition: 0.3s;
-      font-weight: 500;
-    }
-    .demo-item a:hover {
-      background: rgba(214, 194, 157, 0.2);
-      color: #fff;
-      border-color: #d6c29d;
-      transform: scale(1.02);
-    }
-
-    /* ----- SCROLL ANIMATIONS (fade-up) ----- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
-      .slider-track, .slide-card, .demo-item, .nav-links a, button { transition: none; }
-      .hero-background, .gradient-overlay, .hero-section { transform: none !important; }
-    }
-
-    /* ----- RESPONSIVE ----- */
-    @media (max-width: 900px) {
-      .slide-card { min-width: calc(50% - 1rem); }
-      .contact-section { grid-template-columns: 1fr; }
-      .navbar { padding: 1rem 1.5rem; flex-direction: column; align-items: stretch; }
-      .nav-links { justify-content: center; gap: 1.2rem; }
-      .hero-text { padding: 2rem 1.5rem; }
-    }
-    @media (max-width: 600px) {
-      .slide-card { min-width: 100%; }
-      .scrolling-track { font-size: 1.4rem; gap: 2rem; }
-      .hero-text h1 { font-size: 2.6rem; }
-      .contact-card { padding: 1.8rem; }
-      .cursor-dot, .cursor-ring { display: none; } /* hide custom cursor on mobile */
-      body { cursor: auto; }
-    }
-  
-    .tektrend-footer {
-      position: relative;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-      padding: 1.2rem 2rem;
-      background: rgba(8, 10, 14, 0.78);
-      color: rgba(255,255,255,0.72);
-      border-top: 1px solid rgba(214, 194, 157, 0.16);
-      backdrop-filter: blur(10px);
-    }
-    .tektrend-footer__brand a,
-    .tektrend-footer__links a {
-      color: #d6c29d;
-      text-decoration: none;
-    }
-    .tektrend-footer__links {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.1rem;
-    }
-    .tektrend-footer__links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-    .tektrend-footer__brand a:hover,
-    .tektrend-footer__links a:hover {
-      color: #f5efe2;
-    }
-    @media (max-width: 720px) {
-      .tektrend-footer {
-        padding: 1.3rem;
-        flex-direction: column;
-        text-align: center;
-      }
-      .tektrend-footer__links {
-        justify-content: center;
-      }
-    }
-  </style>
+  <!-- GSAP & ScrollTrigger (Akaru Pinned Horizontal Showcase & Timelines) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body id="top">
-  <!-- Custom Cursor -->
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+  <!-- FLUID MAGNETIC CURSOR (Akaru Elastic Blob) -->
+  <div class="akar-cursor" id="akarCursor">
+    <span class="akar-cursor-badge">VIEW</span>
+  </div>
+  <!-- FLOATING HEADER -->
+  <header class="akar-header">
+    <div class="akar-header-left">
+      <a href="<?= eurl('/') ?>" class="akar-brand-logo">
+        Tektrend<span class="akar-dot"></span>
+      </a>
+    </div>
 
-  <!-- Progress Bar -->
-  <div class="progress-bar" id="progressBar"></div>
+    <div class="akar-header-right">
+      <!-- Invest in Tektrend Button -->
+      <button class="akar-invest-pill" onclick="openInvestModal()" title="Invest in Tektrend Softwares" aria-label="Invest in Tektrend Softwares">
+        <i class="fas fa-chart-line"></i>
+        <span class="akar-invest-label">Invest</span>
+      </button>
 
-  <!-- Background -->
-  <div class="hero-background"></div>
-  <div class="gradient-overlay"></div>
+      <!-- Color Palette Switcher Pill -->
+      <button class="akar-palette-pill" onclick="togglePaletteModal()" title="Select Color Theme" aria-label="Select Color Theme">
+        <i class="fas fa-palette"></i>
+        <span class="akar-palette-label">Theme</span>
+      </button>
 
-  <div class="content">
-    <!-- Navbar -->
-    <nav class="navbar">
-      <a href="<?= eurl('/') ?>" class="logo"><i class="fas fa-code"></i> Tek Trend</a>
-      <div class="nav-links">
-        <a href="<?= eurl('/#top') ?>">Home</a>
-        <a href="<?= eurl('/#portfolio') ?>">Portfolio</a>
-        <a href="<?= eurl('/live-demos') ?>"><i class="fas fa-laptop-code"></i> Live Demos</a>
-        <a href="<?= eurl('/#contact') ?>">Contact</a>
-        <!-- Theme Toggle Button -->
-        <button id="homeThemeToggleBtn" onclick="toggleTheme()" title="Toggle Light / Dark Mode" aria-label="Toggle Theme" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--accent-gold); background: var(--accent-gold-glow); color: var(--accent-gold); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: transform 0.25s;">
-          <i class="fas fa-sun" id="homeThemeIcon"></i>
+      <!-- Dark / Light Mode Switcher -->
+      <button class="akar-theme-pill" onclick="toggleAkaruTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+        <i class="fas fa-sun" id="akarThemeIcon"></i>
+      </button>
+
+      <!-- Akaru Pill Burger Button -->
+      <button class="akar-burger-btn" id="akarBurgerBtn" aria-label="Open Navigation Menu">
+        <span class="akar-burger-label">Menu</span>
+        <div class="akar-burger-circle">
+          <div class="akar-burger-icon">
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <!-- COLOR THEME SWITCHER MODAL -->
+  <div class="akar-palette-modal" id="akarPaletteModal" role="dialog" aria-labelledby="akarPaletteTitle" aria-modal="true">
+    <div class="akar-palette-header">
+      <div class="akar-palette-title" id="akarPaletteTitle">
+        <i class="fas fa-palette"></i>
+        <span>Color Theme</span>
+      </div>
+      <button class="akar-palette-close" onclick="closePaletteModal()" aria-label="Close theme selector">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="akar-palette-grid">
+      <!-- 1. Terracotta Akaru -->
+      <button class="akar-palette-option" data-palette-target="terracotta" onclick="setAkaruPalette('terracotta')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #e49366;"></span>
+          <span class="akar-palette-dot" style="background: #798e7b;"></span>
+          <span class="akar-palette-dot" style="background: #b692a1;"></span>
+          <span class="akar-palette-dot" style="background: #8bb4c9;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Terracotta</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">French studio warm earth & stone</div>
+      </button>
+
+      <!-- 2. Emerald Luxe -->
+      <button class="akar-palette-option" data-palette-target="emerald" onclick="setAkaruPalette('emerald')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #10b981;"></span>
+          <span class="akar-palette-dot" style="background: #059669;"></span>
+          <span class="akar-palette-dot" style="background: #f59e0b;"></span>
+          <span class="akar-palette-dot" style="background: #06b6d4;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Emerald Gold</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">Prestige forest green & royal gold</div>
+      </button>
+
+      <!-- 3. Cyberpunk Violet -->
+      <button class="akar-palette-option" data-palette-target="cyberpunk" onclick="setAkaruPalette('cyberpunk')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #a855f7;"></span>
+          <span class="akar-palette-dot" style="background: #06b6d4;"></span>
+          <span class="akar-palette-dot" style="background: #f43f5e;"></span>
+          <span class="akar-palette-dot" style="background: #3b82f6;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Cyberpunk</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">Neo-Tokyo violet & laser rose</div>
+      </button>
+
+      <!-- 4. Cobalt Cyan -->
+      <button class="akar-palette-option" data-palette-target="cobalt" onclick="setAkaruPalette('cobalt')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #3b82f6;"></span>
+          <span class="akar-palette-dot" style="background: #10b981;"></span>
+          <span class="akar-palette-dot" style="background: #6366f1;"></span>
+          <span class="akar-palette-dot" style="background: #0ea5e9;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Nordic Cobalt</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">Electric blue & high-tech indigo</div>
+      </button>
+
+      <!-- 5. Sunset Amber -->
+      <button class="akar-palette-option" data-palette-target="sunset" onclick="setAkaruPalette('sunset')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #f97316;"></span>
+          <span class="akar-palette-dot" style="background: #eab308;"></span>
+          <span class="akar-palette-dot" style="background: #ef4444;"></span>
+          <span class="akar-palette-dot" style="background: #ec4899;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Solar Sunset</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">Vivid amber orange & crimson heat</div>
+      </button>
+
+      <!-- 6. Monochrome Platinum -->
+      <button class="akar-palette-option" data-palette-target="monochrome" onclick="setAkaruPalette('monochrome')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #ffffff; border: 1px solid #555;"></span>
+          <span class="akar-palette-dot" style="background: #94a3b8;"></span>
+          <span class="akar-palette-dot" style="background: #64748b;"></span>
+          <span class="akar-palette-dot" style="background: #cbd5e1;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Monochrome</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">Brutalist obsidian & pure platinum</div>
+      </button>
+
+      <!-- 7. Alabaster Ivory & Champagne Light -->
+      <button class="akar-palette-option" data-palette-target="alabaster" onclick="setAkaruPalette('alabaster')">
+        <div class="akar-palette-swatches">
+          <span class="akar-palette-dot" style="background: #faf9f5; border: 1px solid #bbb;"></span>
+          <span class="akar-palette-dot" style="background: #d97706;"></span>
+          <span class="akar-palette-dot" style="background: #059669;"></span>
+          <span class="akar-palette-dot" style="background: #2563eb;"></span>
+        </div>
+        <div class="akar-palette-opt-name">
+          <span>Alabaster Light</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="akar-palette-opt-desc">Ultra-light linen ivory & champagne</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- INVESTOR RELATIONS & CAPITAL MODAL -->
+  <div class="akar-invest-modal-overlay" id="akarInvestModal" role="dialog" aria-labelledby="akarInvestTitle" aria-modal="true">
+    <div class="akar-invest-modal">
+      <div class="akar-invest-header">
+        <div>
+          <div class="akar-invest-badge"><i class="fas fa-gem"></i> Investor Relations & Growth Capital</div>
+          <h2 class="akar-invest-title" id="akarInvestTitle">Invest in Tektrend Softwares</h2>
+          <p class="akar-invest-subtitle">We are Tektrend Softwares based in Eldoret, Kenya. Partner with East Africa's elite software architecture and turnkey digital systems powerhouse.</p>
+        </div>
+        <button class="akar-palette-close" onclick="closeInvestModal()" aria-label="Close investor dialog">
+          <i class="fas fa-times"></i>
         </button>
-
-        <?php if (isset($_SESSION['user_id'])): ?>
-          <a href="<?= eurl('/dashboard') ?>" class="highlight"><i class="fas fa-chart-pie"></i> Dashboard</a>
-        <?php else: ?>
-          <a href="<?= eurl('/login') ?>" class="highlight"><i class="fas fa-rocket"></i> Portal / Login</a>
-        <?php endif; ?>
       </div>
-    </nav>
 
-    <!-- Hero (with tilt) -->
-    <section class="hero-section" id="heroTilt">
-      <div class="hero-text reveal">
-        <h1 title="Tek Trend Innovations - World Class Software Architecture">code · design · systems</h1>
-        <p>PHP · HTML · CSS · Google Script · Dashboards · School Management</p>
-        <div class="badge"><i class="fas fa-certificate"></i>  Tek Trend Certified</div>
-      </div>
-    </section>
-
-    <!-- Slider -->
-    <div class="slider-wrapper" id="portfolio">
-      <div class="slider-container">
-        <div class="slider-track" id="sliderTrack">
-          <div class="slide-card reveal"><i class="fas fa-laptop-code"></i><h3>Web Design</h3><p>High‑end UI/UX with fluid interactions & motion. Pixel‑perfect, accessible.</p><div class="tech-tag"><span>Figma</span><span>GSAP</span><span>CSS</span></div></div>
-          <div class="slide-card reveal"><i class="fas fa-database"></i><h3>PHP & MySQL</h3><p>Custom backends, APIs, authentication & scalable architecture.</p><div class="tech-tag"><span>Laravel</span><span>PHP8</span><span>MySQL</span></div></div>
-          <div class="slide-card reveal"><i class="fas fa-google"></i><h3>Google Script</h3><p>Automation, GSuite add‑ons, Sheets/Docs integration & dashboards.</p><div class="tech-tag"><span>Apps Script</span><span>GCP</span><span>API</span></div></div>
-          <div class="slide-card reveal"><i class="fas fa-school"></i><h3>School Management</h3><p>Complete systems: attendance, grading, parent portal, analytics.</p><div class="tech-tag"><span>Dashboards</span><span>Reports</span><span>PHP</span></div></div>
-          <div class="slide-card reveal"><i class="fas fa-chart-pie"></i><h3>Dashboards</h3><p>Interactive data visualization, real‑time KPI, admin panels.</p><div class="tech-tag"><span>Chart.js</span><span>Vue</span><span>CSS Grid</span></div></div>
+      <!-- Quick Metrics Grid -->
+      <div class="akar-invest-grid-stats">
+        <div class="akar-invest-stat-card">
+          <div class="akar-invest-stat-val">11+</div>
+          <div class="akar-invest-stat-lbl">Live Turnkey Platforms</div>
         </div>
-        <div class="slider-controls">
-          <button id="prevSlide" aria-label="Previous Slide"><i class="fas fa-chevron-left"></i></button>
-          <button id="nextSlide" aria-label="Next Slide"><i class="fas fa-chevron-right"></i></button>
+        <div class="akar-invest-stat-card">
+          <div class="akar-invest-stat-val">Eldoret, KE</div>
+          <div class="akar-invest-stat-lbl">East Africa Tech Hub</div>
         </div>
-        <div class="slider-dots" id="sliderDots"></div>
+        <div class="akar-invest-stat-card">
+          <div class="akar-invest-stat-val">78%+</div>
+          <div class="akar-invest-stat-lbl">SaaS Software Margin</div>
+        </div>
       </div>
+
+      <!-- Investment Tiers -->
+      <div style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary);">
+        Select Investment Tier
+      </div>
+      <div class="akar-invest-tiers">
+        <button type="button" class="akar-tier-btn --active" data-tier="angel" onclick="selectInvestTier(1000, 'angel')">
+          <div class="akar-tier-name">Angel Syndicate</div>
+          <div class="akar-tier-amount">$1,000</div>
+          <div class="akar-tier-note">Product Royalty & Advisory Pool</div>
+        </button>
+        <button type="button" class="akar-tier-btn" data-tier="growth" onclick="selectInvestTier(5000, 'growth')">
+          <div class="akar-tier-name">Growth Round</div>
+          <div class="akar-tier-amount">$5,000</div>
+          <div class="akar-tier-note">Equity SAFE & Board Briefings</div>
+        </button>
+        <button type="button" class="akar-tier-btn" data-tier="institutional" onclick="selectInvestTier(25000, 'institutional')">
+          <div class="akar-tier-name">Strategic Partner</div>
+          <div class="akar-tier-amount">$25,000+</div>
+          <div class="akar-tier-note">Direct Cap Table & Enterprise Rights</div>
+        </button>
+      </div>
+
+      <!-- Investor Submission Form -->
+      <form action="<?= eurl('/invest') ?>" method="POST">
+        <input type="hidden" name="investment_amount" id="investAmountInput" value="1000">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-bottom: 1.4rem;">
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); display: block; margin-bottom: 0.6rem;">Investor / Firm Name *</label>
+            <input type="text" name="name" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-size: 1.4rem;" placeholder="e.g. Kipchoge Capital">
+          </div>
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); display: block; margin-bottom: 0.6rem;">Email Address *</label>
+            <input type="email" name="email" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-size: 1.4rem;" placeholder="investor@fund.com">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-bottom: 1.4rem;">
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); display: block; margin-bottom: 0.6rem;">WhatsApp / Phone Number</label>
+            <input type="text" name="phone" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-size: 1.4rem;" placeholder="+254 700 000000">
+          </div>
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); display: block; margin-bottom: 0.6rem;">Investor Type</label>
+            <select name="investor_type" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-size: 1.4rem;">
+              <option value="Angel Investor">Angel Investor</option>
+              <option value="Venture Capital / Fund">Venture Capital / Fund</option>
+              <option value="Private Equity">Private Equity</option>
+              <option value="Strategic Corporate Partner">Strategic Corporate Partner</option>
+              <option value="Syndicate Member">Syndicate Member</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.8rem;">
+          <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); display: block; margin-bottom: 0.6rem;">Investor Notes & Target Allocation</label>
+          <textarea name="notes" rows="3" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-size: 1.4rem;" placeholder="Let us know your investment thesis, target ticket size, or questions..."></textarea>
+        </div>
+
+        <button type="submit" class="akar-invest-pill" style="width: 100%; justify-content: center; height: 5.2rem; font-size: 1.4rem;">
+          Submit Investment Inquiry & Request Pitch Deck <i class="fas fa-arrow-right" style="margin-left: 0.8rem;"></i>
+        </button>
+      </form>
     </div>
+  </div>
 
-    <!-- Scrolling Words -->
-    <div class="scrolling-words">
-      <div class="scrolling-track">
-        <span><i class="fas fa-code"></i> PHP · HTML · CSS · Google Script</span>
-        <span><i class="fas fa-laptop"></i> Web Design · Dashboards · School Management</span>
-        <span><i class="fas fa-star"></i> Innovation · Motion · Excellence</span>
-        <span><i class="fas fa-code"></i> PHP · HTML · CSS · Google Script</span>
-        <span><i class="fas fa-laptop"></i> Web Design · Dashboards · School Management</span>
-        <span><i class="fas fa-star"></i> Innovation · Motion · Excellence</span>
-      </div>
-    </div>
-
-    <!-- Contact + Map + Live Demos -->
-    <section class="contact-section" id="contact">
-      <div class="contact-card reveal">
-        <h2><i class="fas fa-paper-plane"></i> Contact</h2>
-        <div class="contact-detail"><i class="fas fa-envelope"></i> <a href="mailto:<?= sanitize($companyEmail) ?>"><?= sanitize($companyEmail) ?></a></div>
-        <div class="contact-detail"><i class="fas fa-phone-alt"></i> <a href="tel:<?= sanitize($companyPhone) ?>"><?= sanitize($companyPhone) ?></a></div>
-        <div class="contact-detail"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/<?= $companyWhatsApp ?>" target="_blank" rel="noopener noreferrer">+<?= $companyWhatsApp ?> (WhatsApp)</a></div>
-        <div class="contact-detail"><i class="fas fa-map-pin"></i> <span><?= sanitize($companyAddress) ?></span></div>
-        <div class="map-container">
-          <iframe src="https://maps.google.com/maps?q=Roadblock,+Eldoret,+Kenya&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" allowfullscreen loading="lazy" title="Tek Cyber Location, Roadblock, Eldoret, Kenya"></iframe>
-        </div>
-      </div>
-
-      <div class="contact-card reveal" id="demos">
-        <h2><i class="fas fa-rocket"></i> Live Demos</h2>
-        <div class="live-demos">
-          <?php if (!empty($portfolioDemos)): ?>
-            <?php foreach (array_slice($portfolioDemos, 0, 5) as $pd): ?>
-              <div class="demo-item">
-                <span><i class="<?= sanitize($pd['icon'] ?? 'fas fa-laptop-code') ?>"></i> <?= sanitize($pd['title']) ?></span>
-                <a href="<?= eurl($pd['demo_url']) ?>" target="_blank">demo →</a>
-              </div>
-            <?php endforeach; ?>
+  <!-- FULLSCREEN CLIP-PATH NAVIGATION OVERLAY -->
+  <div class="akar-nav-overlay" id="akarNavOverlay">
+    <div class="akar-nav-top">
+      <!-- Nav Menu List -->
+      <ul class="akar-nav-menu-list">
+        <li class="akar-nav-item" data-teaser="home">
+          <a href="<?= eurl('/') ?>" class="akar-nav-link">
+            01 / Home <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="projects">
+          <a href="<?= eurl('/#akarShowcase') ?>" class="akar-nav-link">
+            02 / Selected Works <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="services">
+          <a href="<?= eurl('/#services') ?>" class="akar-nav-link">
+            03 / Expertise <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="demos">
+          <a href="<?= eurl('/live-demos') ?>" class="akar-nav-link">
+            04 / Live Demos (11) <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="consultation">
+          <a href="<?= eurl('/#consultation') ?>" class="akar-nav-link">
+            05 / Book Consultation <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="portal">
+          <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="<?= eurl('/dashboard') ?>" class="akar-nav-link">
+              06 / Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
+            </a>
           <?php else: ?>
-            <div class="demo-item"><span><i class="fas fa-palette"></i> Graphic Design Studio</span> <a href="<?= eurl('/live_demo/graphic.html') ?>" target="_blank">demo →</a></div>
-            <div class="demo-item"><span><i class="fas fa-chart-line"></i> Marketing Agency</span> <a href="<?= eurl('/live_demo/digital_markting.html') ?>" target="_blank">demo →</a></div>
-            <div class="demo-item"><span><i class="fas fa-store"></i> E-Commerce Platform</span> <a href="<?= eurl('/live_demo/e-commerce.html') ?>" target="_blank">demo →</a></div>
-            <div class="demo-item"><span><i class="fas fa-scale-balanced"></i> Law Firm & Attorneys</span> <a href="<?= eurl('/live_demo/law_firm.html') ?>" target="_blank">demo →</a></div>
-            <div class="demo-item"><span><i class="fas fa-church"></i> Community Center</span> <a href="<?= eurl('/live_demo/church.html') ?>" target="_blank">demo →</a></div>
+            <a href="<?= eurl('/login') ?>" class="akar-nav-link">
+              06 / Client Portal <span class="akar-nav-arrow"><i class="fas fa-lock"></i></span>
+            </a>
           <?php endif; ?>
+        </li>
+      </ul>
+
+      <!-- Interactive Project Teaser Window -->
+      <div class="akar-nav-teaser-box">
+        <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80" id="akarTeaserImg" alt="Project Teaser">
+        <div class="akar-teaser-badge" id="akarTeaserBadge">Nexus Commercial ERP</div>
+      </div>
+    </div>
+
+    <!-- Agency Details & Footer in Menu -->
+    <div class="akar-nav-bottom">
+      <div class="akar-col">
+        <div class="akar-col-title">Studio Location</div>
+        <div class="akar-col-content">
+          <?= sanitize($companyAddress) ?><br>
+          East Africa & Remote Global
         </div>
-        <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-          <span style="opacity: 0.4; font-size: 0.8rem;"><i class="fas fa-external-link-alt"></i> Click any link to open live project</span>
-          <a href="<?= eurl('/live-demos') ?>" style="color: #d6c29d; font-size: 0.85rem; text-decoration: none; font-weight: 600; background: rgba(214,194,157,0.1); padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid rgba(214,194,157,0.2);">
-            View All Demos <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="akar-col">
+        <div class="akar-col-title">Direct Inquiries</div>
+        <div class="akar-col-content">
+          <a href="mailto:<?= sanitize($companyEmail) ?>"><?= sanitize($companyEmail) ?></a>
+          <a href="tel:<?= sanitize($companyPhone) ?>"><?= sanitize($companyPhone) ?></a>
+        </div>
+      </div>
+      <div class="akar-col">
+        <div class="akar-col-title">Quick Connect</div>
+        <div class="akar-col-content">
+          <a href="https://wa.me/<?= $companyWhatsApp ?>" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Team</a>
+          <a href="<?= eurl('/live-demos') ?>"><i class="fas fa-desktop"></i> View Prototypes</a>
+        </div>
+      </div>
+      <div class="akar-col">
+        <div class="akar-col-title">Social / Networks</div>
+        <div class="akar-col-content">
+          <a href="https://github.com/Mchungaji-tech" target="_blank">GitHub</a>
+          <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+          <a href="https://twitter.com" target="_blank">X (Twitter)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Giant Ghost Letters -->
+    <div class="akar-ghost-letters">TEKTREND</div>
+  </div>
+
+  <!-- MAIN HERO SECTION (AKARU MONUMENTAL TYPOGRAPHY) -->
+  <section class="akar-hero">
+    <div class="akar-hero-meta-top">
+      <span>[ SOFTWARE ARCHITECTURE & DIGITAL INNOVATION ]</span>
+      <span class="akar-tag-live">ACCEPTING Q4 / 2026 COMMISSIONS</span>
+    </div>
+
+    <!-- Monumental Interactive Letters: TEKTREND -->
+    <div class="akar-letters-stage" id="akarLetterStage">
+      <div class="akar-letters-grid">
+        <span class="akar-letter">T</span>
+        <span class="akar-letter">E</span>
+        <span class="akar-letter">K</span>
+        <span class="akar-letter">T</span>
+        <span class="akar-letter">R</span>
+        <span class="akar-letter">E</span>
+        <span class="akar-letter">N</span>
+        <span class="akar-letter">D</span>
+      </div>
+
+      <div class="akar-letters-tagline">
+        <p><strong>We are Tektrend Softwares.</strong> We architect world-class web systems, cloud dashboards, and turnkey production platforms based in Eldoret, Kenya.</p>
+        <button type="button" class="akar-featured-pill" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($featuredShowcase[0]), ENT_QUOTES) ?>)">
+          01 / Featured Project <i class="fas fa-arrow-up-right-from-square"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="akar-hero-footer">
+      <ul class="akar-hero-discipline">
+        <li>PHP 8 MVC Architecture</li>
+        <li>•</li>
+        <li>Google Workspace ERP</li>
+        <li>•</li>
+        <li>Real-time Dashboards</li>
+        <li>•</li>
+        <li>Turnkey Codebases</li>
+      </ul>
+
+      <a href="#akarShowcase" class="akar-scroll-prompt">
+        <span>Explore Works <i class="fas fa-arrow-down" style="margin-left: 0.6rem;"></i></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SELECTED ARCHITECTURES & PROTOTYPES (PINNED HORIZONTAL SHOWCASE LIKE AKARU) -->
+  <section class="akar-showcase-pin-wrap" id="akarShowcase">
+    <div class="akar-showcase-sticky">
+      <div class="akar-showcase-header">
+        <div>
+          <div class="akar-section-badge">[ SELECTED ARCHITECTURES & PROTOTYPES ]</div>
+          <h2 class="akar-showcase-title">Featured Works</h2>
+        </div>
+        <div class="akar-showcase-counter" id="akarShowcaseCounter">01 / 06</div>
+      </div>
+
+      <!-- Horizontal Translating Reel -->
+      <div class="akar-showcase-reel" id="akarShowcaseReel">
+        <?php foreach ($featuredShowcase as $index => $proj): ?>
+          <div class="akar-project-card" data-color="<?= $proj['color'] ?>" data-index="0<?= $index + 1 ?> / 06" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($proj), ENT_QUOTES) ?>)">
+            <div class="akar-card-top">
+              <span class="akar-card-index">0<?= $index + 1 ?> / 06</span>
+              <div class="akar-card-tags">
+                <span class="akar-pill-tag"><?= sanitize($proj['category']) ?></span>
+                <span class="akar-pill-tag"><?= sanitize($proj['year']) ?></span>
+              </div>
+            </div>
+
+            <div class="akar-card-media">
+              <img src="<?= $proj['image'] ?>" alt="<?= sanitize($proj['title']) ?>" loading="lazy">
+              <div class="akar-media-overlay-badge"><i class="fas fa-code"></i> Live System</div>
+            </div>
+
+            <div class="akar-card-bottom">
+              <div class="akar-card-info">
+                <h3 class="akar-card-title"><?= sanitize($proj['title']) ?></h3>
+                <p class="akar-card-desc"><?= sanitize($proj['short_desc']) ?></p>
+              </div>
+              <div class="akar-action-circle" title="Explore Case Study">
+                <i class="fas fa-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 1.5rem;">
+        <span style="font-size: 1.25rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">
+          <i class="fas fa-arrows-left-right"></i> Scroll down to glide horizontally · Click any showcase to open interactive prototype
+        </span>
+        <a href="<?= eurl('/live-demos') ?>" style="font-size: 1.3rem; font-weight: 700; text-transform: uppercase; color: var(--text-primary); letter-spacing: 0.06em; display: inline-flex; align-items: center; gap: 0.8rem;">
+          View All 11 Live Prototypes <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMMERSIVE CASE STUDY DRAWER & MULTI-DEVICE PROTOTYPE RUNNER -->
+  <div class="akar-case-drawer" id="akarCaseDrawer">
+    <div class="akar-drawer-nav">
+      <button type="button" class="akar-drawer-back-btn" id="akarBackDrawer">
+        <i class="fas fa-arrow-left"></i> Back to Overview
+      </button>
+
+      <!-- Device Viewport Switcher -->
+      <div class="akar-device-switcher">
+        <button type="button" class="akar-device-btn --active" data-device="desktop">
+          <i class="fas fa-desktop"></i> Desktop
+        </button>
+        <button type="button" class="akar-device-btn" data-device="tablet">
+          <i class="fas fa-tablet-screen-button"></i> Tablet
+        </button>
+        <button type="button" class="akar-device-btn" data-device="mobile">
+          <i class="fas fa-mobile-screen"></i> Mobile
+        </button>
+      </div>
+
+      <button type="button" class="akar-drawer-close-btn" id="akarCloseDrawer" aria-label="Close Case Study">
+        &times;
+      </button>
+    </div>
+
+    <div class="akar-drawer-body">
+      <div class="akar-drawer-header">
+        <div class="akar-drawer-meta">
+          <span id="akarDrawerCategory">Enterprise Architecture</span>
+          <span>Verified Production Build</span>
+          <span>Turnkey Code Available</span>
+        </div>
+        <h2 id="akarDrawerTitle">Nexus Commercial ERP</h2>
+        <p id="akarDrawerDesc">High-performance cloud management system with real-time financial tracking, multi-tenant RBAC, and executive reporting suite.</p>
+      </div>
+
+      <!-- Live Interactive Prototype Runner -->
+      <div class="akar-live-frame-wrapper --desktop" id="akarFrameWrapper">
+        <iframe id="akarDrawerIframe" src="about:blank" title="Interactive Prototype Runner"></iframe>
+      </div>
+
+      <!-- Technical Specifications Breakdown -->
+      <div class="akar-case-specs-grid">
+        <div class="akar-spec-box">
+          <h4>Core Tech Stack</h4>
+          <p id="akarDrawerTech">PHP 8.2 MVC, MySQL 8, Redis, Chart.js, GSAP</p>
+        </div>
+        <div class="akar-spec-box">
+          <h4>Deliverables Included</h4>
+          <p>Full Source Code, Schema SQL, CSS/JS Assets, Admin Panel</p>
+        </div>
+        <div class="akar-spec-box">
+          <h4>Architecture Model</h4>
+          <p>Clean MVC · Zero-bloat · Modular REST API</p>
+        </div>
+      </div>
+
+      <div class="akar-drawer-actions">
+        <div class="akar-price-callout">
+          Turnkey Commercial Codebase: <strong id="akarDrawerPrice">$89</strong>
+        </div>
+
+        <div class="akar-cta-btns">
+          <a href="#" id="akarDrawerExternalLink" target="_blank" class="akar-btn-main">
+            <i class="fas fa-up-right-from-square"></i> Open Live Prototype in New Tab
+          </a>
+          <a href="<?= eurl('/live-demos') ?>" class="akar-btn-outline">
+            <i class="fas fa-cubes"></i> Browse All Prototypes
+          </a>
+          <a href="#consultation" onclick="document.getElementById('akarCloseDrawer').click()" class="akar-btn-outline">
+            <i class="fas fa-calendar-check"></i> Commission Custom Build
           </a>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 
-  <script>
-    (function() {
-      // ----- CUSTOM CURSOR -----
-      const dot = document.getElementById('cursorDot');
-      const ring = document.getElementById('cursorRing');
-      const enableCursor = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-      if (enableCursor) {
-        document.addEventListener('mousemove', (e) => {
-          dot.style.left = e.clientX + 'px';
-          dot.style.top = e.clientY + 'px';
-          ring.style.left = e.clientX + 'px';
-          ring.style.top = e.clientY + 'px';
-        });
-        // hover effect for links/buttons
-        document.querySelectorAll('a, button, .slide-card, .demo-item').forEach(el => {
-          el.addEventListener('mouseenter', () => {
-            dot.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            ring.style.transform = 'translate(-50%, -50%) scale(1.3)';
-            ring.style.borderColor = '#d6c29d';
-          });
-          el.addEventListener('mouseleave', () => {
-            dot.style.transform = 'translate(-50%, -50%) scale(1)';
-            ring.style.transform = 'translate(-50%, -50%) scale(1)';
-            ring.style.borderColor = 'rgba(214, 194, 157, 0.3)';
-          });
-        });
-      }
+  <!-- SERVICES & CAPABILITIES (AKARU ACCORDION) -->
+  <section class="akar-services-section" id="services">
+    <div class="akar-services-header">
+      <div>
+        <div class="akar-section-badge">[ SYSTEM CAPABILITIES & EXPERTISE ]</div>
+        <h2>What We Architect</h2>
+      </div>
+      <p>We blend uncompromising engineering standards with French creative agency aesthetics to build systems that scale effortlessly.</p>
+    </div>
 
-      // ----- SCROLL PROGRESS BAR -----
-      const progressBar = document.getElementById('progressBar');
-      const heroBackground = document.querySelector('.hero-background');
-      const gradientOverlay = document.querySelector('.gradient-overlay');
-      const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let scrollTicking = false;
+    <div class="akar-services-list">
+      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80">
+        <div class="akar-service-num">00</div>
+        <div class="akar-service-main">
+          <h3>Enterprise Software Architecture</h3>
+          <p>Custom PHP 8.x MVC backends, relational schema design, role hierarchies, audit logging, and resilient micro-framework foundations.</p>
+        </div>
+        <div class="akar-service-action">
+          <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
 
-      function updateScrollEffects() {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = (scrollTop / docHeight) * 100;
-        progressBar.style.width = progress + '%';
+      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80">
+        <div class="akar-service-num">01</div>
+        <div class="akar-service-main">
+          <h3>Google Workspace & Cloud Automation</h3>
+          <p>Google Apps Script enterprise ERPs, automated Sheets-to-Docs reporting, Gmail outreach pipelines, and zero-maintenance cloud workflows.</p>
+        </div>
+        <div class="akar-service-action">
+          <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
 
-        if (!prefersReducedMotion) {
-          const parallaxRange = Math.min(scrollTop, window.innerHeight * 1.2);
-          heroBackground.style.transform = `translate3d(0, ${parallaxRange * 0.18}px, 0) scale(1.08)`;
-          gradientOverlay.style.transform = `translate3d(0, ${parallaxRange * 0.1}px, 0)`;
-          hero.style.transform = `translate3d(0, ${parallaxRange * 0.12}px, 0)`;
-        }
+      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80">
+        <div class="akar-service-num">02</div>
+        <div class="akar-service-main">
+          <h3>Real-time Dashboards & School Systems</h3>
+          <p>Interactive metric suites with Chart.js, attendance tracking, automated grading pipelines, financial ledgers, and teleconferencing.</p>
+        </div>
+        <div class="akar-service-action">
+          <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
 
-        scrollTicking = false;
-      }
+      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80">
+        <div class="akar-service-num">03</div>
+        <div class="akar-service-main">
+          <h3>Turnkey Web Templates & Source Code</h3>
+          <p>Award-caliber HTML5/CSS3 prototypes, accessible typography, fluid scroll physics, and instant deployment packs for founders and businesses.</p>
+        </div>
+        <div class="akar-service-action">
+          <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+    </div>
 
-      function requestScrollEffects() {
-        if (!scrollTicking) {
-          window.requestAnimationFrame(updateScrollEffects);
-          scrollTicking = true;
-        }
-      }
+    <!-- Floating Service Preview Image -->
+    <div class="akar-floating-service-img" id="akarFloatingServiceImg">
+      <img src="" alt="Service Preview">
+    </div>
+  </section>
 
-      window.addEventListener('scroll', requestScrollEffects, { passive: true });
-      window.addEventListener('resize', requestScrollEffects);
+  <!-- DARK EDITORIAL BREAK: TRUST, METRICS & ZOOM CONSULTATION -->
+  <section class="akar-dark-break" id="consultation">
+    <div class="akar-metrics-grid">
+      <div class="akar-metric-box">
+        <div class="akar-metric-val">99.9%</div>
+        <div class="akar-metric-label">System Uptime Architecture</div>
+      </div>
+      <div class="akar-metric-box">
+        <div class="akar-metric-val">&lt; 85ms</div>
+        <div class="akar-metric-label">Server Response Latency</div>
+      </div>
+      <div class="akar-metric-box">
+        <div class="akar-metric-val">15+</div>
+        <div class="akar-metric-label">Enterprise Deployments</div>
+      </div>
+      <div class="akar-metric-box">
+        <div class="akar-metric-val">100%</div>
+        <div class="akar-metric-label">Turnkey Delivery Guarantee</div>
+      </div>
+    </div>
 
-      // ----- SCROLL REVEAL (Intersection Observer) -----
-      const revealElements = document.querySelectorAll('.reveal');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          } else {
-            entry.target.classList.remove('visible');
-          }
-        });
-      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-      revealElements.forEach(el => observer.observe(el));
+    <!-- Consultation & Zoom Booking Vault -->
+    <div class="akar-consult-banner">
+      <div class="akar-consult-text">
+        <div style="font-size: 1.2rem; font-weight: 700; color: var(--terra); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.8rem;">
+          [ FREE 45-MINUTE ARCHITECTURAL SCOPING ]
+        </div>
+        <h3>Book 1-on-1 Zoom Session</h3>
+        <p>Discuss your enterprise software scope, cloud automation needs, or turnkey prototype deployment directly with our Principal Solutions Architect.</p>
+      </div>
 
-      // ----- 3D TILT EFFECT (Hero) -----
-      const hero = document.getElementById('heroTilt');
-      hero.addEventListener('mousemove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        const tiltX = y * 8;
-        const tiltY = -x * 8;
-        hero.querySelector('.hero-text').style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-      });
-      hero.addEventListener('mouseleave', () => {
-        hero.querySelector('.hero-text').style.transform = 'rotateX(0deg) rotateY(0deg)';
-      });
+      <button type="button" class="akar-consult-btn" onclick="document.getElementById('consultFormModal').style.display='flex'">
+        Schedule Zoom Session <i class="fas fa-calendar-check" style="margin-left: 0.6rem;"></i>
+      </button>
+    </div>
+  </section>
 
-      // ----- SLIDER -----
-      const track = document.getElementById('sliderTrack');
-      const dotsContainer = document.getElementById('sliderDots');
-      const prevBtn = document.getElementById('prevSlide');
-      const nextBtn = document.getElementById('nextSlide');
-      const slides = Array.from(track.children);
-      const slideCount = slides.length;
-      let currentIndex = 0;
-      let autoSlideInterval;
+  <!-- ZOOM CONSULTATION MODAL -->
+  <div id="consultFormModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 100005; align-items: center; justify-content: center; padding: 2rem;">
+    <div style="background: #161616; border: 1px solid rgba(255,255,255,0.12); border-radius: 2.4rem; padding: 4rem; max-width: 65rem; width: 100%; position: relative; color: #ffffff;">
+      <button onclick="document.getElementById('consultFormModal').style.display='none'" style="position: absolute; top: 2rem; right: 2rem; font-size: 2.4rem; color: #ffffff; cursor: pointer;">&times;</button>
+      <h3 style="font-family: 'Syne', sans-serif; font-size: 2.8rem; margin-bottom: 0.8rem;">Book Scoping Consultation</h3>
+      <p style="color: rgba(255,255,255,0.65); font-size: 1.4rem; margin-bottom: 2.5rem;">Select your preferred slot to receive an instant Zoom meeting link & calendar invite.</p>
 
-      function createDots() {
-        dotsContainer.innerHTML = '';
-        for (let i = 0; i < slideCount; i++) {
-          const dot = document.createElement('span');
-          dot.className = 'dot' + (i === 0 ? ' active' : '');
-          dot.dataset.index = i;
-          dot.addEventListener('click', () => goToSlide(i));
-          dotsContainer.appendChild(dot);
-        }
-      }
-      createDots();
+      <form action="<?= eurl('/book-consultation') ?>" method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Full Name *</label>
+            <input type="text" name="name" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="e.g. Alex Kimani">
+          </div>
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Email Address *</label>
+            <input type="email" name="email" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="alex@company.com">
+          </div>
+        </div>
 
-      function goToSlide(index) {
-        if (index < 0) index = 0;
-        if (index >= slideCount) index = slideCount - 1;
-        currentIndex = index;
-        const slideWidth = slides[0].offsetWidth + 32;
-        track.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
-        document.querySelectorAll('.dot').forEach((dot, i) => {
-          dot.classList.toggle('active', i === currentIndex);
-        });
-      }
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">WhatsApp / Phone</label>
+            <input type="text" name="phone" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="+254 700 000000">
+          </div>
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Company / Organization</label>
+            <input type="text" name="company" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="Acme Inc">
+          </div>
+        </div>
 
-      function nextSlide() { goToSlide((currentIndex + 1) % slideCount); }
-      function prevSlide() { goToSlide((currentIndex - 1 + slideCount) % slideCount); }
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Preferred Date</label>
+            <input type="date" name="preferred_date" value="<?= date('Y-m-d', strtotime('+1 day')) ?>" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;">
+          </div>
+          <div>
+            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Preferred Time</label>
+            <select name="preferred_time" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;">
+              <option value="10:00 AM">10:00 AM EAT</option>
+              <option value="02:00 PM">02:00 PM EAT</option>
+              <option value="04:30 PM">04:30 PM EAT</option>
+            </select>
+          </div>
+        </div>
 
-      nextBtn.addEventListener('click', () => { clearInterval(autoSlideInterval); nextSlide(); startAutoSlide(); });
-      prevBtn.addEventListener('click', () => { clearInterval(autoSlideInterval); prevSlide(); startAutoSlide(); });
+        <div style="margin-bottom: 2rem;">
+          <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Project Overview / Key Requirements</label>
+          <textarea name="notes" rows="3" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="Tell us briefly about what you want to engineer..."></textarea>
+        </div>
 
-      function startAutoSlide() {
-        if (autoSlideInterval) clearInterval(autoSlideInterval);
-        autoSlideInterval = setInterval(nextSlide, 4000);
-      }
-
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => goToSlide(currentIndex), 120);
-      });
-
-      requestScrollEffects();
-      goToSlide(0);
-      startAutoSlide();
-
-      const sliderContainer = document.querySelector('.slider-container');
-      sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-      sliderContainer.addEventListener('mouseleave', startAutoSlide);
-    })();
-  </script>
-<footer class="tektrend-footer">
-  <div class="tektrend-footer__brand">Designed by <a href="<?= eurl('/') ?>">TekTrend</a></div>
-  <div class="tektrend-footer__links">
-    <a href="mailto:<?= sanitize($companyEmail) ?>"><i class="fas fa-envelope"></i> <?= sanitize($companyEmail) ?></a>
-    <a href="tel:<?= sanitize($companyPhone) ?>"><i class="fab fa-whatsapp"></i> <?= sanitize($companyPhone) ?></a>
-    <a href="<?= eurl('/login') ?>"><i class="fas fa-lock"></i> Portal</a>
+        <button type="submit" style="width: 100%; padding: 1.5rem; border-radius: 10rem; background: var(--terra); color: #0e0e0e; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;">
+          Confirm Booking & Generate Zoom Room <i class="fas fa-video" style="margin-left: 0.6rem;"></i>
+        </button>
+      </form>
+    </div>
   </div>
-</footer>
 
-<!-- Include Google Gemini AI Chatbot -->
-<?php require_once BASE_PATH . '/app/views/partials/ai_chat.php'; ?>
+  <!-- AKARU FOOTER & MONUMENTAL LETTERMARK -->
+  <footer class="akar-footer">
+    <div class="akar-footer-top">
+      <div class="akar-footer-brand">
+        <h3>Tektrend Softwares</h3>
+        <p>We are Tektrend Softwares. Bespoke software architecture, digital systems, and cloud engineering based in Eldoret, Kenya.</p>
+      </div>
 
-<script>
-  // Theme Toggle Functionality
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('tektrend_theme', next);
-    updateHomeThemeIcon(next);
-  }
+      <div class="akar-footer-links-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="<?= eurl('/') ?>">Home</a></li>
+          <li><a href="<?= eurl('/#akarShowcase') ?>">Selected Works</a></li>
+          <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
+          <li><a href="<?= eurl('/live-demos') ?>">11 Live Demos</a></li>
+        </ul>
+      </div>
 
-  function updateHomeThemeIcon(theme) {
-    const icon = document.getElementById('homeThemeIcon');
-    if (!icon) return;
-    icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-  }
+      <div class="akar-footer-links-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:<?= sanitize($companyEmail) ?>"><?= sanitize($companyEmail) ?></a></li>
+          <li><a href="tel:<?= sanitize($companyPhone) ?>"><?= sanitize($companyPhone) ?></a></li>
+          <li><a href="https://wa.me/<?= $companyWhatsApp ?>" target="_blank">WhatsApp Direct</a></li>
+        </ul>
+      </div>
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    updateHomeThemeIcon(current);
-  });
-</script>
+      <div class="akar-footer-links-col">
+        <h4>Headquarters</h4>
+        <p style="font-size: 1.4rem; color: var(--text-secondary); line-height: 1.6;">
+          Tektrend Softwares, Eldoret, Kenya<br>
+          Global Engineering Retainers
+        </p>
+      </div>
+    </div>
+
+    <!-- Giant Footer Stamped Brand Mark -->
+    <div class="akar-footer-brand-mark">
+      <div class="akar-big-brand">TEKTREND</div>
+    </div>
+
+    <div class="akar-footer-bottom">
+      <div>&copy; <?= date('Y') ?> Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares</div>
+      <a href="#top" class="akar-back-to-top">
+        Back to Top <i class="fas fa-arrow-up"></i>
+      </a>
+    </div>
+  </footer>
+
+  <!-- Include Google Gemini AI Chatbot -->
+  <?php require_once BASE_PATH . '/app/views/partials/ai_chat.php'; ?>
+
+  <!-- Platform Engine JS -->
+  <script src="<?= eurl('/assets/js/main.js') ?>"></script>
 </body>
 </html>

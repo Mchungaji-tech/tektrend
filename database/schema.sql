@@ -757,6 +757,24 @@ CREATE TABLE IF NOT EXISTS `portfolio_demos` (
     KEY `category` (`category`),
     KEY `is_featured` (`is_featured`),
     KEY `sort_order` (`sort_order`)
+-- ============================================================
+-- INVESTOR RELATIONS & CAPITAL
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS `investments` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `investor_name` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `phone` VARCHAR(50) DEFAULT NULL,
+    `investor_type` VARCHAR(100) DEFAULT 'Angel Investor',
+    `target_amount` DECIMAL(15,2) DEFAULT 1000.00,
+    `status` ENUM('inquiry', 'nda_sent', 'data_room_access', 'term_sheet', 'funded', 'archived') DEFAULT 'inquiry',
+    `notes` TEXT DEFAULT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `email` (`email`),
+    KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

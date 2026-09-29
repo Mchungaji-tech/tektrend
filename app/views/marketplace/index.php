@@ -37,7 +37,7 @@
                     <?php foreach ($items as $it): ?>
                         <tr>
                             <td style="width: 80px;">
-                                <img src="<?= sanitize($it['image']) ?>" alt="" style="width: 70px; height: 48px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                                <img src="<?= eurl($it['image']) ?>" alt="<?= sanitize($it['title']) ?>" style="width: 70px; height: 48px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border);">
                             </td>
                             <td>
                                 <strong style="color: var(--text-main);"><?= sanitize($it['title']) ?></strong>

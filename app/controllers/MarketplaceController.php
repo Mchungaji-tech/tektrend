@@ -50,6 +50,21 @@ class MarketplaceController extends Controller {
         $startingBid = (float)$val['data']['starting_bid'];
         $buyNowPrice = (float)$val['data']['buy_now_price'];
 
+        // Handle Image File Upload
+        $image = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80';
+        if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
+            $upload = uploadFile($_FILES['image_file'], 'marketplace');
+            if ($upload['success']) {
+                $image = 'uploads/' . $upload['filename'];
+            } else {
+                $this->session->flash('error', 'Image upload failed: ' . ($upload['error'] ?? 'Unknown error'));
+                redirect('/marketplace/create');
+                return;
+            }
+        } elseif (!empty($_POST['image'])) {
+            $image = trim($_POST['image']);
+        }
+
         $this->db->insert(
             "INSERT INTO design_items (title, slug, category, award_badge, description, short_description, image, demo_url, sale_type, starting_bid, current_bid, buy_now_price, bid_end_date, status, created_by) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?)",
@@ -58,7 +73,7 @@ class MarketplaceController extends Controller {
                 $_POST['award_badge'] ?? 'Site of the Day',
                 $_POST['description'] ?? null,
                 $_POST['short_description'] ?? null,
-                $_POST['image'] ?? 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+                $image,
                 $_POST['demo_url'] ?? null,
                 $_POST['sale_type'] ?? 'both',
                 $startingBid, $startingBid, $buyNowPrice,
@@ -89,6 +104,27 @@ class MarketplaceController extends Controller {
         $this->requireAuth();
         $this->verifyCsrf();
 
+        $item = $this->db->fetch("SELECT * FROM design_items WHERE id = ?", [$id]);
+        if (!$item) {
+            $this->session->flash('error', 'Design item not found.');
+            redirect('/marketplace');
+        }
+
+        // Handle Image File Upload (Uploaded file takes priority, then URL input, else keep existing)
+        $image = $item['image'] ?? null;
+        if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
+            $upload = uploadFile($_FILES['image_file'], 'marketplace');
+            if ($upload['success']) {
+                $image = 'uploads/' . $upload['filename'];
+            } else {
+                $this->session->flash('error', 'Image upload failed: ' . ($upload['error'] ?? 'Unknown error'));
+                redirect("/marketplace/$id/edit");
+                return;
+            }
+        } elseif (isset($_POST['image']) && trim($_POST['image']) !== '') {
+            $image = trim($_POST['image']);
+        }
+
         $this->db->execute(
             "UPDATE design_items SET title = ?, category = ?, award_badge = ?, description = ?, short_description = ?, image = ?, demo_url = ?, sale_type = ?, starting_bid = ?, current_bid = ?, buy_now_price = ?, status = ?, updated_at = NOW() WHERE id = ?",
             [
@@ -97,7 +133,7 @@ class MarketplaceController extends Controller {
                 $_POST['award_badge'] ?? 'Site of the Day',
                 $_POST['description'] ?? null,
                 $_POST['short_description'] ?? null,
-                $_POST['image'] ?? null,
+                $image,
                 $_POST['demo_url'] ?? null,
                 $_POST['sale_type'] ?? 'both',
                 $_POST['starting_bid'] ?? 0,

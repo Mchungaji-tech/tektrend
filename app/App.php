@@ -45,6 +45,7 @@ class App {
         $this->router->post('/demos/request-system', 'PortfolioController@requestSystem');
         $this->router->post('/book-consultation', 'HomeController@bookConsultation');
         $this->router->post('/place-bid', 'HomeController@placeBid');
+        $this->router->post('/invest', 'HomeController@submitInvestment');
         $this->router->post('/api/ai/chat', 'AiChatController@chat');
         $this->router->post('/api/ai-chat', 'AiChatController@chat');
 
@@ -74,6 +75,12 @@ class App {
         $this->router->get('/consultations/{id}', 'ConsultationController@show', ['auth']);
         $this->router->post('/consultations/{id}/status', 'ConsultationController@updateStatus', ['auth']);
         $this->router->get('/consultations/{id}/delete', 'ConsultationController@delete', ['auth']);
+
+        // Investor Relations & Capital
+        $this->router->get('/investments', 'InvestmentController@index', ['auth']);
+        $this->router->get('/investments/{id}', 'InvestmentController@show', ['auth']);
+        $this->router->post('/investments/{id}/status', 'InvestmentController@updateStatus', ['auth']);
+        $this->router->get('/investments/{id}/delete', 'InvestmentController@delete', ['auth']);
 
         // Marketplace & Awwwards Bidding
         $this->router->get('/marketplace', 'MarketplaceController@index', ['auth']);

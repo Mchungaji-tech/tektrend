@@ -136,6 +136,22 @@ class PortfolioController extends Controller {
 
         $data = $validation['data'];
 
+        // Handle Preview Image Upload (Uploaded file takes priority)
+        $previewImage = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80';
+        if (isset($_FILES['preview_image_file']) && $_FILES['preview_image_file']['error'] === UPLOAD_ERR_OK) {
+            $upload = uploadFile($_FILES['preview_image_file'], 'demos');
+            if ($upload['success']) {
+                $previewImage = 'uploads/' . $upload['filename'];
+            } else {
+                $this->session->flash('error', 'Image upload failed: ' . ($upload['error'] ?? 'Unknown error'));
+                $this->session->flash('old', $_POST);
+                redirect('/demos/create');
+                return;
+            }
+        } elseif (!empty($_POST['preview_image'])) {
+            $previewImage = trim($_POST['preview_image']);
+        }
+
         $demoId = $this->db->insert(
             "INSERT INTO portfolio_demos (title, category, short_description, icon, demo_type, demo_url, hosting_domain, tech_stack, preview_image, award_badge, is_featured, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
@@ -147,7 +163,7 @@ class PortfolioController extends Controller {
                 $data['demo_url'],
                 $_POST['hosting_domain'] ?? parse_url($data['demo_url'], PHP_URL_HOST) ?? 'external',
                 $_POST['tech_stack'] ?? 'PHP, HTML, CSS',
-                $_POST['preview_image'] ?? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+                $previewImage,
                 $_POST['award_badge'] ?? '',
                 isset($_POST['is_featured']) ? 1 : 0,
                 (int)($_POST['sort_order'] ?? 0)
@@ -199,6 +215,21 @@ class PortfolioController extends Controller {
 
         $data = $validation['data'];
 
+        // Handle Preview Image (Uploaded file takes priority, then URL input, else keep existing)
+        $previewImage = $demo['preview_image'] ?? '';
+        if (isset($_FILES['preview_image_file']) && $_FILES['preview_image_file']['error'] === UPLOAD_ERR_OK) {
+            $upload = uploadFile($_FILES['preview_image_file'], 'demos');
+            if ($upload['success']) {
+                $previewImage = 'uploads/' . $upload['filename'];
+            } else {
+                $this->session->flash('error', 'Image upload failed: ' . ($upload['error'] ?? 'Unknown error'));
+                redirect("/demos/$id/edit");
+                return;
+            }
+        } elseif (isset($_POST['preview_image']) && trim($_POST['preview_image']) !== '') {
+            $previewImage = trim($_POST['preview_image']);
+        }
+
         $this->db->execute(
             "UPDATE portfolio_demos SET title = ?, category = ?, short_description = ?, icon = ?, demo_type = ?, demo_url = ?, hosting_domain = ?, tech_stack = ?, preview_image = ?, award_badge = ?, is_featured = ?, sort_order = ? WHERE id = ?",
             [
@@ -210,7 +241,7 @@ class PortfolioController extends Controller {
                 $data['demo_url'],
                 $_POST['hosting_domain'] ?? parse_url($data['demo_url'], PHP_URL_HOST) ?? '',
                 $_POST['tech_stack'] ?? 'PHP, HTML, CSS',
-                $_POST['preview_image'] ?? '',
+                $previewImage,
                 $_POST['award_badge'] ?? '',
                 isset($_POST['is_featured']) ? 1 : 0,
                 (int)($_POST['sort_order'] ?? 0),

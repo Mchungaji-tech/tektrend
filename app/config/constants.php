@@ -167,36 +167,68 @@ function slugify($text) {
  * Upload file
  */
 function uploadFile($file, $directory = 'uploads', $allowedTypes = null) {
-    if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
-        return ['success' => false, 'error' => 'Upload failed'];
+    if (!isset($file['error'])) {
+        return ['success' => false, 'error' => 'No file uploaded'];
     }
 
-    if ($file['size'] > MAX_UPLOAD_SIZE) {
-        return ['success' => false, 'error' => 'File too large'];
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $uploadErrors = [
+            UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+            UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+            UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
+            UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder on server.',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+            UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.'
+        ];
+        return ['success' => false, 'error' => $uploadErrors[$file['error']] ?? ('Upload failed with error code ' . $file['error'])];
+    }
+
+    $maxBytes = defined('MAX_UPLOAD_SIZE') ? MAX_UPLOAD_SIZE : (5 * 1024 * 1024);
+    if ($file['size'] > $maxBytes) {
+        $maxMB = round($maxBytes / (1024 * 1024), 1);
+        return ['success' => false, 'error' => "File is too large. Maximum allowed size is {$maxMB}MB."];
     }
 
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if ($allowedTypes === null) {
-        $allowedTypes = ALLOWED_IMAGE_TYPES;
+        $allowedTypes = defined('ALLOWED_IMAGE_TYPES') ? ALLOWED_IMAGE_TYPES : ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     }
 
     if (!in_array($ext, $allowedTypes)) {
-        return ['success' => false, 'error' => 'Invalid file type'];
+        return ['success' => false, 'error' => 'Invalid file format (.' . htmlspecialchars($ext) . '). Allowed types: ' . implode(', ', $allowedTypes)];
     }
 
     $uploadDir = UPLOAD_PATH . '/' . $directory;
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
+        @mkdir($uploadDir, 0755, true);
     }
 
-    $filename = uniqid() . '_' . time() . '.' . $ext;
+    $filename = uniqid('proj_') . '_' . time() . '.' . $ext;
     $filepath = $uploadDir . '/' . $filename;
 
-    if (move_uploaded_file($file['tmp_name'], $filepath)) {
+    $moved = false;
+    if (is_uploaded_file($file['tmp_name'])) {
+        $moved = move_uploaded_file($file['tmp_name'], $filepath);
+    } else {
+        $moved = @copy($file['tmp_name'], $filepath);
+    }
+
+    if ($moved) {
+        // Also mirror to public/uploads if public exists as a distinct directory
+        if (defined('BASE_PATH')) {
+            $publicDir = BASE_PATH . '/public/uploads/' . $directory;
+            if (is_dir(BASE_PATH . '/public') && realpath(BASE_PATH . '/public') !== realpath(BASE_PATH)) {
+                if (!is_dir($publicDir)) {
+                    @mkdir($publicDir, 0755, true);
+                }
+                @copy($filepath, $publicDir . '/' . $filename);
+            }
+        }
         return ['success' => true, 'filename' => $directory . '/' . $filename];
     }
 
-    return ['success' => false, 'error' => 'Failed to save file'];
+    return ['success' => false, 'error' => 'Failed to save file to destination directory. Check folder permissions.'];
 }
 
 /**

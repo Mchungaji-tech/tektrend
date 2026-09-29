@@ -42,9 +42,13 @@
                         <tr>
                             <td>
                                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center;">
-                                        <i class="<?= sanitize($d['icon'] ?? 'fas fa-laptop-code') ?>"></i>
-                                    </div>
+                                    <?php if (!empty($d['preview_image'])): ?>
+                                        <img src="<?= eurl($d['preview_image']) ?>" alt="<?= sanitize($d['title']) ?>" style="width: 48px; height: 36px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80';">
+                                    <?php else: ?>
+                                        <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                            <i class="<?= sanitize($d['icon'] ?? 'fas fa-laptop-code') ?>"></i>
+                                        </div>
+                                    <?php endif; ?>
                                     <div>
                                         <div style="font-weight: 700; color: var(--text-main);"><?= sanitize($d['title']) ?></div>
                                         <?php if (!empty($d['award_badge'])): ?>

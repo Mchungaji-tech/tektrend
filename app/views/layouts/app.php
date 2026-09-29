@@ -567,6 +567,9 @@
                 </a>
 
                 <div class="nav-group-title">Consultancy & Deals</div>
+                <a href="<?= eurl('/investments') ?>" class="nav-link <?= ($currentPage ?? '') === 'investments' ? 'active' : '' ?>">
+                    <i class="fas fa-gem" style="color: #f59e0b;"></i> Investor Relations <span class="nav-badge" style="background: rgba(245,158,11,0.2); color: #f59e0b;">Capital</span>
+                </a>
                 <a href="<?= eurl('/consultations') ?>" class="nav-link <?= ($currentPage ?? '') === 'consultations' ? 'active' : '' ?>">
                     <i class="fas fa-video"></i> Consultations & Zoom <span class="nav-badge accent"><i class="fas fa-video"></i> Live</span>
                 </a>

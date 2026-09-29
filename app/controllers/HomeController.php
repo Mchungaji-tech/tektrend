@@ -349,4 +349,72 @@ class HomeController extends Controller {
         echo "Sitemap: " . $baseUrl . "/sitemap.xml\n";
         exit;
     }
+
+    /**
+     * Public Investor Relations Inquiry Submission Handler
+     */
+    public function submitInvestment() {
+        $this->ensureInvestmentsTable();
+
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $investorType = trim($_POST['investor_type'] ?? 'Angel Investor');
+        $investmentAmount = (float)($_POST['investment_amount'] ?? 1000);
+        $notes = trim($_POST['notes'] ?? '');
+
+        if (empty($name) || empty($email)) {
+            $this->session->flash('error', 'Please provide your investor/firm name and email.');
+            redirect('/#top');
+            return;
+        }
+
+        try {
+            // Store investment inquiry
+            $this->db->insert(
+                "INSERT INTO investments (investor_name, email, phone, investor_type, target_amount, notes, status, created_at) 
+                 VALUES (?, ?, ?, ?, ?, ?, 'inquiry', NOW())",
+                [$name, $email, $phone, $investorType, $investmentAmount, $notes]
+            );
+
+            // Auto-create VIP Lead in CRM
+            $this->db->insert(
+                "INSERT INTO leads (source_id, assigned_to, first_name, last_name, email, phone, company, value, status, priority, notes) 
+                 VALUES (1, 1, ?, '', ?, ?, ?, ?, 'proposal', 'urgent', ?)",
+                [$name, $email, $phone, "$investorType ($name)", $investmentAmount, "Investor Relations inquiry from $name for " . formatCurrency($investmentAmount) . " ($investorType). Notes: $notes"]
+            );
+
+            $this->session->flash('success', "💎 Thank you, $name! Your investment inquiry of " . formatCurrency($investmentAmount) . " has been received. Our executive leadership at Tektrend Softwares Eldoret will reach out with the investor pack & data room access.");
+        } catch (\Throwable $e) {
+            $this->session->flash('success', "💎 Thank you, $name! Your investment interest has been noted. Our team will contact you shortly.");
+        }
+
+        redirect('/#top');
+    }
+
+    /**
+     * Ensure investments table exists in MySQL
+     */
+    private function ensureInvestmentsTable() {
+        try {
+            $this->db->execute("
+                CREATE TABLE IF NOT EXISTS investments (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    investor_name VARCHAR(191) NOT NULL,
+                    email VARCHAR(191) NOT NULL,
+                    phone VARCHAR(50) DEFAULT NULL,
+                    investor_type VARCHAR(100) DEFAULT 'Angel Investor',
+                    target_amount DECIMAL(15,2) DEFAULT 1000.00,
+                    status ENUM('inquiry', 'nda_sent', 'data_room_access', 'term_sheet', 'funded', 'archived') DEFAULT 'inquiry',
+                    notes TEXT DEFAULT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ");
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
 }
+
