@@ -207,18 +207,11 @@ $canonicalUrl = url('/live-demos');
         <span class="akar-invest-label">Invest</span>
       </button>
 
-      <!-- Company Portal / Sign In or Dashboard -->
-      <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Company Dashboard" aria-label="Company Dashboard">
-          <i class="fas fa-chart-pie"></i>
-          <span class="akar-login-label">Dashboard</span>
-        </a>
-      <?php else: ?>
-        <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Sign In" aria-label="Sign In">
-          <i class="fas fa-arrow-right-to-bracket"></i>
-          <span class="akar-login-label">Sign In</span>
-        </a>
-      <?php endif; ?>
+      <!-- Company Portal / Sign In -->
+      <a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>" class="akar-login-pill" title="Sign In" aria-label="Sign In">
+        <i class="fas fa-arrow-right-to-bracket"></i>
+        <span class="akar-login-label">Sign In</span>
+      </a>
 
       <!-- Color Palette Switcher Pill -->
       <button class="akar-palette-pill" onclick="togglePaletteModal()" title="Select Color Theme" aria-label="Select Color Theme">
@@ -868,11 +861,7 @@ $canonicalUrl = url('/live-demos');
           <li><a href="<?= eurl('/#akarShowcase') ?>">Featured Works</a></li>
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Book Scoping Zoom</a></li>
-          <?php if (isset($_SESSION['user_id'])): ?>
-            <li><a href="<?= eurl('/dashboard') ?>">Dashboard</a></li>
-          <?php else: ?>
-            <li><a href="<?= eurl('/login') ?>">Sign In</a></li>
-          <?php endif; ?>
+          <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>
       </div>
 

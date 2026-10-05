@@ -192,18 +192,11 @@ if (!empty($portfolioDemos)) {
         <span class="akar-invest-label">Invest</span>
       </button>
 
-      <!-- Company Portal / Sign In or Dashboard -->
-      <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Company Dashboard" aria-label="Company Dashboard">
-          <i class="fas fa-chart-pie"></i>
-          <span class="akar-login-label">Dashboard</span>
-        </a>
-      <?php else: ?>
-        <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Sign In" aria-label="Sign In">
-          <i class="fas fa-arrow-right-to-bracket"></i>
-          <span class="akar-login-label">Sign In</span>
-        </a>
-      <?php endif; ?>
+      <!-- Company Portal / Sign In -->
+      <a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>" class="akar-login-pill" title="Sign In" aria-label="Sign In">
+        <i class="fas fa-arrow-right-to-bracket"></i>
+        <span class="akar-login-label">Sign In</span>
+      </a>
 
       <!-- Color Palette Switcher Pill -->
       <button class="akar-palette-pill" onclick="togglePaletteModal()" title="Select Color Theme" aria-label="Select Color Theme">
@@ -475,15 +468,9 @@ if (!empty($portfolioDemos)) {
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="portal">
-          <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="<?= eurl('/dashboard') ?>" class="akar-nav-link">
-              06 / Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
-            </a>
-          <?php else: ?>
-            <a href="<?= eurl('/login') ?>" class="akar-nav-link">
-              06 / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
-            </a>
-          <?php endif; ?>
+          <a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>" class="akar-nav-link">
+            06 / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
+          </a>
         </li>
       </ul>
 
@@ -876,11 +863,7 @@ if (!empty($portfolioDemos)) {
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
           <li><a href="<?= eurl('/live-demos') ?>">11 Live Demos</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Consultation</a></li>
-          <?php if (isset($_SESSION['user_id'])): ?>
-            <li><a href="<?= eurl('/dashboard') ?>">Dashboard</a></li>
-          <?php else: ?>
-            <li><a href="<?= eurl('/login') ?>">Sign In</a></li>
-          <?php endif; ?>
+          <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>
       </div>
 
