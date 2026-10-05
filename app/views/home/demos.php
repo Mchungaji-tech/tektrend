@@ -207,11 +207,17 @@ $canonicalUrl = url('/live-demos');
         <span class="akar-invest-label">Invest</span>
       </button>
 
+      <!-- Front-End CMS Studio Direct Link -->
+      <a href="<?= eurl('/content') ?>" class="akar-cms-pill" title="Front-End Visual CMS & Media Studio" aria-label="Front-End CMS & Media Studio">
+        <i class="fas fa-magic"></i>
+        <span class="akar-cms-label">Edit Content</span>
+      </a>
+
       <!-- Company Portal / Sign In or Dashboard -->
       <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Company Dashboard" aria-label="Company Dashboard">
+        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Virtual Company Operations Console" aria-label="Company Dashboard">
           <i class="fas fa-chart-pie"></i>
-          <span class="akar-login-label">Dashboard</span>
+          <span class="akar-login-label">Admin Console</span>
         </a>
       <?php else: ?>
         <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Company Portal / Sign In" aria-label="Sign In to Dashboard">
@@ -872,6 +878,16 @@ $canonicalUrl = url('/live-demos');
       </div>
 
       <div class="akar-footer-links-col">
+        <h4>Management & Studio</h4>
+        <ul>
+          <li><a href="<?= eurl('/content') ?>" style="color: var(--terra);"><i class="fas fa-magic" style="margin-right: 0.5rem;"></i> Edit Front-End (CMS)</a></li>
+          <li><a href="<?= eurl('/dashboard') ?>"><i class="fas fa-building" style="margin-right: 0.5rem;"></i> Virtual Company Console</a></li>
+          <li><a href="<?= eurl('/chat') ?>"><i class="fas fa-comments" style="margin-right: 0.5rem;"></i> Company Chat Room</a></li>
+          <li><a href="<?= eurl('/invoices') ?>"><i class="fas fa-file-invoice-dollar" style="margin-right: 0.5rem;"></i> Invoices & Billings</a></li>
+        </ul>
+      </div>
+
+      <div class="akar-footer-links-col">
         <h4>Direct Channels</h4>
         <ul>
           <li><a href="mailto:<?= sanitize($companyEmail) ?>"><?= sanitize($companyEmail) ?></a></li>
@@ -900,6 +916,27 @@ $canonicalUrl = url('/live-demos');
       </a>
     </div>
   </footer>
+
+  <!-- FLOATING QUICK-ACCESS DOCK -->
+  <aside class="akar-floating-dock" aria-label="Quick management actions">
+    <a href="<?= eurl('/content') ?>" class="akar-dock-item --primary" title="Edit Front-End Text & Images in Real-Time">
+      <i class="fas fa-magic"></i>
+      <span>Edit Front-End</span>
+    </a>
+    <div class="akar-dock-divider"></div>
+    <a href="<?= eurl('/dashboard') ?>" class="akar-dock-item" title="Virtual Company Operations Console">
+      <i class="fas fa-building"></i>
+      <span>Company Console</span>
+    </a>
+    <a href="<?= eurl('/chat') ?>" class="akar-dock-item" title="Team & Client Live Chat Room">
+      <i class="fas fa-comments"></i>
+      <span>Live Chat</span>
+    </a>
+    <a href="<?= eurl('/invoices') ?>" class="akar-dock-item" title="Invoices & Billings">
+      <i class="fas fa-receipt"></i>
+      <span>Invoices</span>
+    </a>
+  </aside>
 
   <!-- Modal Scripts -->
   <script>

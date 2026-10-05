@@ -191,6 +191,7 @@ class App {
         $this->router->get('/chat', 'ChatController@index', ['auth']);
         $this->router->get('/chat/room/{id}', 'ChatController@room', ['auth']);
         $this->router->post('/chat/room/{id}/message', 'ChatController@sendMessage', ['auth']);
+        $this->router->post('/chat/room/{id}/send', 'ChatController@sendMessage', ['auth']);
         $this->router->get('/chat/messages/{id}', 'ChatController@getMessages', ['auth']);
         $this->router->get('/chat/online', 'ChatController@onlineUsers', ['auth']);
 
@@ -230,6 +231,7 @@ class App {
 
         // Content Management
         $this->router->get('/content', 'ContentController@index', ['auth']);
+        $this->router->post('/content/bulk-update', 'ContentController@bulkUpdate', ['auth']);
         $this->router->get('/content/{key}/edit', 'ContentController@edit', ['auth']);
         $this->router->post('/content/{key}', 'ContentController@update', ['auth']);
 

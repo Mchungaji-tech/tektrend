@@ -338,3 +338,43 @@ function auditLog($action, $tableName = null, $recordId = null, $details = null)
         // Silent fail - don't break the app for logging
     }
 }
+
+/**
+ * CMS Content Helper
+ * Retrieve dynamic text or HTML from content table with graceful fallback
+ */
+function cms($key, $default = '') {
+    static $cmsCache = null;
+    if ($cmsCache === null) {
+        $cmsCache = [];
+        try {
+            $db = Database::getInstance();
+            $rows = $db->fetchAll("SELECT `key`, `content` FROM content WHERE is_active = 1");
+            foreach ($rows as $row) {
+                $cmsCache[$row['key']] = $row['content'];
+            }
+        } catch (\Throwable $e) {
+            // DB not connected or table not created yet - cache stays empty
+        }
+    }
+    if (isset($cmsCache[$key]) && $cmsCache[$key] !== null && $cmsCache[$key] !== '') {
+        return $cmsCache[$key];
+    }
+    return $default;
+}
+
+/**
+ * CMS Image Helper
+ * Resolves local upload paths, external URLs, or default fallbacks
+ */
+function cms_img($key, $default = '') {
+    $val = cms($key, $default);
+    if (!$val) {
+        return $default;
+    }
+    if (strpos($val, 'http://') === 0 || strpos($val, 'https://') === 0 || strpos($val, '//') === 0 || strpos($val, 'data:') === 0) {
+        return $val;
+    }
+    return url('/' . ltrim($val, '/'));
+}
+

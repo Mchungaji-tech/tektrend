@@ -636,7 +636,7 @@
                     <i class="fas fa-building"></i> Departments
                 </a>
                 <a href="<?= eurl('/content') ?>" class="nav-link <?= ($currentPage ?? '') === 'content' ? 'active' : '' ?>">
-                    <i class="fas fa-edit"></i> CMS Content
+                    <i class="fas fa-magic" style="color: var(--primary);"></i> Front-End CMS Studio <span class="nav-badge accent">Studio</span>
                 </a>
                 <a href="<?= eurl('/users') ?>" class="nav-link <?= ($currentPage ?? '') === 'users' ? 'active' : '' ?>">
                     <i class="fas fa-user-shield"></i> System Users

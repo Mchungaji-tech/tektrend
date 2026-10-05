@@ -757,6 +757,8 @@ CREATE TABLE IF NOT EXISTS `portfolio_demos` (
     KEY `category` (`category`),
     KEY `is_featured` (`is_featured`),
     KEY `sort_order` (`sort_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ============================================================
 -- INVESTOR RELATIONS & CAPITAL
 -- ============================================================

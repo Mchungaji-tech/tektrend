@@ -4,92 +4,120 @@ $companyWhatsApp = $settings['company_whatsapp'] ?? '254707246273';
 $companyEmail = $settings['company_email'] ?? 'tektrend.softwares@gmail.com';
 $companyAddress = $settings['company_address'] ?? 'Tektrend Softwares, Eldoret, Kenya';
 $siteCanonicalUrl = url('/');
-$metaDescription = "Tektrend Softwares · Enterprise software architecture, digital innovation, cloud dashboards, and turnkey production platforms based in Eldoret, Kenya. We are Tektrend Softwares.";
 
-// Default curated featured projects inspired by Akaru
-$featuredShowcase = [
-    [
-        'id' => 1,
-        'title' => 'Nexus Commercial ERP',
-        'category' => 'Enterprise Architecture',
-        'color' => 'terra',
-        'year' => '2026',
-        'short_desc' => 'High-performance cloud management system with real-time financial tracking, multi-tenant RBAC, and executive reporting suite.',
-        'image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
-        'demo_url' => url('/live_demo/nexus.html'),
-        'tech' => 'PHP 8.2, MySQL 8, Redis, Chart.js, Tailwind MVC',
-        'price' => 89.00
-    ],
-    [
-        'id' => 2,
-        'title' => 'Titan Industrial Automation',
-        'category' => 'Industrial & Engineering',
-        'color' => 'green',
-        'year' => '2026',
-        'short_desc' => 'Industrial equipment telemetry and blueprint management platform featuring interactive 3D technical viewer and procurement RFQ pipelines.',
-        'image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=85',
-        'demo_url' => url('/live_demo/engineering.html'),
-        'tech' => 'HTML5 Canvas, WebGL, Modern CSS, REST APIs',
-        'price' => 79.00
-    ],
-    [
-        'id' => 3,
-        'title' => 'LuxeCart Modern Storefront',
-        'category' => 'E-Commerce & Retail',
-        'color' => 'pink',
-        'year' => '2025',
-        'short_desc' => 'Ultra-fast headless commerce platform with instantaneous client filtering, dynamic cart drawer, multi-currency pricing, and M-Pesa readiness.',
-        'image' => 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=85',
-        'demo_url' => url('/live_demo/e-commerce.html'),
-        'tech' => 'JavaScript ES6+, Modern CSS Grid, Checkout Engine',
-        'price' => 79.00
-    ],
-    [
-        'id' => 4,
-        'title' => 'Vanguard & Sterling Legal',
-        'category' => 'Corporate & Advisory',
-        'color' => 'blue',
-        'year' => '2025',
-        'short_desc' => 'High-trust corporate legal portal featuring confidential case study archives, attorney directory, and encrypted consultation scheduling vaults.',
-        'image' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=85',
-        'demo_url' => url('/live_demo/law_firm.html'),
-        'tech' => 'Semantic HTML5, CSS3 Variables, Booking Vault',
-        'price' => 69.00
-    ],
-    [
-        'id' => 5,
-        'title' => 'GrowthPulse Media & SEO',
-        'category' => 'Marketing & Analytics',
-        'color' => 'terra',
-        'year' => '2026',
-        'short_desc' => 'Growth-driven marketing agency portal with live campaign tracking, interactive ROI calculation models, and automated lead capture funnel.',
-        'image' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85',
-        'demo_url' => url('/live_demo/digital_markting.html'),
-        'tech' => 'Chart.js, GSAP Animations, Responsive Grid',
-        'price' => 59.00
-    ],
-    [
-        'id' => 6,
-        'title' => 'Le Jardin Gourmet Bistro',
-        'category' => 'Hospitality & Dining',
-        'color' => 'green',
-        'year' => '2025',
-        'short_desc' => 'Atmospheric culinary experience portal with seasonal degustation menu showcases, wine pairing guides, and real-time reservation desk.',
-        'image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85',
-        'demo_url' => url('/live_demo/restaurant.html'),
-        'tech' => 'Playfair Typography, CSS Motion, Booking Form',
-        'price' => 49.00
-    ]
-];
+$metaTitle = cms('meta_title', 'Tektrend Softwares · Eldoret, Kenya · Software Architecture & Creative Studio');
+$metaDescription = cms('meta_description', "Tektrend Softwares · Enterprise software architecture, digital innovation, cloud dashboards, and turnkey production platforms based in Eldoret, Kenya. We are Tektrend Softwares.");
+$metaKeywords = cms('meta_keywords', 'Tektrend Softwares, Tektrend Softwares Eldoret Kenya, We are Tektrend Softwares, software architecture, web development, custom software, PHP 8 MVC, Google Apps Script, dashboards, Eldoret, Kenya, creative agency');
+$ogImage = cms_img('og_image', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85');
+
+// Dynamic showcase from database portfolio demos if available, or fallback to default curated
+if (!empty($portfolioDemos)) {
+    $colors = ['terra', 'green', 'pink', 'blue', 'terra', 'green'];
+    $featuredShowcase = [];
+    foreach ($portfolioDemos as $idx => $pDemo) {
+        $demoLink = $pDemo['demo_url'] ?? '';
+        if ($demoLink && strpos($demoLink, 'http') !== 0 && strpos($demoLink, '/') !== 0) {
+            $demoLink = '/' . $demoLink;
+        }
+        $featuredShowcase[] = [
+            'id' => $pDemo['id'],
+            'title' => $pDemo['title'],
+            'category' => $pDemo['category'] ?? 'Enterprise Architecture',
+            'color' => $colors[$idx % count($colors)],
+            'year' => date('Y', strtotime($pDemo['created_at'] ?? 'now')),
+            'short_desc' => $pDemo['short_description'] ?? 'High-performance cloud management system with real-time financial tracking.',
+            'image' => $pDemo['preview_image'] ?: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => strpos($demoLink, 'http') === 0 ? $demoLink : url($demoLink),
+            'tech' => $pDemo['tech_stack'] ?? 'PHP 8.2 MVC, MySQL, Redis, GSAP',
+            'price' => (float)($pDemo['price'] ?? 79.00)
+        ];
+    }
+} else {
+    // Default curated featured projects inspired by Akaru
+    $featuredShowcase = [
+        [
+            'id' => 1,
+            'title' => 'Nexus Commercial ERP',
+            'category' => 'Enterprise Architecture',
+            'color' => 'terra',
+            'year' => '2026',
+            'short_desc' => 'High-performance cloud management system with real-time financial tracking, multi-tenant RBAC, and executive reporting suite.',
+            'image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/nexus.html'),
+            'tech' => 'PHP 8.2, MySQL 8, Redis, Chart.js, Tailwind MVC',
+            'price' => 89.00
+        ],
+        [
+            'id' => 2,
+            'title' => 'Titan Industrial Automation',
+            'category' => 'Industrial & Engineering',
+            'color' => 'green',
+            'year' => '2026',
+            'short_desc' => 'Industrial equipment telemetry and blueprint management platform featuring interactive 3D technical viewer and procurement RFQ pipelines.',
+            'image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/engineering.html'),
+            'tech' => 'HTML5 Canvas, WebGL, Modern CSS, REST APIs',
+            'price' => 79.00
+        ],
+        [
+            'id' => 3,
+            'title' => 'LuxeCart Modern Storefront',
+            'category' => 'E-Commerce & Retail',
+            'color' => 'pink',
+            'year' => '2025',
+            'short_desc' => 'Ultra-fast headless commerce platform with instantaneous client filtering, dynamic cart drawer, multi-currency pricing, and M-Pesa readiness.',
+            'image' => 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/e-commerce.html'),
+            'tech' => 'JavaScript ES6+, Modern CSS Grid, Checkout Engine',
+            'price' => 79.00
+        ],
+        [
+            'id' => 4,
+            'title' => 'Vanguard & Sterling Legal',
+            'category' => 'Corporate & Advisory',
+            'color' => 'blue',
+            'year' => '2025',
+            'short_desc' => 'High-trust corporate legal portal featuring confidential case study archives, attorney directory, and encrypted consultation scheduling vaults.',
+            'image' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/law_firm.html'),
+            'tech' => 'Semantic HTML5, CSS3 Variables, Booking Vault',
+            'price' => 69.00
+        ],
+        [
+            'id' => 5,
+            'title' => 'GrowthPulse Media & SEO',
+            'category' => 'Marketing & Analytics',
+            'color' => 'terra',
+            'year' => '2026',
+            'short_desc' => 'Growth-driven marketing agency portal with live campaign tracking, interactive ROI calculation models, and automated lead capture funnel.',
+            'image' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/digital_markting.html'),
+            'tech' => 'Chart.js, GSAP Animations, Responsive Grid',
+            'price' => 59.00
+        ],
+        [
+            'id' => 6,
+            'title' => 'Le Jardin Gourmet Bistro',
+            'category' => 'Hospitality & Dining',
+            'color' => 'green',
+            'year' => '2025',
+            'short_desc' => 'Atmospheric culinary experience portal with seasonal degustation menu showcases, wine pairing guides, and real-time reservation desk.',
+            'image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/restaurant.html'),
+            'tech' => 'Playfair Typography, CSS Motion, Booking Form',
+            'price' => 49.00
+        ]
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tektrend Softwares · Eldoret, Kenya · Software Architecture & Creative Studio</title>
+  <title><?= htmlspecialchars($metaTitle, ENT_QUOTES, 'UTF-8') ?></title>
   <meta name="description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="keywords" content="Tektrend Softwares, Tektrend Softwares Eldoret Kenya, We are Tektrend Softwares, software architecture, web development, custom software, PHP 8 MVC, Google Apps Script, dashboards, Eldoret, Kenya, creative agency">
+  <meta name="keywords" content="<?= htmlspecialchars($metaKeywords, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="author" content="Tektrend Softwares">
   <link rel="canonical" href="<?= eurl('/') ?>">
   <meta name="theme-color" content="#0e0e0e">
@@ -103,16 +131,17 @@ $featuredShowcase = [
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Tektrend Softwares">
   <meta property="og:url" content="<?= eurl('/') ?>">
-  <meta property="og:title" content="Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares">
+  <meta property="og:title" content="<?= htmlspecialchars($metaTitle, ENT_QUOTES, 'UTF-8') ?>">
   <meta property="og:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85">
+  <meta property="og:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
   <meta property="og:locale" content="en_US">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="<?= eurl('/') ?>">
-  <meta name="twitter:title" content="Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares">
+  <meta name="twitter:title" content="<?= htmlspecialchars($metaTitle, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="twitter:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
+  <meta name="twitter:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="twitter:image" content="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85">
 
   <!-- Anti-flicker Theme & Palette Script -->
@@ -163,11 +192,17 @@ $featuredShowcase = [
         <span class="akar-invest-label">Invest</span>
       </button>
 
+      <!-- Front-End CMS Studio Direct Link -->
+      <a href="<?= eurl('/content') ?>" class="akar-cms-pill" title="Front-End Visual CMS & Media Studio" aria-label="Front-End CMS & Media Studio">
+        <i class="fas fa-magic"></i>
+        <span class="akar-cms-label">Edit Content</span>
+      </a>
+
       <!-- Company Portal / Sign In or Dashboard -->
       <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Company Dashboard" aria-label="Company Dashboard">
+        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Virtual Company Operations Console" aria-label="Company Dashboard">
           <i class="fas fa-chart-pie"></i>
-          <span class="akar-login-label">Dashboard</span>
+          <span class="akar-login-label">Admin Console</span>
         </a>
       <?php else: ?>
         <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Company Portal / Sign In" aria-label="Sign In to Dashboard">
@@ -324,9 +359,9 @@ $featuredShowcase = [
     <div class="akar-invest-modal">
       <div class="akar-invest-header">
         <div>
-          <div class="akar-invest-badge"><i class="fas fa-gem"></i> Investor Relations & Growth Capital</div>
-          <h2 class="akar-invest-title" id="akarInvestTitle">Invest in Tektrend Softwares</h2>
-          <p class="akar-invest-subtitle">We are Tektrend Softwares based in Eldoret, Kenya. Partner with East Africa's elite software architecture and turnkey digital systems powerhouse.</p>
+          <div class="akar-invest-badge"><i class="fas fa-gem"></i> <?= sanitize(cms('invest_badge', 'Investor Relations & Growth Capital')) ?></div>
+          <h2 class="akar-invest-title" id="akarInvestTitle"><?= sanitize(cms('invest_title', 'Invest in Tektrend Softwares')) ?></h2>
+          <p class="akar-invest-subtitle"><?= sanitize(cms('invest_subtitle', "We are Tektrend Softwares based in Eldoret, Kenya. Partner with East Africa's elite software architecture and turnkey digital systems powerhouse.")) ?></p>
         </div>
         <button class="akar-palette-close" onclick="closeInvestModal()" aria-label="Close investor dialog">
           <i class="fas fa-times"></i>
@@ -336,16 +371,16 @@ $featuredShowcase = [
       <!-- Quick Metrics Grid -->
       <div class="akar-invest-grid-stats">
         <div class="akar-invest-stat-card">
-          <div class="akar-invest-stat-val">11+</div>
-          <div class="akar-invest-stat-lbl">Live Turnkey Platforms</div>
+          <div class="akar-invest-stat-val"><?= sanitize(cms('invest_stat_1_val', '11+')) ?></div>
+          <div class="akar-invest-stat-lbl"><?= sanitize(cms('invest_stat_1_lbl', 'Live Turnkey Platforms')) ?></div>
         </div>
         <div class="akar-invest-stat-card">
-          <div class="akar-invest-stat-val">Eldoret, KE</div>
-          <div class="akar-invest-stat-lbl">East Africa Tech Hub</div>
+          <div class="akar-invest-stat-val"><?= sanitize(cms('invest_stat_2_val', 'Eldoret, KE')) ?></div>
+          <div class="akar-invest-stat-lbl"><?= sanitize(cms('invest_stat_2_lbl', 'East Africa Tech Hub')) ?></div>
         </div>
         <div class="akar-invest-stat-card">
-          <div class="akar-invest-stat-val">78%+</div>
-          <div class="akar-invest-stat-lbl">SaaS Software Margin</div>
+          <div class="akar-invest-stat-val"><?= sanitize(cms('invest_stat_3_val', '78%+')) ?></div>
+          <div class="akar-invest-stat-lbl"><?= sanitize(cms('invest_stat_3_lbl', 'SaaS Software Margin')) ?></div>
         </div>
       </div>
 
@@ -446,15 +481,30 @@ $featuredShowcase = [
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="portal">
+          <a href="<?= eurl('/content') ?>" class="akar-nav-link" style="color: var(--terra);">
+            06 / Front-End CMS Studio <span class="akar-nav-arrow"><i class="fas fa-magic"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="portal">
           <?php if (isset($_SESSION['user_id'])): ?>
             <a href="<?= eurl('/dashboard') ?>" class="akar-nav-link">
-              06 / Company Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
+              07 / Virtual Company Console <span class="akar-nav-arrow"><i class="fas fa-building"></i></span>
             </a>
           <?php else: ?>
             <a href="<?= eurl('/login') ?>" class="akar-nav-link">
-              06 / Sign In / Portal <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
+              07 / Virtual Company / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
             </a>
           <?php endif; ?>
+        </li>
+        <li class="akar-nav-item" data-teaser="portal">
+          <a href="<?= eurl('/chat') ?>" class="akar-nav-link">
+            08 / Live Company Chat <span class="akar-nav-arrow"><i class="fas fa-comments"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="portal">
+          <a href="<?= eurl('/crm/pipeline') ?>" class="akar-nav-link">
+            09 / CRM Sales Pipeline <span class="akar-nav-arrow"><i class="fas fa-funnel-dollar"></i></span>
+          </a>
         </li>
       </ul>
 
@@ -499,50 +549,49 @@ $featuredShowcase = [
     </div>
 
     <!-- Giant Ghost Letters -->
-    <div class="akar-ghost-letters">TEKTREND</div>
+    <div class="akar-ghost-letters"><?= sanitize(cms('hero_brand_letters', 'TEKTREND')) ?></div>
   </div>
 
   <!-- MAIN HERO SECTION (AKARU MONUMENTAL TYPOGRAPHY) -->
   <section class="akar-hero">
     <div class="akar-hero-meta-top">
-      <span>[ SOFTWARE ARCHITECTURE & DIGITAL INNOVATION ]</span>
-      <span class="akar-tag-live">ACCEPTING Q4 / 2026 COMMISSIONS</span>
+      <span><?= sanitize(cms('hero_eyebrow', '[ SOFTWARE ARCHITECTURE & DIGITAL INNOVATION ]')) ?></span>
+      <span class="akar-tag-live"><?= sanitize(cms('hero_tag_live', 'ACCEPTING Q4 / 2026 COMMISSIONS')) ?></span>
     </div>
 
-    <!-- Monumental Interactive Letters: TEKTREND -->
+    <!-- Monumental Interactive Letters -->
+    <?php 
+    $brandLetters = cms('hero_brand_letters', 'TEKTREND');
+    $letterChars = preg_split('//u', $brandLetters, -1, PREG_SPLIT_NO_EMPTY);
+    ?>
     <div class="akar-letters-stage" id="akarLetterStage">
       <div class="akar-letters-grid">
-        <span class="akar-letter">T</span>
-        <span class="akar-letter">E</span>
-        <span class="akar-letter">K</span>
-        <span class="akar-letter">T</span>
-        <span class="akar-letter">R</span>
-        <span class="akar-letter">E</span>
-        <span class="akar-letter">N</span>
-        <span class="akar-letter">D</span>
+        <?php foreach ($letterChars as $lChar): ?>
+          <span class="akar-letter"><?= sanitize($lChar) ?></span>
+        <?php endforeach; ?>
       </div>
 
       <div class="akar-letters-tagline">
-        <p><strong>We are Tektrend Softwares.</strong> We architect world-class web systems, cloud dashboards, and turnkey production platforms based in Eldoret, Kenya.</p>
-        <button type="button" class="akar-featured-pill" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($featuredShowcase[0]), ENT_QUOTES) ?>)">
-          01 / Featured Project <i class="fas fa-arrow-up-right-from-square"></i>
+        <p><?= sanitize(cms('hero_headline', 'We are Tektrend Softwares. We architect world-class web systems, cloud dashboards, and turnkey production platforms based in Eldoret, Kenya.')) ?></p>
+        <button type="button" class="akar-featured-pill" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($featuredShowcase[0] ?? []), ENT_QUOTES) ?>)">
+          <?= sanitize(cms('hero_featured_btn_text', '01 / Featured Project')) ?> <i class="fas fa-arrow-up-right-from-square"></i>
         </button>
       </div>
     </div>
 
     <div class="akar-hero-footer">
       <ul class="akar-hero-discipline">
-        <li>PHP 8 MVC Architecture</li>
+        <li><?= sanitize(cms('hero_discipline_1', 'PHP 8 MVC Architecture')) ?></li>
         <li>•</li>
-        <li>Google Workspace ERP</li>
+        <li><?= sanitize(cms('hero_discipline_2', 'Google Workspace ERP')) ?></li>
         <li>•</li>
-        <li>Real-time Dashboards</li>
+        <li><?= sanitize(cms('hero_discipline_3', 'Real-time Dashboards')) ?></li>
         <li>•</li>
-        <li>Turnkey Codebases</li>
+        <li><?= sanitize(cms('hero_discipline_4', 'Turnkey Codebases')) ?></li>
       </ul>
 
       <a href="#akarShowcase" class="akar-scroll-prompt">
-        <span>Explore Works <i class="fas fa-arrow-down" style="margin-left: 0.6rem;"></i></span>
+        <span><?= sanitize(cms('hero_explore_btn_text', 'Explore Works')) ?> <i class="fas fa-arrow-down" style="margin-left: 0.6rem;"></i></span>
       </a>
     </div>
   </section>
@@ -552,10 +601,10 @@ $featuredShowcase = [
     <div class="akar-showcase-sticky">
       <div class="akar-showcase-header">
         <div>
-          <div class="akar-section-badge">[ SELECTED ARCHITECTURES & PROTOTYPES ]</div>
-          <h2 class="akar-showcase-title">Featured Works</h2>
+          <div class="akar-section-badge"><?= sanitize(cms('showcase_badge', '[ SELECTED ARCHITECTURES & PROTOTYPES ]')) ?></div>
+          <h2 class="akar-showcase-title"><?= sanitize(cms('showcase_title', 'Featured Works')) ?></h2>
         </div>
-        <div class="akar-showcase-counter" id="akarShowcaseCounter">01 / 06</div>
+        <div class="akar-showcase-counter" id="akarShowcaseCounter">01 / <?= sprintf('%02d', count($featuredShowcase)) ?></div>
       </div>
 
       <!-- Horizontal Translating Reel -->
@@ -680,51 +729,51 @@ $featuredShowcase = [
   <section class="akar-services-section" id="services">
     <div class="akar-services-header">
       <div>
-        <div class="akar-section-badge">[ SYSTEM CAPABILITIES & EXPERTISE ]</div>
-        <h2>What We Architect</h2>
+        <div class="akar-section-badge"><?= sanitize(cms('services_badge', '[ SYSTEM CAPABILITIES & EXPERTISE ]')) ?></div>
+        <h2><?= sanitize(cms('services_title', 'What We Architect')) ?></h2>
       </div>
-      <p>We blend uncompromising engineering standards with French creative agency aesthetics to build systems that scale effortlessly.</p>
+      <p><?= sanitize(cms('services_subtitle', 'We blend uncompromising engineering standards with French creative agency aesthetics to build systems that scale effortlessly.')) ?></p>
     </div>
 
     <div class="akar-services-list">
-      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80">
-        <div class="akar-service-num">00</div>
+      <div class="akar-service-row" data-img="<?= htmlspecialchars(cms_img('service_1_image', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80'), ENT_QUOTES, 'UTF-8') ?>">
+        <div class="akar-service-num"><?= sanitize(cms('service_1_num', '00')) ?></div>
         <div class="akar-service-main">
-          <h3>Enterprise Software Architecture</h3>
-          <p>Custom PHP 8.x MVC backends, relational schema design, role hierarchies, audit logging, and resilient micro-framework foundations.</p>
+          <h3><?= sanitize(cms('service_1_title', 'Enterprise Software Architecture')) ?></h3>
+          <p><?= sanitize(cms('service_1_desc', 'Custom PHP 8.x MVC backends, relational schema design, role hierarchies, audit logging, and resilient micro-framework foundations.')) ?></p>
         </div>
         <div class="akar-service-action">
           <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
         </div>
       </div>
 
-      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80">
-        <div class="akar-service-num">01</div>
+      <div class="akar-service-row" data-img="<?= htmlspecialchars(cms_img('service_2_image', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80'), ENT_QUOTES, 'UTF-8') ?>">
+        <div class="akar-service-num"><?= sanitize(cms('service_2_num', '01')) ?></div>
         <div class="akar-service-main">
-          <h3>Google Workspace & Cloud Automation</h3>
-          <p>Google Apps Script enterprise ERPs, automated Sheets-to-Docs reporting, Gmail outreach pipelines, and zero-maintenance cloud workflows.</p>
+          <h3><?= sanitize(cms('service_2_title', 'Google Workspace & Cloud Automation')) ?></h3>
+          <p><?= sanitize(cms('service_2_desc', 'Google Apps Script enterprise ERPs, automated Sheets-to-Docs reporting, Gmail outreach pipelines, and zero-maintenance cloud workflows.')) ?></p>
         </div>
         <div class="akar-service-action">
           <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
         </div>
       </div>
 
-      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80">
-        <div class="akar-service-num">02</div>
+      <div class="akar-service-row" data-img="<?= htmlspecialchars(cms_img('service_3_image', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80'), ENT_QUOTES, 'UTF-8') ?>">
+        <div class="akar-service-num"><?= sanitize(cms('service_3_num', '02')) ?></div>
         <div class="akar-service-main">
-          <h3>Real-time Dashboards & School Systems</h3>
-          <p>Interactive metric suites with Chart.js, attendance tracking, automated grading pipelines, financial ledgers, and teleconferencing.</p>
+          <h3><?= sanitize(cms('service_3_title', 'Real-time Dashboards & School Systems')) ?></h3>
+          <p><?= sanitize(cms('service_3_desc', 'Interactive metric suites with Chart.js, attendance tracking, automated grading pipelines, financial ledgers, and teleconferencing.')) ?></p>
         </div>
         <div class="akar-service-action">
           <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
         </div>
       </div>
 
-      <div class="akar-service-row" data-img="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80">
-        <div class="akar-service-num">03</div>
+      <div class="akar-service-row" data-img="<?= htmlspecialchars(cms_img('service_4_image', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80'), ENT_QUOTES, 'UTF-8') ?>">
+        <div class="akar-service-num"><?= sanitize(cms('service_4_num', '03')) ?></div>
         <div class="akar-service-main">
-          <h3>Turnkey Web Templates & Source Code</h3>
-          <p>Award-caliber HTML5/CSS3 prototypes, accessible typography, fluid scroll physics, and instant deployment packs for founders and businesses.</p>
+          <h3><?= sanitize(cms('service_4_title', 'Turnkey Web Templates & Source Code')) ?></h3>
+          <p><?= sanitize(cms('service_4_desc', 'Award-caliber HTML5/CSS3 prototypes, accessible typography, fluid scroll physics, and instant deployment packs for founders and businesses.')) ?></p>
         </div>
         <div class="akar-service-action">
           <div class="akar-service-arrow"><i class="fas fa-arrow-right"></i></div>
@@ -742,20 +791,20 @@ $featuredShowcase = [
   <section class="akar-dark-break" id="consultation">
     <div class="akar-metrics-grid">
       <div class="akar-metric-box">
-        <div class="akar-metric-val">99.9%</div>
-        <div class="akar-metric-label">System Uptime Architecture</div>
+        <div class="akar-metric-val"><?= sanitize(cms('metric_1_val', '99.9%')) ?></div>
+        <div class="akar-metric-label"><?= sanitize(cms('metric_1_lbl', 'System Uptime Architecture')) ?></div>
       </div>
       <div class="akar-metric-box">
-        <div class="akar-metric-val">&lt; 85ms</div>
-        <div class="akar-metric-label">Server Response Latency</div>
+        <div class="akar-metric-val"><?= sanitize(cms('metric_2_val', '< 85ms')) ?></div>
+        <div class="akar-metric-label"><?= sanitize(cms('metric_2_lbl', 'Server Response Latency')) ?></div>
       </div>
       <div class="akar-metric-box">
-        <div class="akar-metric-val">15+</div>
-        <div class="akar-metric-label">Enterprise Deployments</div>
+        <div class="akar-metric-val"><?= sanitize(cms('metric_3_val', '15+')) ?></div>
+        <div class="akar-metric-label"><?= sanitize(cms('metric_3_lbl', 'Enterprise Deployments')) ?></div>
       </div>
       <div class="akar-metric-box">
-        <div class="akar-metric-val">100%</div>
-        <div class="akar-metric-label">Turnkey Delivery Guarantee</div>
+        <div class="akar-metric-val"><?= sanitize(cms('metric_4_val', '100%')) ?></div>
+        <div class="akar-metric-label"><?= sanitize(cms('metric_4_lbl', 'Turnkey Delivery Guarantee')) ?></div>
       </div>
     </div>
 
@@ -763,14 +812,14 @@ $featuredShowcase = [
     <div class="akar-consult-banner">
       <div class="akar-consult-text">
         <div style="font-size: 1.2rem; font-weight: 700; color: var(--terra); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.8rem;">
-          [ FREE 45-MINUTE ARCHITECTURAL SCOPING ]
+          <?= sanitize(cms('consult_badge', '[ FREE 45-MINUTE ARCHITECTURAL SCOPING ]')) ?>
         </div>
-        <h3>Book 1-on-1 Zoom Session</h3>
-        <p>Discuss your enterprise software scope, cloud automation needs, or turnkey prototype deployment directly with our Principal Solutions Architect.</p>
+        <h3><?= sanitize(cms('consult_title', 'Book 1-on-1 Zoom Session')) ?></h3>
+        <p><?= sanitize(cms('consult_desc', 'Discuss your enterprise software scope, cloud automation needs, or turnkey prototype deployment directly with our Principal Solutions Architect.')) ?></p>
       </div>
 
       <button type="button" class="akar-consult-btn" onclick="document.getElementById('consultFormModal').style.display='flex'">
-        Schedule Zoom Session <i class="fas fa-calendar-check" style="margin-left: 0.6rem;"></i>
+        <?= sanitize(cms('consult_btn_text', 'Schedule Zoom Session')) ?> <i class="fas fa-calendar-check" style="margin-left: 0.6rem;"></i>
       </button>
     </div>
   </section>
@@ -779,8 +828,8 @@ $featuredShowcase = [
   <div id="consultFormModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 100005; align-items: center; justify-content: center; padding: 2rem;">
     <div style="background: #161616; border: 1px solid rgba(255,255,255,0.12); border-radius: 2.4rem; padding: 4rem; max-width: 65rem; width: 100%; position: relative; color: #ffffff;">
       <button onclick="document.getElementById('consultFormModal').style.display='none'" style="position: absolute; top: 2rem; right: 2rem; font-size: 2.4rem; color: #ffffff; cursor: pointer;">&times;</button>
-      <h3 style="font-family: 'Syne', sans-serif; font-size: 2.8rem; margin-bottom: 0.8rem;">Book Scoping Consultation</h3>
-      <p style="color: rgba(255,255,255,0.65); font-size: 1.4rem; margin-bottom: 2.5rem;">Select your preferred slot to receive an instant Zoom meeting link & calendar invite.</p>
+      <h3 style="font-family: 'Syne', sans-serif; font-size: 2.8rem; margin-bottom: 0.8rem;"><?= sanitize(cms('consult_modal_title', 'Book Scoping Consultation')) ?></h3>
+      <p style="color: rgba(255,255,255,0.65); font-size: 1.4rem; margin-bottom: 2.5rem;"><?= sanitize(cms('consult_modal_subtitle', 'Select your preferred slot to receive an instant Zoom meeting link & calendar invite.')) ?></p>
 
       <form action="<?= eurl('/book-consultation') ?>" method="POST">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
@@ -836,8 +885,8 @@ $featuredShowcase = [
   <footer class="akar-footer">
     <div class="akar-footer-top">
       <div class="akar-footer-brand">
-        <h3>Tektrend Softwares</h3>
-        <p>We are Tektrend Softwares. Bespoke software architecture, digital systems, and cloud engineering based in Eldoret, Kenya.</p>
+        <h3><?= sanitize(cms('footer_brand_title', 'Tektrend Softwares')) ?></h3>
+        <p><?= sanitize(cms('footer_tagline', 'We are Tektrend Softwares. Bespoke software architecture, digital systems, and cloud engineering based in Eldoret, Kenya.')) ?></p>
       </div>
 
       <div class="akar-footer-links-col">
@@ -847,6 +896,18 @@ $featuredShowcase = [
           <li><a href="<?= eurl('/#akarShowcase') ?>">Selected Works</a></li>
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
           <li><a href="<?= eurl('/live-demos') ?>">11 Live Demos</a></li>
+          <li><a href="<?= eurl('/#consultation') ?>">Consultation</a></li>
+        </ul>
+      </div>
+
+      <div class="akar-footer-links-col">
+        <h4>Management & Studio</h4>
+        <ul>
+          <li><a href="<?= eurl('/content') ?>" style="color: var(--terra);"><i class="fas fa-magic" style="margin-right: 0.5rem;"></i> Edit Front-End (CMS)</a></li>
+          <li><a href="<?= eurl('/dashboard') ?>"><i class="fas fa-building" style="margin-right: 0.5rem;"></i> Virtual Company Console</a></li>
+          <li><a href="<?= eurl('/chat') ?>"><i class="fas fa-comments" style="margin-right: 0.5rem;"></i> Company Chat Room</a></li>
+          <li><a href="<?= eurl('/invoices') ?>"><i class="fas fa-file-invoice-dollar" style="margin-right: 0.5rem;"></i> Invoices & Billings</a></li>
+          <li><a href="<?= eurl('/crm/pipeline') ?>"><i class="fas fa-funnel-dollar" style="margin-right: 0.5rem;"></i> CRM Sales Pipeline</a></li>
         </ul>
       </div>
 
@@ -862,24 +923,44 @@ $featuredShowcase = [
       <div class="akar-footer-links-col">
         <h4>Headquarters</h4>
         <p style="font-size: 1.4rem; color: var(--text-secondary); line-height: 1.6;">
-          Tektrend Softwares, Eldoret, Kenya<br>
-          Global Engineering Retainers
+          <?= nl2br(sanitize(cms('footer_headquarters', "Tektrend Softwares, Eldoret, Kenya\nGlobal Engineering Retainers"))) ?>
         </p>
       </div>
     </div>
 
     <!-- Giant Footer Stamped Brand Mark -->
     <div class="akar-footer-brand-mark">
-      <div class="akar-big-brand">TEKTREND</div>
+      <div class="akar-big-brand"><?= sanitize(cms('footer_big_mark', 'TEKTREND')) ?></div>
     </div>
 
     <div class="akar-footer-bottom">
-      <div>&copy; <?= date('Y') ?> Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares</div>
+      <div>&copy; <?= date('Y') ?> <?= sanitize(cms('footer_copyright', 'Tektrend Softwares · Eldoret, Kenya · We are Tektrend Softwares')) ?></div>
       <a href="#top" class="akar-back-to-top">
         Back to Top <i class="fas fa-arrow-up"></i>
       </a>
     </div>
   </footer>
+
+  <!-- FLOATING QUICK-ACCESS DOCK -->
+  <aside class="akar-floating-dock" aria-label="Quick management actions">
+    <a href="<?= eurl('/content') ?>" class="akar-dock-item --primary" title="Edit Front-End Text & Images in Real-Time">
+      <i class="fas fa-magic"></i>
+      <span>Edit Front-End</span>
+    </a>
+    <div class="akar-dock-divider"></div>
+    <a href="<?= eurl('/dashboard') ?>" class="akar-dock-item" title="Virtual Company Operations Console">
+      <i class="fas fa-building"></i>
+      <span>Company Console</span>
+    </a>
+    <a href="<?= eurl('/chat') ?>" class="akar-dock-item" title="Team & Client Live Chat Room">
+      <i class="fas fa-comments"></i>
+      <span>Live Chat</span>
+    </a>
+    <a href="<?= eurl('/crm/pipeline') ?>" class="akar-dock-item" title="CRM Sales Pipeline">
+      <i class="fas fa-funnel-dollar"></i>
+      <span>Pipeline</span>
+    </a>
+  </aside>
 
   <!-- Include Google Gemini AI Chatbot -->
   <?php require_once BASE_PATH . '/app/views/partials/ai_chat.php'; ?>
