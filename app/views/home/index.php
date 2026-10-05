@@ -192,20 +192,14 @@ if (!empty($portfolioDemos)) {
         <span class="akar-invest-label">Invest</span>
       </button>
 
-      <!-- Front-End CMS Studio Direct Link -->
-      <a href="<?= eurl('/content') ?>" class="akar-cms-pill" title="Front-End Visual CMS & Media Studio" aria-label="Front-End CMS & Media Studio">
-        <i class="fas fa-magic"></i>
-        <span class="akar-cms-label">Edit Content</span>
-      </a>
-
       <!-- Company Portal / Sign In or Dashboard -->
       <?php if (isset($_SESSION['user_id'])): ?>
-        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Virtual Company Operations Console" aria-label="Company Dashboard">
+        <a href="<?= eurl('/dashboard') ?>" class="akar-login-pill" title="Company Dashboard" aria-label="Company Dashboard">
           <i class="fas fa-chart-pie"></i>
-          <span class="akar-login-label">Admin Console</span>
+          <span class="akar-login-label">Dashboard</span>
         </a>
       <?php else: ?>
-        <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Company Portal / Sign In" aria-label="Sign In to Dashboard">
+        <a href="<?= eurl('/login') ?>" class="akar-login-pill" title="Sign In" aria-label="Sign In">
           <i class="fas fa-arrow-right-to-bracket"></i>
           <span class="akar-login-label">Sign In</span>
         </a>
@@ -481,30 +475,15 @@ if (!empty($portfolioDemos)) {
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="portal">
-          <a href="<?= eurl('/content') ?>" class="akar-nav-link" style="color: var(--terra);">
-            06 / Front-End CMS Studio <span class="akar-nav-arrow"><i class="fas fa-magic"></i></span>
-          </a>
-        </li>
-        <li class="akar-nav-item" data-teaser="portal">
           <?php if (isset($_SESSION['user_id'])): ?>
             <a href="<?= eurl('/dashboard') ?>" class="akar-nav-link">
-              07 / Virtual Company Console <span class="akar-nav-arrow"><i class="fas fa-building"></i></span>
+              06 / Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
             </a>
           <?php else: ?>
             <a href="<?= eurl('/login') ?>" class="akar-nav-link">
-              07 / Virtual Company / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
+              06 / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
             </a>
           <?php endif; ?>
-        </li>
-        <li class="akar-nav-item" data-teaser="portal">
-          <a href="<?= eurl('/chat') ?>" class="akar-nav-link">
-            08 / Live Company Chat <span class="akar-nav-arrow"><i class="fas fa-comments"></i></span>
-          </a>
-        </li>
-        <li class="akar-nav-item" data-teaser="portal">
-          <a href="<?= eurl('/crm/pipeline') ?>" class="akar-nav-link">
-            09 / CRM Sales Pipeline <span class="akar-nav-arrow"><i class="fas fa-funnel-dollar"></i></span>
-          </a>
         </li>
       </ul>
 
@@ -897,17 +876,11 @@ if (!empty($portfolioDemos)) {
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
           <li><a href="<?= eurl('/live-demos') ?>">11 Live Demos</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Consultation</a></li>
-        </ul>
-      </div>
-
-      <div class="akar-footer-links-col">
-        <h4>Management & Studio</h4>
-        <ul>
-          <li><a href="<?= eurl('/content') ?>" style="color: var(--terra);"><i class="fas fa-magic" style="margin-right: 0.5rem;"></i> Edit Front-End (CMS)</a></li>
-          <li><a href="<?= eurl('/dashboard') ?>"><i class="fas fa-building" style="margin-right: 0.5rem;"></i> Virtual Company Console</a></li>
-          <li><a href="<?= eurl('/chat') ?>"><i class="fas fa-comments" style="margin-right: 0.5rem;"></i> Company Chat Room</a></li>
-          <li><a href="<?= eurl('/invoices') ?>"><i class="fas fa-file-invoice-dollar" style="margin-right: 0.5rem;"></i> Invoices & Billings</a></li>
-          <li><a href="<?= eurl('/crm/pipeline') ?>"><i class="fas fa-funnel-dollar" style="margin-right: 0.5rem;"></i> CRM Sales Pipeline</a></li>
+          <?php if (isset($_SESSION['user_id'])): ?>
+            <li><a href="<?= eurl('/dashboard') ?>">Dashboard</a></li>
+          <?php else: ?>
+            <li><a href="<?= eurl('/login') ?>">Sign In</a></li>
+          <?php endif; ?>
         </ul>
       </div>
 
@@ -940,27 +913,6 @@ if (!empty($portfolioDemos)) {
       </a>
     </div>
   </footer>
-
-  <!-- FLOATING QUICK-ACCESS DOCK -->
-  <aside class="akar-floating-dock" aria-label="Quick management actions">
-    <a href="<?= eurl('/content') ?>" class="akar-dock-item --primary" title="Edit Front-End Text & Images in Real-Time">
-      <i class="fas fa-magic"></i>
-      <span>Edit Front-End</span>
-    </a>
-    <div class="akar-dock-divider"></div>
-    <a href="<?= eurl('/dashboard') ?>" class="akar-dock-item" title="Virtual Company Operations Console">
-      <i class="fas fa-building"></i>
-      <span>Company Console</span>
-    </a>
-    <a href="<?= eurl('/chat') ?>" class="akar-dock-item" title="Team & Client Live Chat Room">
-      <i class="fas fa-comments"></i>
-      <span>Live Chat</span>
-    </a>
-    <a href="<?= eurl('/crm/pipeline') ?>" class="akar-dock-item" title="CRM Sales Pipeline">
-      <i class="fas fa-funnel-dollar"></i>
-      <span>Pipeline</span>
-    </a>
-  </aside>
 
   <!-- Include Google Gemini AI Chatbot -->
   <?php require_once BASE_PATH . '/app/views/partials/ai_chat.php'; ?>
