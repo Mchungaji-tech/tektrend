@@ -78,6 +78,10 @@ class App {
         $this->router->get('/auth/google', 'GoogleAuthController@redirect', ['guest']);
         $this->router->get('/auth/google/callback', 'GoogleAuthController@callback', ['guest']);
 
+        // GitHub OAuth 2.0 (Sign in with GitHub)
+        $this->router->get('/auth/github', 'GithubAuthController@redirect', ['guest']);
+        $this->router->get('/auth/github/callback', 'GithubAuthController@callback', ['guest']);
+
         // Dashboard
         $this->router->get('/dashboard', 'DashboardController@index', ['auth']);
         $this->router->get('/dashboard/stats', 'DashboardController@stats', ['auth']);

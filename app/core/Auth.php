@@ -96,7 +96,7 @@ class Auth {
      * Establish a logged-in session for an already-authenticated user row
      * (used by external providers such as Google OAuth where no local password is checked)
      */
-    public function loginUser($user) {
+    public function loginUser($user, $provider = 'OAuth') {
         if (empty($user) || empty($user['id'])) {
             return false;
         }
@@ -130,7 +130,7 @@ class Auth {
         $this->session->set('user_department', $user['department_id'] ?? null);
         $this->session->set('login_time', time());
 
-        auditLog('login', 'users', $user['id'], 'User logged in via Google OAuth');
+        auditLog('login', 'users', $user['id'], 'User logged in via ' . $provider . ' OAuth');
 
         return true;
     }

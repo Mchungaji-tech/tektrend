@@ -132,7 +132,7 @@ class GoogleAuthController extends Controller {
             return;
         }
 
-        if (!$this->auth->loginUser($user)) {
+        if (!$this->auth->loginUser($user, 'Google')) {
             $this->session->flash('error', 'Your account has been suspended.');
             redirect('/login');
             return;

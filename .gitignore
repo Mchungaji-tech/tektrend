@@ -1,0 +1,12 @@
+# Local environment / secrets (never commit)
+.env
+
+# Runtime uploads
+uploads/*
+!uploads/**/.gitkeep
+public/uploads/*
+!public/uploads/**/.gitkeep
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db

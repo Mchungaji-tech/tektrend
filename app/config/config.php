@@ -72,6 +72,16 @@ define('GOOGLE_OAUTH_AUTH_ENDPOINT', 'https://accounts.google.com/o/oauth2/v2/au
 define('GOOGLE_OAUTH_TOKEN_ENDPOINT', 'https://oauth2.googleapis.com/token');
 define('GOOGLE_OAUTH_USERINFO_ENDPOINT', 'https://www.googleapis.com/oauth2/v3/userinfo');
 
+// GitHub OAuth 2.0 (Sign in with GitHub)
+define('GITHUB_CLIENT_ID', getenv('GITHUB_CLIENT_ID') ?: '');
+define('GITHUB_CLIENT_SECRET', getenv('GITHUB_CLIENT_SECRET') ?: '');
+// Optional: restrict account creation to specific email domains (comma-separated, e.g. tektrend.co.ke,gmail.com). Empty = allow any verified email.
+define('GITHUB_ALLOWED_DOMAIN', getenv('GITHUB_ALLOWED_DOMAIN') ?: '');
+define('GITHUB_OAUTH_AUTH_ENDPOINT', 'https://github.com/login/oauth/authorize');
+define('GITHUB_OAUTH_TOKEN_ENDPOINT', 'https://github.com/login/oauth/access_token');
+define('GITHUB_OAUTH_USER_ENDPOINT', 'https://api.github.com/user');
+define('GITHUB_OAUTH_EMAILS_ENDPOINT', 'https://api.github.com/user/emails');
+
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('DB_NAME') ?: 'tektrend');
