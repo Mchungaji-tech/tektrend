@@ -63,6 +63,15 @@ define('APP_CURRENCY_SYMBOL', getenv('APP_CURRENCY_SYMBOL') ?: 'KSh ');
 // Google Gemini AI API Configuration
 define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: (getenv('GEMINI_API_KEY') ?: ''));
 
+// Google OAuth 2.0 (Sign in with Google)
+define('GOOGLE_CLIENT_ID', getenv('GOOGLE_CLIENT_ID') ?: '');
+define('GOOGLE_CLIENT_SECRET', getenv('GOOGLE_CLIENT_SECRET') ?: '');
+// Optional: restrict account creation to a single Google Workspace domain (e.g. tektrend.co.ke). Empty = allow any verified email.
+define('GOOGLE_ALLOWED_DOMAIN', getenv('GOOGLE_ALLOWED_DOMAIN') ?: '');
+define('GOOGLE_OAUTH_AUTH_ENDPOINT', 'https://accounts.google.com/o/oauth2/v2/auth');
+define('GOOGLE_OAUTH_TOKEN_ENDPOINT', 'https://oauth2.googleapis.com/token');
+define('GOOGLE_OAUTH_USERINFO_ENDPOINT', 'https://www.googleapis.com/oauth2/v3/userinfo');
+
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('DB_NAME') ?: 'tektrend');

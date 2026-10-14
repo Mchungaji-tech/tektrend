@@ -74,6 +74,10 @@ class App {
         $this->router->post('/reset-password', 'AuthController@updatePassword');
         $this->router->get('/logout', 'AuthController@logout', ['auth']);
 
+        // Google OAuth 2.0 (Sign in with Google)
+        $this->router->get('/auth/google', 'GoogleAuthController@redirect', ['guest']);
+        $this->router->get('/auth/google/callback', 'GoogleAuthController@callback', ['guest']);
+
         // Dashboard
         $this->router->get('/dashboard', 'DashboardController@index', ['auth']);
         $this->router->get('/dashboard/stats', 'DashboardController@stats', ['auth']);

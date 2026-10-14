@@ -93,6 +93,49 @@ class Auth {
     }
 
     /**
+     * Establish a logged-in session for an already-authenticated user row
+     * (used by external providers such as Google OAuth where no local password is checked)
+     */
+    public function loginUser($user) {
+        if (empty($user) || empty($user['id'])) {
+            return false;
+        }
+        if (($user['status'] ?? 'active') === 'suspended') {
+            return false;
+        }
+
+        $this->db->execute(
+            "UPDATE users SET last_login = NOW(), last_activity = NOW(), is_online = 1, work_status = 'working' WHERE id = ?",
+            [$user['id']]
+        );
+
+        $sessionId = session_id();
+        $this->db->insert(
+            "INSERT INTO user_sessions (user_id, session_id, ip_address, user_agent, expires_at) 
+             VALUES (?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL " . SESSION_LIFETIME . " SECOND))",
+            [
+                $user['id'],
+                $sessionId,
+                $_SERVER['REMOTE_ADDR'] ?? null,
+                $_SERVER['HTTP_USER_AGENT'] ?? null
+            ]
+        );
+
+        $this->session->regenerate();
+        $this->session->set('user_id', $user['id']);
+        $this->session->set('user_email', $user['email']);
+        $this->session->set('user_role', $user['role']);
+        $this->session->set('user_name', $user['first_name'] . ' ' . $user['last_name']);
+        $this->session->set('user_avatar', $user['avatar'] ?? null);
+        $this->session->set('user_department', $user['department_id'] ?? null);
+        $this->session->set('login_time', time());
+
+        auditLog('login', 'users', $user['id'], 'User logged in via Google OAuth');
+
+        return true;
+    }
+
+    /**
      * Log out the current user
      */
     public function logout() {
