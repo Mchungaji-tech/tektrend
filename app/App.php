@@ -53,6 +53,16 @@ class App {
         $this->router->get('/sitemap.xml', 'HomeController@sitemap');
         $this->router->get('/robots.txt', 'HomeController@robots');
 
+        // Blog / Insights (public SEO content + admin CMS)
+        $this->router->get('/blog', 'BlogController@index');
+        $this->router->get('/blog-manage', 'BlogController@manage', ['auth']);
+        $this->router->get('/blog-manage/create', 'BlogController@create', ['auth']);
+        $this->router->post('/blog-manage', 'BlogController@store', ['auth']);
+        $this->router->get('/blog-manage/{id}/edit', 'BlogController@edit', ['auth']);
+        $this->router->post('/blog-manage/{id}', 'BlogController@update', ['auth']);
+        $this->router->get('/blog-manage/{id}/delete', 'BlogController@destroy', ['auth']);
+        $this->router->get('/blog/{slug}', 'BlogController@show');
+
         // Authentication routes
         $this->router->get('/login', 'AuthController@login', ['guest']);
         $this->router->post('/login', 'AuthController@authenticate');

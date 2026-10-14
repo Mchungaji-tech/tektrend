@@ -6,6 +6,7 @@ Allow: /
 Allow: /live-demos
 Allow: /live-demo
 Allow: /live_demo/
+Allow: /blog
 Allow: /sitemap.xml
 
 # Protect back-office modules, authentication, and API endpoints

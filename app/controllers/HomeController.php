@@ -276,6 +276,29 @@ class HomeController extends Controller {
         echo "    <priority>0.9</priority>\n";
         echo "  </url>\n";
 
+        // Blog / Insights hub + published articles
+        echo "  <url>\n";
+        echo "    <loc>" . htmlspecialchars($baseUrl . '/blog', ENT_XML1) . "</loc>\n";
+        echo "    <lastmod>" . $today . "</lastmod>\n";
+        echo "    <changefreq>weekly</changefreq>\n";
+        echo "    <priority>0.9</priority>\n";
+        echo "  </url>\n";
+        $blogPosts = [];
+        try {
+            $blogPosts = $this->db->fetchAll("SELECT slug, updated_at FROM blog_posts WHERE status = 'published'");
+        } catch (\Throwable $e) {
+            $blogPosts = [];
+        }
+        foreach ($blogPosts as $bp) {
+            $modDate = !empty($bp['updated_at']) ? date('Y-m-d', strtotime($bp['updated_at'])) : $today;
+            echo "  <url>\n";
+            echo "    <loc>" . htmlspecialchars($baseUrl . '/blog/' . $bp['slug'], ENT_XML1) . "</loc>\n";
+            echo "    <lastmod>" . $modDate . "</lastmod>\n";
+            echo "    <changefreq>monthly</changefreq>\n";
+            echo "    <priority>0.7</priority>\n";
+            echo "  </url>\n";
+        }
+
         // Dynamic or static prototypes
         $seen = [];
         if (!empty($demos)) {
@@ -324,6 +347,7 @@ class HomeController extends Controller {
         echo "Allow: /live-demos\n";
         echo "Allow: /live-demo\n";
         echo "Allow: /live_demo/\n";
+        echo "Allow: /blog\n";
         echo "Allow: /sitemap.xml\n\n";
         echo "# Protected Back-office & Private Modules\n";
         echo "Disallow: /dashboard\n";
@@ -345,6 +369,7 @@ class HomeController extends Controller {
         echo "Disallow: /register\n";
         echo "Disallow: /forgot-password\n";
         echo "Disallow: /reset-password\n";
+        echo "Disallow: /blog-manage\n";
         echo "Disallow: /api/\n\n";
         echo "Sitemap: " . $baseUrl . "/sitemap.xml\n";
         exit;

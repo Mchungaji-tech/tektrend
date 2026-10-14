@@ -638,6 +638,9 @@
                 <a href="<?= eurl('/content') ?>" class="nav-link <?= ($currentPage ?? '') === 'content' ? 'active' : '' ?>">
                     <i class="fas fa-magic" style="color: var(--primary);"></i> Front-End CMS Studio <span class="nav-badge accent">Studio</span>
                 </a>
+                <a href="<?= eurl('/blog-manage') ?>" class="nav-link <?= ($currentPage ?? '') === 'blog' ? 'active' : '' ?>">
+                    <i class="fas fa-newspaper"></i> Blog & Insights
+                </a>
                 <a href="<?= eurl('/users') ?>" class="nav-link <?= ($currentPage ?? '') === 'users' ? 'active' : '' ?>">
                     <i class="fas fa-user-shield"></i> System Users
                 </a>

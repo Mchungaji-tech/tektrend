@@ -119,7 +119,11 @@ if (!empty($portfolioDemos)) {
   <meta name="description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="keywords" content="<?= htmlspecialchars($metaKeywords, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="author" content="Tektrend Softwares">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <?php $gsv = cms('google_site_verification', ''); if ($gsv !== ''): ?><meta name="google-site-verification" content="<?= htmlspecialchars($gsv, ENT_QUOTES, 'UTF-8') ?>"><?php endif; ?>
   <link rel="canonical" href="<?= eurl('/') ?>">
+  <link rel="alternate" hreflang="en" href="<?= eurl('/') ?>">
+  <link rel="alternate" hreflang="x-default" href="<?= eurl('/') ?>">
   <meta name="theme-color" content="#0e0e0e">
 
   <!-- Favicon -->
@@ -134,15 +138,21 @@ if (!empty($portfolioDemos)) {
   <meta property="og:title" content="<?= htmlspecialchars($metaTitle, ENT_QUOTES, 'UTF-8') ?>">
   <meta property="og:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
   <meta property="og:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
+  <meta property="og:image:secure_url" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="850">
+  <meta property="og:image:alt" content="Tektrend Softwares · Software architecture & creative studio in Eldoret, Kenya">
   <meta property="og:locale" content="en_US">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@tektrend">
+  <meta name="twitter:creator" content="@tektrend">
   <meta name="twitter:url" content="<?= eurl('/') ?>">
   <meta name="twitter:title" content="<?= htmlspecialchars($metaTitle, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="twitter:description" content="<?= htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="twitter:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=85">
+  <meta name="twitter:image:alt" content="Tektrend Softwares · Software architecture & creative studio in Eldoret, Kenya">
 
   <!-- Anti-flicker Theme & Palette Script -->
   <script>
@@ -171,6 +181,78 @@ if (!empty($portfolioDemos)) {
   <!-- GSAP & ScrollTrigger (Akaru Pinned Horizontal Showcase & Timelines) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <?php
+  // Structured data (JSON-LD) for rich results: Organization, WebSite, ItemList, BreadcrumbList
+  $ldBase = rtrim(url('/'), '/');
+  $ldSameAs = array_values(array_filter([
+      'https://github.com/Mchungaji-tech',
+      $settings['social_linkedin']  ?? null,
+      $settings['social_twitter']   ?? null,
+      $settings['social_facebook']  ?? null,
+      $settings['social_instagram'] ?? null,
+  ]));
+  $ldPhone = '+' . preg_replace('/[^0-9]/', '', $companyWhatsApp);
+
+  $ldItems = [];
+  foreach ($featuredShowcase as $p) {
+      $ldItems[] = [
+          '@type'  => 'ListItem',
+          'position' => count($ldItems) + 1,
+          'url'    => $p['demo_url'],
+          'name'   => $p['title'],
+      ];
+  }
+
+  $ldGraph = [
+      [
+          '@type'       => ['Organization', 'ProfessionalService'],
+          '@id'         => $ldBase . '/#organization',
+          'name'        => 'Tektrend Softwares',
+          'legalName'   => 'Tektrend Softwares',
+          'url'         => $ldBase . '/',
+          'logo'        => $ogImage,
+          'image'       => $ogImage,
+          'description' => $metaDescription,
+          'email'       => $companyEmail,
+          'telephone'   => $ldPhone,
+          'priceRange'  => '$$',
+          'foundingLocation' => 'Eldoret, Kenya',
+          'address'     => [
+              '@type'           => 'PostalAddress',
+              'streetAddress'   => $companyAddress,
+              'addressLocality' => 'Eldoret',
+              'addressRegion'   => 'Uasin Gishu',
+              'addressCountry'  => 'KE',
+          ],
+          'areaServed'  => ['KE', 'East Africa', 'Worldwide'],
+          'sameAs'      => $ldSameAs,
+          'knowsAbout'  => ['Software Architecture', 'PHP MVC Development', 'Google Workspace Automation', 'Cloud Dashboards', 'Web Design'],
+      ],
+      [
+          '@type'       => 'WebSite',
+          '@id'         => $ldBase . '/#website',
+          'url'         => $ldBase . '/',
+          'name'        => 'Tektrend Softwares',
+          'description' => $metaDescription,
+          'inLanguage'  => 'en',
+          'publisher'   => ['@id' => $ldBase . '/#organization'],
+      ],
+      [
+          '@type'            => 'BreadcrumbList',
+          'itemListElement'  => [
+              ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $ldBase . '/'],
+          ],
+      ],
+      [
+          '@type'            => 'ItemList',
+          'name'             => 'Selected Architectures & Live Prototypes',
+          'itemListElement'  => $ldItems,
+      ],
+  ];
+  $ldDoc = ['@context' => 'https://schema.org', '@graph' => $ldGraph];
+  echo '<script type="application/ld+json">' . json_encode($ldDoc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+  ?>
 </head>
 <body id="top">
   <!-- FLUID MAGNETIC CURSOR (Akaru Elastic Blob) -->
@@ -460,6 +542,11 @@ if (!empty($portfolioDemos)) {
         <li class="akar-nav-item" data-teaser="demos">
           <a href="<?= eurl('/live-demos') ?>" class="akar-nav-link">
             04 / Live Demos (11) <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="blog">
+          <a href="<?= eurl('/blog') ?>" class="akar-nav-link">
+            Insights &amp; Blog <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="consultation">
@@ -862,6 +949,7 @@ if (!empty($portfolioDemos)) {
           <li><a href="<?= eurl('/#akarShowcase') ?>">Selected Works</a></li>
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
           <li><a href="<?= eurl('/live-demos') ?>">11 Live Demos</a></li>
+           <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Consultation</a></li>
           <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>

@@ -186,6 +186,40 @@ $canonicalUrl = url('/live-demos');
       border-color: var(--terra);
     }
   </style>
+
+  <?php
+  // Structured data (JSON-LD): BreadcrumbList + ItemList of live prototypes
+  $ldBase = rtrim(url('/'), '/');
+  $ldItems = [];
+  foreach ($demos as $d) {
+      $du = $d['demo_url'] ?? '';
+      if ($du && strpos($du, 'http') !== 0) { $du = url($du); }
+      $ldItems[] = [
+          '@type'    => 'ListItem',
+          'position' => count($ldItems) + 1,
+          'url'      => $du,
+          'name'     => $d['title'],
+      ];
+  }
+  $ldDoc = [
+      '@context' => 'https://schema.org',
+      '@graph'   => [
+          [
+              '@type'           => 'BreadcrumbList',
+              'itemListElement' => [
+                  ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $ldBase . '/'],
+                  ['@type' => 'ListItem', 'position' => 2, 'name' => 'Live Demos', 'item' => $ldBase . '/live-demos'],
+              ],
+          ],
+          [
+              '@type'           => 'ItemList',
+              'name'            => 'Tektrend Softwares Live Production Prototypes',
+              'itemListElement' => $ldItems,
+          ],
+      ],
+  ];
+  echo '<script type="application/ld+json">' . json_encode($ldDoc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+  ?>
 </head>
 <body id="top">
   <!-- FLUID MAGNETIC CURSOR -->
@@ -860,6 +894,7 @@ $canonicalUrl = url('/live-demos');
           <li><a href="<?= eurl('/') ?>">Main Agency</a></li>
           <li><a href="<?= eurl('/#akarShowcase') ?>">Featured Works</a></li>
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
+           <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Book Scoping Zoom</a></li>
           <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>
