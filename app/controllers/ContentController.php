@@ -58,13 +58,13 @@ class ContentController extends Controller {
         'metric_4_val' => ['title' => 'Metric 4 Value', 'type' => 'text', 'section' => 'metrics', 'content' => '100%'],
         'metric_4_lbl' => ['title' => 'Metric 4 Label', 'type' => 'text', 'section' => 'metrics', 'content' => 'Turnkey Delivery Guarantee'],
 
-        // Consultation & Zoom Scoping
+        // Consultation & Video Booking
         'consult_badge' => ['title' => 'Consultation Eyebrow Badge', 'type' => 'text', 'section' => 'consultation', 'content' => '[ FREE 45-MINUTE ARCHITECTURAL SCOPING ]'],
-        'consult_title' => ['title' => 'Consultation Headline', 'type' => 'text', 'section' => 'consultation', 'content' => 'Book 1-on-1 Zoom Session'],
+        'consult_title' => ['title' => 'Consultation Headline', 'type' => 'text', 'section' => 'consultation', 'content' => 'Book 1-on-1 Video Consultation'],
         'consult_desc' => ['title' => 'Consultation Pitch Description', 'type' => 'text', 'section' => 'consultation', 'content' => 'Discuss your enterprise software scope, cloud automation needs, or turnkey prototype deployment directly with our Principal Solutions Architect.'],
-        'consult_btn_text' => ['title' => 'Consultation Button Text', 'type' => 'text', 'section' => 'consultation', 'content' => 'Schedule Zoom Session'],
+        'consult_btn_text' => ['title' => 'Consultation Button Text', 'type' => 'text', 'section' => 'consultation', 'content' => 'Schedule a Free Consultation'],
         'consult_modal_title' => ['title' => 'Consultation Modal Title', 'type' => 'text', 'section' => 'consultation', 'content' => 'Book Scoping Consultation'],
-        'consult_modal_subtitle' => ['title' => 'Consultation Modal Subtitle', 'type' => 'text', 'section' => 'consultation', 'content' => 'Select your preferred slot to receive an instant Zoom meeting link & calendar invite.'],
+        'consult_modal_subtitle' => ['title' => 'Consultation Modal Subtitle', 'type' => 'text', 'section' => 'consultation', 'content' => 'Select your preferred slot to receive an instant embedded video meeting room & calendar invite.'],
 
         // Investor Relations Modal
         'invest_badge' => ['title' => 'Investor Eyebrow Badge', 'type' => 'text', 'section' => 'investor', 'content' => 'Investor Relations & Growth Capital'],

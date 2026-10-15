@@ -19,7 +19,7 @@ class AiChatController extends Controller {
         if (empty($userMessage)) {
             echo json_encode([
                 'success' => false,
-                'reply' => "Hello! I am Nova, Tek Trend's AI Solutions Architect. Ask me anything about our software engineering, turnkey templates, custom architectures, or book a 1-on-1 Zoom consultation!"
+                'reply' => "Hello! I am Nova, Tek Trend's AI Solutions Architect. Ask me anything about our software engineering, turnkey templates, custom architectures, or book a 1-on-1 video consultation!"
             ]);
             exit;
         }
@@ -96,11 +96,11 @@ class AiChatController extends Controller {
             "Key Information:\n" .
             "- Custom Systems: Clients can commission tailored full-stack software built by our engineering team.\n" .
             "- Turnkey Templates: Ready-to-deploy clean source code with commercial usage rights.\n" .
-            "- Consultations: Free 45-min Zoom consultations can be booked directly on our homepage.\n" .
+            "- Consultations: Free 45-min video consultations can be booked directly on our homepage.\n" .
             "- WhatsApp: Instant direct chat available at +254 707 246 273.\n" .
             "- Email: tektrend.softwares@gmail.com.\n" .
             "- Physical Location: Tek Cyber, Roadblock, Eldoret, Kenya.\n\n" .
-            "Guidelines: Keep answers helpful, concise, well-structured (use bullet points and bolding), warm, and authoritative. Suggest relevant prototypes, booking a Zoom session, or messaging on WhatsApp where helpful.";
+            "Guidelines: Keep answers helpful, concise, well-structured (use bullet points and bolding), warm, and authoritative. Suggest relevant prototypes, booking a video consultation session, or messaging on WhatsApp where helpful.";
 
         $payload = [
             'system_instruction' => [
@@ -172,8 +172,8 @@ class AiChatController extends Controller {
                    "9. **Verve** · Editorial Tech Magazine ($39)\n\n" .
                    "You can review any of these live on our **Live Demos** page and buy or request customization!";
         } elseif (str_contains($m, 'zoom') || str_contains($m, 'consult') || str_contains($m, 'meet') || str_contains($m, 'book')) {
-            $res = "📅 **Schedule a 1-on-1 Zoom Consultation**:\n\n" .
-                   "You can book directly with our Principal Solutions Architect right from our homepage! Pick your preferred date and 45-minute slot, and you'll receive your instant Zoom invitation.";
+            $res = "📅 **Schedule a 1-on-1 Video Consultation**:\n\n" .
+                   "You can book directly with our Principal Solutions Architect right from our homepage! Pick your preferred date and 45-minute slot, and you'll receive an instant embedded video meeting room.";
         } elseif (str_contains($m, 'whatsapp') || str_contains($m, 'contact') || str_contains($m, 'call') || str_contains($m, 'phone')) {
             $res = "📱 **Direct Contact Channels**:\n\n" .
                     "• **WhatsApp**: [+254 707 246 273](https://wa.me/254707246273)\n" .
@@ -188,7 +188,7 @@ class AiChatController extends Controller {
                    "• Automated Invoicing & M-Pesa / Stripe Payments\n" .
                    "• Google Workspace / Apps Script Enterprise Automations\n" .
                    "• Real-time Teleconferencing & Chat Systems\n\n" .
-                   "Submit your requirements on any prototype card or book a Zoom call to begin!";
+                   "Submit your requirements on any prototype card or book a video consultation to begin!";
         } else {
             $res = "Welcome to **Tek Trend Innovations**! We deliver world-class software architecture, custom business web applications, and turnkey production templates.\n\n" .
                    "How can I assist you today? I can help you choose a turnkey template, scope a custom web build, or book a consultation.";

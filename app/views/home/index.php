@@ -840,7 +840,7 @@ if (!empty($portfolioDemos)) {
     </div>
   </section>
 
-  <!-- DARK EDITORIAL BREAK: TRUST, METRICS & ZOOM CONSULTATION -->
+  <!-- DARK EDITORIAL BREAK: TRUST, METRICS & VIDEO CONSULTATION -->
   <section class="akar-dark-break" id="consultation">
     <div class="akar-metrics-grid">
       <div class="akar-metric-box">
@@ -861,28 +861,28 @@ if (!empty($portfolioDemos)) {
       </div>
     </div>
 
-    <!-- Consultation & Zoom Booking Vault -->
+    <!-- Consultation & Video Meeting Booking Vault -->
     <div class="akar-consult-banner">
       <div class="akar-consult-text">
         <div style="font-size: 1.2rem; font-weight: 700; color: var(--terra); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.8rem;">
           <?= sanitize(cms('consult_badge', '[ FREE 45-MINUTE ARCHITECTURAL SCOPING ]')) ?>
         </div>
-        <h3><?= sanitize(cms('consult_title', 'Book 1-on-1 Zoom Session')) ?></h3>
+        <h3><?= sanitize(cms('consult_title', 'Book 1-on-1 Video Consultation')) ?></h3>
         <p><?= sanitize(cms('consult_desc', 'Discuss your enterprise software scope, cloud automation needs, or turnkey prototype deployment directly with our Principal Solutions Architect.')) ?></p>
       </div>
 
       <button type="button" class="akar-consult-btn" onclick="document.getElementById('consultFormModal').style.display='flex'">
-        <?= sanitize(cms('consult_btn_text', 'Schedule Zoom Session')) ?> <i class="fas fa-calendar-check" style="margin-left: 0.6rem;"></i>
+        <?= sanitize(cms('consult_btn_text', 'Schedule Video Consultation')) ?> <i class="fas fa-calendar-check" style="margin-left: 0.6rem;"></i>
       </button>
     </div>
   </section>
 
-  <!-- ZOOM CONSULTATION MODAL -->
+  <!-- VIDEO CONSULTATION MODAL -->
   <div id="consultFormModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 100005; align-items: center; justify-content: center; padding: 2rem;">
     <div style="background: #161616; border: 1px solid rgba(255,255,255,0.12); border-radius: 2.4rem; padding: 4rem; max-width: 65rem; width: 100%; position: relative; color: #ffffff;">
       <button onclick="document.getElementById('consultFormModal').style.display='none'" style="position: absolute; top: 2rem; right: 2rem; font-size: 2.4rem; color: #ffffff; cursor: pointer;">&times;</button>
       <h3 style="font-family: 'Syne', sans-serif; font-size: 2.8rem; margin-bottom: 0.8rem;"><?= sanitize(cms('consult_modal_title', 'Book Scoping Consultation')) ?></h3>
-      <p style="color: rgba(255,255,255,0.65); font-size: 1.4rem; margin-bottom: 2.5rem;"><?= sanitize(cms('consult_modal_subtitle', 'Select your preferred slot to receive an instant Zoom meeting link & calendar invite.')) ?></p>
+      <p style="color: rgba(255,255,255,0.65); font-size: 1.4rem; margin-bottom: 2.5rem;"><?= sanitize(cms('consult_modal_subtitle', 'Select your preferred slot to receive an instant secure video meeting room link & calendar invite.')) ?></p>
 
       <form action="<?= eurl('/book-consultation') ?>" method="POST">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
@@ -928,7 +928,7 @@ if (!empty($portfolioDemos)) {
         </div>
 
         <button type="submit" style="width: 100%; padding: 1.5rem; border-radius: 10rem; background: var(--terra); color: #0e0e0e; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;">
-          Confirm Booking & Generate Zoom Room <i class="fas fa-video" style="margin-left: 0.6rem;"></i>
+          Confirm Booking & Generate Video Room <i class="fas fa-video" style="margin-left: 0.6rem;"></i>
         </button>
       </form>
     </div>

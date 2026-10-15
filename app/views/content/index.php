@@ -64,7 +64,7 @@ function getCmsVal($key, $contentMap, $defaultContent) {
                 <i class="fas fa-laptop-code"></i> Featured Works (Demos)
             </a>
             <a href="?tab=consultation" class="cms-tab-link <?= $activeTab === 'consultation' ? 'active' : '' ?>">
-                <i class="fas fa-video"></i> Zoom Scoping & Booking
+                <i class="fas fa-video"></i> Video Consultation & Booking
             </a>
             <a href="?tab=investor" class="cms-tab-link <?= $activeTab === 'investor' ? 'active' : '' ?>">
                 <i class="fas fa-gem"></i> Investor Relations Modal
@@ -416,13 +416,13 @@ function getCmsVal($key, $contentMap, $defaultContent) {
             </div>
         <?php endif; ?>
 
-        <!-- TAB 6: ZOOM SCOPING & BOOKING -->
+        <!-- TAB 6: VIDEO CONSULTATION & BOOKING -->
         <?php if ($activeTab === 'consultation'): ?>
             <div class="card">
                 <div class="card-header">
                     <div>
-                        <h3 class="card-title"><i class="fas fa-video" style="color: var(--primary); margin-right: 0.5rem;"></i> Zoom Consultation & Booking Banner</h3>
-                        <p class="card-subtitle">Scoping banner, CTA button, modal titles, and default Zoom meeting credentials</p>
+                        <h3 class="card-title"><i class="fas fa-video" style="color: var(--primary); margin-right: 0.5rem;"></i> Video Consultation & Booking Banner</h3>
+                        <p class="card-subtitle">Scoping banner, CTA button, and modal titles. Meeting rooms are generated automatically in the backend (embedded, no external links).</p>
                     </div>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Consultation</button>
                 </div>
@@ -459,21 +459,8 @@ function getCmsVal($key, $contentMap, $defaultContent) {
                     <input type="text" name="content[consult_modal_subtitle]" class="form-control" value="<?= sanitize(getCmsVal('consult_modal_subtitle', $contentMap, $defaultContent)) ?>">
                 </div>
 
-                <!-- Global Zoom Credentials -->
-                <div style="background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1rem;">
-                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem; margin-bottom: 0.75rem;">
-                        <i class="fas fa-video" style="color: #2d8cff; margin-right: 0.35rem;"></i> Official Zoom Room Connection
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label>Default Zoom Meeting Link</label>
-                            <input type="text" name="settings[zoom_default_link]" class="form-control" value="<?= sanitize($settings['zoom_default_link'] ?? 'https://zoom.us/j/9924883102?pwd=tektrend_consult') ?>">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label>Default Meeting ID</label>
-                            <input type="text" name="settings[zoom_meeting_id]" class="form-control" value="<?= sanitize($settings['zoom_meeting_id'] ?? '992-488-3102') ?>">
-                        </div>
-                    </div>
+                <div class="alert alert-info" style="margin-top: 1rem;">
+                    <i class="fas fa-info-circle"></i> Each booked consultation gets its own secure, embedded video room created automatically in the backend. No external meeting credentials are required.
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">

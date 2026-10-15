@@ -91,11 +91,13 @@ class App {
         $this->router->get('/dashboard/online-users', 'DashboardController@onlineUsers', ['staff']);
         $this->router->get('/dashboard/work-status', 'DashboardController@workStatus', ['staff']);
 
-        // Consultations & Zoom Booking
+        // Consultations & Video Meeting Booking
         $this->router->get('/consultations', 'ConsultationController@index', ['staff']);
         $this->router->get('/consultations/{id}', 'ConsultationController@show', ['staff']);
         $this->router->post('/consultations/{id}/status', 'ConsultationController@updateStatus', ['staff']);
         $this->router->get('/consultations/{id}/delete', 'ConsultationController@delete', ['staff']);
+        // Public, token-protected embedded meeting room (client or staff joins in-app; no redirect)
+        $this->router->get('/consult/{token}', 'ConsultationController@room');
 
         // Investor Relations & Capital
         $this->router->get('/investments', 'InvestmentController@index', ['staff']);
@@ -213,14 +215,17 @@ class App {
         $this->router->get('/chat/room/{id}', 'ChatController@room', ['staff']);
         $this->router->post('/chat/room/{id}/message', 'ChatController@sendMessage', ['staff']);
         $this->router->post('/chat/room/{id}/send', 'ChatController@sendMessage', ['staff']);
+        $this->router->post('/chat/room/{id}/typing', 'ChatController@typing', ['staff']);
         $this->router->get('/chat/messages/{id}', 'ChatController@getMessages', ['staff']);
         $this->router->get('/chat/online', 'ChatController@onlineUsers', ['staff']);
 
-        // Meetings / Teleconferencing
+        // Meetings / Video Conferencing
         $this->router->get('/meetings', 'ChatController@meetings', ['staff']);
         $this->router->get('/meetings/create', 'ChatController@createMeeting', ['staff']);
         $this->router->post('/meetings', 'ChatController@storeMeeting', ['staff']);
+        $this->router->post('/meetings/instant', 'ChatController@startInstantMeeting', ['staff']);
         $this->router->get('/meetings/{id}', 'ChatController@joinMeeting', ['staff']);
+        $this->router->get('/meetings/{id}/join', 'ChatController@joinMeeting', ['staff']);
         $this->router->get('/meetings/{id}/start', 'ChatController@startMeeting', ['staff']);
         $this->router->get('/meetings/{id}/end', 'ChatController@endMeeting', ['staff']);
 

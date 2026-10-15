@@ -42,7 +42,7 @@ UPDATE departments SET head_id = 5 WHERE id = 5;
 -- ============================================================
 TRUNCATE TABLE lead_sources;
 INSERT INTO lead_sources (name, type, description, status) VALUES
-('Direct Website & Zoom Booking', 'online', 'Direct consultation booking via website', 'active'),
+('Direct Website & Video Booking', 'online', 'Direct consultation booking via website', 'active'),
 ('WhatsApp Direct Inquiries', 'online', 'Instant WhatsApp consultation messages', 'active'),
 ('Awwwards Design Marketplace', 'online', 'Bids & inquiries from design showcase', 'active'),
 ('Google Search & Organic SEO', 'online', 'Organic search engine traffic', 'active'),
@@ -55,9 +55,9 @@ INSERT INTO lead_sources (name, type, description, status) VALUES
 TRUNCATE TABLE leads;
 INSERT INTO leads (id, source_id, assigned_to, first_name, last_name, email, phone, company, position, value, status, priority, notes, next_followup, created_at) VALUES
 (1, 1, 3, 'James', 'Rotich', 'j.rotich@safariholding.com', '+254711223344', 'Safari Holdings Ltd', 'Managing Director', 18500.00, 'proposal', 'urgent', 'Needs enterprise ERP + Google Workspace workflow automation', DATE_ADD(NOW(), INTERVAL 1 DAY), NOW()),
-(2, 2, 3, 'Grace', 'Mwangi', 'grace@peakfintech.co.ke', '+254722334455', 'Peak Fintech Kenya', 'Head of Product', 12000.00, 'qualified', 'high', 'Zoom consultation completed. Preparing custom API architecture scope.', DATE_ADD(NOW(), INTERVAL 2 DAY), NOW()),
+(2, 2, 3, 'Grace', 'Mwangi', 'grace@peakfintech.co.ke', '+254722334455', 'Peak Fintech Kenya', 'Head of Product', 12000.00, 'qualified', 'high', 'Video consultation completed. Preparing custom API architecture scope.', DATE_ADD(NOW(), INTERVAL 2 DAY), NOW()),
 (3, 3, 3, 'Arthur', 'Pendleton', 'arthur@vanguard-us.com', '+14155552671', 'Vanguard Global Real Estate', 'CEO', 25000.00, 'negotiation', 'urgent', 'Bidding on Apex Luxury Portal + Custom CRM backend integration.', DATE_ADD(NOW(), INTERVAL 1 DAY), NOW()),
-(4, 1, 3, 'Fatima', 'Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'VP Innovation', 34000.00, 'contacted', 'high', 'Booked Zoom session on AI Chatbot + Customer Portal.', DATE_ADD(NOW(), INTERVAL 3 DAY), NOW()),
+(4, 1, 3, 'Fatima', 'Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'VP Innovation', 34000.00, 'contacted', 'high', 'Booked video consultation on AI Chatbot + Customer Portal.', DATE_ADD(NOW(), INTERVAL 3 DAY), NOW()),
 (5, 5, 3, 'Marcus', 'Chen', 'm.chen@novatech.sg', '+6591234567', 'NovaTech Singapore', 'COO', 45000.00, 'closed_won', 'high', 'Signed enterprise contract for 12-month tech consulting partnership.', NULL, NOW()),
 (6, 4, 3, 'Elena', 'Rostova', 'elena@nordicconsulting.se', '+46812345678', 'Nordic Horizon Media', 'Creative Director', 8500.00, 'new', 'medium', 'Inquired about Awwwards-style interactive agency template.', DATE_ADD(NOW(), INTERVAL 2 DAY), NOW());
 
@@ -71,13 +71,13 @@ INSERT INTO customers (id, first_name, last_name, email, phone, company, address
 (3, 'Grace', 'Mwangi', 'grace@peakfintech.co.ke', '+254722334455', 'Peak Fintech Kenya', 'Delta Corner Annex, Westlands', 'Nairobi', 'Nairobi', '00100', 'Kenya', 'P051239481Z', 'Fintech integration & dashboard client.', 'active', NOW());
 
 -- ============================================================
--- CONSULTATIONS & ZOOM SESSIONS
+-- CONSULTATIONS & VIDEO MEETING SESSIONS
 -- ============================================================
 TRUNCATE TABLE consultations;
-INSERT INTO consultations (id, name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, zoom_link, meeting_id, status, notes, created_at) VALUES
-(1, 'Fatima Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'AI & Enterprise Automation', CURDATE(), '03:00 PM', 45, 'https://zoom.us/j/9924883102?pwd=tektrend_consult', '992-488-3102', 'confirmed', 'Exploring automated AI customer service & lead intake workflow.', NOW()),
-(2, 'Dr. Samuel Kariuki', 'samuel@medicareplus.org', '+254733445566', 'MediCare Plus Africa', 'Full Stack PHP Architecture', DATE_ADD(CURDATE(), INTERVAL 1 DAY), '10:00 AM', 60, 'https://zoom.us/j/9924883102?pwd=tektrend_consult', '992-488-3102', 'confirmed', 'Consultation on scaling clinic management system across 8 branches.', NOW()),
-(3, 'Sophie Dubois', 'sophie@luxeparis.fr', '+33140506070', 'Luxe Paris Digital', 'UI/UX & Awwwards Web Design', DATE_ADD(CURDATE(), INTERVAL 2 DAY), '02:30 PM', 45, 'https://zoom.us/j/9924883102?pwd=tektrend_consult', '992-488-3102', 'pending', 'Interested in custom bidding for brand launch web platform.', NOW());
+INSERT INTO consultations (id, name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, room_token, meeting_id, status, notes, created_at) VALUES
+(1, 'Fatima Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'AI & Enterprise Automation', CURDATE(), '03:00 PM', 45, 'f1a2b3c4d5e6070809aa', '948-201-3375', 'confirmed', 'Exploring automated AI customer service & lead intake workflow.', NOW()),
+(2, 'Dr. Samuel Kariuki', 'samuel@medicareplus.org', '+254733445566', 'MediCare Plus Africa', 'Full Stack PHP Architecture', DATE_ADD(CURDATE(), INTERVAL 1 DAY), '10:00 AM', 60, 'b2c3d4e5f607080910bb', '311-774-9028', 'confirmed', 'Consultation on scaling clinic management system across 8 branches.', NOW()),
+(3, 'Sophie Dubois', 'sophie@luxeparis.fr', '+33140506070', 'Luxe Paris Digital', 'UI/UX & Awwwards Web Design', DATE_ADD(CURDATE(), INTERVAL 2 DAY), '02:30 PM', 45, 'c3d4e5f60708091011cc', '605-118-2743', 'pending', 'Interested in custom bidding for brand launch web platform.', NOW());
 
 -- ============================================================
 -- E-COMMERCE DESIGN MARKETPLACE & AWWWARDS BIDDING ITEMS
@@ -139,7 +139,7 @@ INSERT INTO finance_transactions (type, category, department_id, customer_id, in
 ('income', 'Consulting Retainer', 1, 1, 1, 'Client Retainer Payment - NovaTech SG', 'Q1 Advisory tranche settled via wire transfer.', 17400.00, 2400.00, 1, 'bank', 'WIRE-SG-98214', CURDATE(), 1),
 ('income', 'Design Marketplace Sale', 4, 2, NULL, 'Design Template Deposit - Vanguard US', 'Downpayment on Apex Luxury Portal.', 5000.00, 800.00, 1, 'bank', 'WIRE-US-11204', DATE_SUB(CURDATE(), INTERVAL 2 DAY), 1),
 ('expense', 'Cloud Infrastructure & AWS', 2, NULL, NULL, 'AWS Cloud & Dedicated Server Cluster', 'Monthly server hosting, AI endpoints and GPU instances.', 850.00, 0.00, NULL, 'card', 'CARD-AWS-902', CURDATE(), 1),
-('expense', 'Zoom Enterprise & Video API', 1, NULL, NULL, 'Zoom Pro Enterprise Teleconferencing', 'Annual video consultation licenses.', 240.00, 0.00, NULL, 'card', 'ZOOM-ANN-2026', DATE_SUB(CURDATE(), INTERVAL 10 DAY), 1),
+('expense', 'Video Conferencing & Meeting API', 1, NULL, NULL, 'Enterprise Teleconferencing & Video API', 'Annual video consultation licenses.', 240.00, 0.00, NULL, 'card', 'VIDEO-ANN-2026', DATE_SUB(CURDATE(), INTERVAL 10 DAY), 1),
 ('expense', 'Design & Typography Licenses', 4, NULL, NULL, 'Awwwards / Foundry Font Licenses', 'Commercial font and 3D asset library pack.', 420.00, 0.00, NULL, 'card', 'FONT-FOUNDRY-33', DATE_SUB(CURDATE(), INTERVAL 15 DAY), 1);
 
 -- ============================================================
@@ -157,7 +157,7 @@ INSERT INTO budgets (department_id, name, category, planned_amount, spent_amount
 TRUNCATE TABLE tasks;
 INSERT INTO tasks (id, title, description, department_id, created_by, priority, status, due_date, start_date, estimated_hours, spent_hours, progress) VALUES
 (1, 'Deploy Apex Real Estate Live Bidding Demo', 'Finalize interactive 3D floor plan viewer and connect bid modal webhook.', 4, 1, 'high', 'in_progress', DATE_ADD(CURDATE(), INTERVAL 2 DAY), CURDATE(), 12.00, 8.00, 75),
-(2, 'Host Zoom Consultation with Fatima (Dubai Ventures)', 'Prepare custom deck on AI Chatbot customer intake architecture.', 1, 1, 'urgent', 'in_progress', CURDATE(), CURDATE(), 2.00, 1.00, 50),
+(2, 'Host Video Consultation with Fatima (Dubai Ventures)', 'Prepare custom deck on AI Chatbot customer intake architecture.', 1, 1, 'urgent', 'in_progress', CURDATE(), CURDATE(), 2.00, 1.00, 50),
 (3, 'Draft Scope Agreement for Safari Holdings ERP', 'Breakdown milestones for Google Sheets + PHP custom logistics ERP.', 3, 1, 'medium', 'todo', DATE_ADD(CURDATE(), INTERVAL 3 DAY), CURDATE(), 6.00, 0.00, 0);
 
 TRUNCATE TABLE task_assignments;
@@ -185,7 +185,7 @@ INSERT INTO chat_room_members (room_id, user_id, role) VALUES
 TRUNCATE TABLE chat_messages;
 INSERT INTO chat_messages (room_id, user_id, message, type, created_at) VALUES
 (1, 1, 'Welcome to Tek Trend Virtual Office. All client consultations, design marketplace bids, and contracts are active.', 'text', DATE_SUB(NOW(), INTERVAL 2 HOUR)),
-(3, 3, 'Arthur from Vanguard US just placed a $2,400 bid on the Apex Luxury Estate portal. Following up on Zoom.', 'text', DATE_SUB(NOW(), INTERVAL 1 HOUR)),
+(3, 3, 'Arthur from Vanguard US just placed a $2,400 bid on the Apex Luxury Estate portal. Following up on a video call.', 'text', DATE_SUB(NOW(), INTERVAL 1 HOUR)),
 (2, 4, 'Cloud AI demo endpoints are live and integrated on the consultancy frontend.', 'text', DATE_SUB(NOW(), INTERVAL 30 MINUTE));
 
 -- ============================================================
@@ -202,8 +202,6 @@ INSERT INTO settings (`key`, `value`, `type`, `group`, `description`) VALUES
 ('currency_symbol', '$', 'string', 'finance', 'Default display currency symbol'),
 ('currency_code', 'USD', 'string', 'finance', 'Default ISO currency code'),
 ('timezone', 'Africa/Nairobi', 'string', 'general', 'System timezone'),
-('zoom_default_link', 'https://zoom.us/j/9924883102?pwd=tektrend_consult', 'string', 'general', 'Default Zoom meeting link for consultations'),
-('zoom_meeting_id', '992-488-3102', 'string', 'general', 'Default Zoom meeting ID'),
 ('google_api_key', '', 'password', 'ai', 'Google Gemini Generative AI API Key for Live AI Assistant');
 
 -- ============================================================
@@ -250,11 +248,11 @@ INSERT INTO content (`key`, `title`, `content`, `type`, `page`, `section`, `is_a
 ('metric_4_val', 'Metric 4 Value', '100%', 'text', 'home', 'metrics', 1, NOW()),
 ('metric_4_lbl', 'Metric 4 Label', 'Turnkey Delivery Guarantee', 'text', 'home', 'metrics', 1, NOW()),
 ('consult_badge', 'Consultation Eyebrow Badge', '[ FREE 45-MINUTE ARCHITECTURAL SCOPING ]', 'text', 'home', 'consultation', 1, NOW()),
-('consult_title', 'Consultation Headline', 'Book 1-on-1 Zoom Session', 'text', 'home', 'consultation', 1, NOW()),
+('consult_title', 'Consultation Headline', 'Book 1-on-1 Video Consultation', 'text', 'home', 'consultation', 1, NOW()),
 ('consult_desc', 'Consultation Pitch Description', 'Discuss your enterprise software scope, cloud automation needs, or turnkey prototype deployment directly with our Principal Solutions Architect.', 'text', 'home', 'consultation', 1, NOW()),
-('consult_btn_text', 'Consultation Button Text', 'Schedule Zoom Session', 'text', 'home', 'consultation', 1, NOW()),
+('consult_btn_text', 'Consultation Button Text', 'Schedule a Free Consultation', 'text', 'home', 'consultation', 1, NOW()),
 ('consult_modal_title', 'Consultation Modal Title', 'Book Scoping Consultation', 'text', 'home', 'consultation', 1, NOW()),
-('consult_modal_subtitle', 'Consultation Modal Subtitle', 'Select your preferred slot to receive an instant Zoom meeting link & calendar invite.', 'text', 'home', 'consultation', 1, NOW()),
+('consult_modal_subtitle', 'Consultation Modal Subtitle', 'Select your preferred slot to receive an instant embedded video meeting room & calendar invite.', 'text', 'home', 'consultation', 1, NOW()),
 ('invest_badge', 'Investor Eyebrow Badge', 'Investor Relations & Growth Capital', 'text', 'home', 'investor', 1, NOW()),
 ('invest_title', 'Investor Modal Title', 'Invest in Tektrend Softwares', 'text', 'home', 'investor', 1, NOW()),
 ('invest_subtitle', 'Investor Modal Subtitle', 'We are Tektrend Softwares based in Eldoret, Kenya. Partner with East Africa\'s elite software architecture and turnkey digital systems powerhouse.', 'text', 'home', 'investor', 1, NOW()),

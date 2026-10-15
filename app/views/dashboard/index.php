@@ -55,8 +55,8 @@ $currentWorkStatus = $user['work_status'] ?? 'working';
                 <a href="<?= eurl('/leads/create') ?>" class="btn btn-outline btn-sm">
                     <i class="fas fa-user-plus"></i> New Lead
                 </a>
-                <a href="<?= eurl('/consultations') ?>" class="btn btn-zoom btn-sm">
-                    <i class="fas fa-video"></i> Zoom Boardroom
+                <a href="<?= eurl('/consultations') ?>" class="btn btn-video btn-sm">
+                    <i class="fas fa-video"></i> Video Boardroom
                 </a>
             </div>
         </div>

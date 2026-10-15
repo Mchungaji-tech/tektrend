@@ -8,8 +8,12 @@
             </h2>
             <p style="color: var(--text-muted); font-size: 0.85rem;">Host architectural reviews, client teleconferences, and engineering standups</p>
         </div>
-        <div style="display: flex; gap: 0.5rem;">
-            <a href="<?= eurl('/meetings/create') ?>" class="btn btn-primary">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <form method="POST" action="<?= eurl('/meetings/instant') ?>" style="display: inline-flex;">
+                <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-bolt"></i> Meet Now</button>
+            </form>
+            <a href="<?= eurl('/meetings/create') ?>" class="btn btn-secondary">
                 <i class="fas fa-plus"></i> Schedule Meeting
             </a>
             <a href="<?= eurl('/chat') ?>" class="btn btn-outline">
@@ -53,9 +57,9 @@
                             <td style="text-align: right;">
                                 <div style="display: inline-flex; gap: 0.35rem;">
                                     <?php if (($m['status'] ?? 'scheduled') === 'scheduled'): ?>
-                                        <a href="<?= eurl('/meetings/' . $m['id'] . '/start') ?>" class="btn btn-zoom" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-video"></i> Start</a>
+                                        <a href="<?= eurl('/meetings/' . $m['id'] . '/start') ?>" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-play"></i> Start</a>
                                     <?php endif; ?>
-                                    <a href="<?= eurl('/meetings/' . $m['id'] . '/join') ?>" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-sign-in-alt"></i> Join Room</a>
+                                    <a href="<?= eurl('/meetings/' . $m['id']) ?>" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-video"></i> <?= ($m['status'] ?? '') === 'in_progress' ? 'Join Live' : 'Open Room' ?></a>
                                 </div>
                             </td>
                         </tr>

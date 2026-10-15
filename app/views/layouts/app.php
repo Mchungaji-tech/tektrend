@@ -232,8 +232,8 @@
         .btn-outline:hover { background: var(--bg-card-subtle); border-color: var(--border-hover); }
         .btn-whatsapp { background: #25d366; color: #ffffff; box-shadow: 0 2px 8px rgba(37,211,102,0.25); }
         .btn-whatsapp:hover { background: #20ba5a; }
-        .btn-zoom { background: #2d8cff; color: #ffffff; box-shadow: 0 2px 8px rgba(45,140,255,0.25); }
-        .btn-zoom:hover { background: #1a77eb; }
+        .btn-video { background: #2d8cff; color: #ffffff; box-shadow: 0 2px 8px rgba(45,140,255,0.25); }
+        .btn-video:hover { background: #1a77eb; }
         .btn-danger { background: var(--danger-light); color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
         .btn-danger:hover { background: var(--danger); color: #ffffff; }
 
@@ -577,7 +577,7 @@
                     <i class="fas fa-gem" style="color: #f59e0b;"></i> Investor Relations <span class="nav-badge" style="background: rgba(245,158,11,0.2); color: #f59e0b;">Capital</span>
                 </a>
                 <a href="<?= eurl('/consultations') ?>" class="nav-link <?= ($currentPage ?? '') === 'consultations' ? 'active' : '' ?>">
-                    <i class="fas fa-video"></i> Consultations & Zoom <span class="nav-badge accent"><i class="fas fa-video"></i> Live</span>
+                    <i class="fas fa-video"></i> Consultations &amp; Meetings <span class="nav-badge accent"><i class="fas fa-video"></i> Live</span>
                 </a>
                 <a href="<?= eurl('/leads/pipeline') ?>" class="nav-link <?= ($currentPage ?? '') === 'pipeline' ? 'active' : '' ?>">
                     <i class="fas fa-columns"></i> Sales Pipeline <span class="nav-badge">Kanban</span>
@@ -683,8 +683,8 @@
                     <a href="https://wa.me/254707246273?text=Hello%20Tek%20Trend%20Consulting%20Team" target="_blank" class="btn btn-whatsapp">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
-                    <a href="<?= eurl('/consultations') ?>" class="btn btn-zoom">
-                        <i class="fas fa-video"></i> Zoom Sessions
+                    <a href="<?= eurl('/consultations') ?>" class="btn btn-video">
+                        <i class="fas fa-video"></i> Video Meetings
                     </a>
                     <div class="user-profile-menu">
                         <div class="user-avatar-wrap">

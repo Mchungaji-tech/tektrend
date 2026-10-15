@@ -76,7 +76,7 @@
         <?php else: ?>
             <div class="table-responsive">
                 <table class="table">
-                    <thead><tr><th>Service</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
                     <tbody>
                     <?php foreach ($upcomingConsultations as $c): ?>
                         <tr>
@@ -84,6 +84,11 @@
                             <td><?= formatDate($c['preferred_date']) ?></td>
                             <td><?= sanitize($c['preferred_time']) ?></td>
                             <td><span class="badge <?= sanitize($c['status']) ?>"><?= sanitize(ucfirst($c['status'])) ?></span></td>
+                            <td style="text-align:right;">
+                                <?php if (!empty($c['room_token'])): ?>
+                                    <a href="<?= eurl('/consult/' . $c['room_token']) ?>" target="_blank" class="btn btn-primary" style="padding:0.2rem 0.6rem; font-size:0.75rem;"><i class="fas fa-video"></i> Join</a>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

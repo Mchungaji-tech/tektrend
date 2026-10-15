@@ -5,8 +5,10 @@
             <h3 class="card-title">Consultation Scoping Brief</h3>
             <p class="card-subtitle">Client: <?= sanitize($consultation['name']) ?> (<?= sanitize($consultation['company'] ?? 'Individual') ?>)</p>
         </div>
-        <div style="display: flex; gap: 0.5rem;">
-            <a href="<?= sanitize($consultation['zoom_link']) ?>" target="_blank" class="btn btn-zoom"><i class="fas fa-video"></i> Launch Zoom Teleconference</a>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <?php if (!empty($consultation['room_token'])): ?>
+                <a href="<?= eurl('/consult/' . $consultation['room_token']) ?>" target="_blank" class="btn btn-primary"><i class="fas fa-video"></i> Open Meeting Room</a>
+            <?php endif; ?>
             <a href="<?= eurl('/consultations') ?>" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to List</a>
         </div>
     </div>
@@ -39,15 +41,16 @@
                     <label>Consultation Status</label>
                     <select name="status" class="form-control">
                         <option value="pending" <?= $consultation['status'] === 'pending' ? 'selected' : '' ?>>Pending Review</option>
-                        <option value="confirmed" <?= $consultation['status'] === 'confirmed' ? 'selected' : '' ?>>Confirmed (Active Zoom)</option>
+                        <option value="confirmed" <?= $consultation['status'] === 'confirmed' ? 'selected' : '' ?>>Confirmed (Active)</option>
                         <option value="completed" <?= $consultation['status'] === 'completed' ? 'selected' : '' ?>>Completed (Scope Delivered)</option>
                         <option value="cancelled" <?= $consultation['status'] === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Zoom Meeting Link</label>
-                    <input type="url" name="zoom_link" class="form-control" value="<?= sanitize($consultation['zoom_link']) ?>">
+                    <label>Secure Meeting Room Link</label>
+                    <input type="text" class="form-control" readonly value="<?= sanitize($consultation['meeting_link'] ?? '') ?>" onclick="this.select();">
+                    <small style="color: var(--text-muted); font-size: 0.78rem;">Share this link with the client. It opens the embedded video room inside Tek Trend — no external service.</small>
                 </div>
 
                 <div class="form-group">

@@ -91,13 +91,23 @@ class ClientController extends Controller {
         if ($email) {
             try {
                 $upcomingConsultations = $this->db->fetchAll(
-                    "SELECT id, service_type, preferred_date, preferred_time, status, zoom_link FROM consultations
+                    "SELECT id, service_type, preferred_date, preferred_time, status, room_token FROM consultations
                      WHERE email = ? AND preferred_date >= CURDATE() AND status IN ('pending','confirmed')
                      ORDER BY preferred_date ASC LIMIT 5",
                     [$email]
                 );
             } catch (\Throwable $e) {
-                error_log('ClientController::dashboard consultations - ' . $e->getMessage());
+                // Older databases may pre-date the room_token column; still list sessions without a join link.
+                try {
+                    $upcomingConsultations = $this->db->fetchAll(
+                        "SELECT id, service_type, preferred_date, preferred_time, status, NULL AS room_token FROM consultations
+                         WHERE email = ? AND preferred_date >= CURDATE() AND status IN ('pending','confirmed')
+                         ORDER BY preferred_date ASC LIMIT 5",
+                        [$email]
+                    );
+                } catch (\Throwable $e2) {
+                    error_log('ClientController::dashboard consultations - ' . $e2->getMessage());
+                }
             }
         }
 

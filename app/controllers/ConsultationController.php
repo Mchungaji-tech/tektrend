@@ -1,13 +1,44 @@
 <?php
 /**
  * Consultation Controller
- * Manage client Zoom consultations, scheduling and status
+ * Manage client video consultations, scheduling and the embedded open-source meeting room
  */
 
 class ConsultationController extends Controller {
 
+    /**
+     * Ensure the meeting-room columns exist on older installs and backfill secure room tokens.
+     */
+    private function ensureRoomSchema() {
+        try {
+            $cols = $this->db->fetchAll("SHOW COLUMNS FROM `consultations`");
+            $names = array_column($cols, 'Field');
+            if (!in_array('room_token', $names)) {
+                $this->db->execute("ALTER TABLE `consultations` ADD COLUMN `room_token` VARCHAR(40) DEFAULT NULL AFTER `meeting_id`");
+                $this->db->execute("ALTER TABLE `consultations` ADD KEY `room_token` (`room_token`)");
+            }
+            if (!in_array('meeting_link', $names)) {
+                $this->db->execute("ALTER TABLE `consultations` ADD COLUMN `meeting_link` VARCHAR(255) DEFAULT NULL AFTER `duration_minutes`");
+            }
+            // Give every booking that lacks a token a secure, unique one.
+            $this->db->execute(
+                "UPDATE `consultations` SET `room_token` = SUBSTRING(MD5(CONCAT(`id`, RAND())), 1, 18)
+                 WHERE `room_token` IS NULL OR `room_token` = ''"
+            );
+            // Build the internal share link from the token (never an external service).
+            $pending = $this->db->fetchAll("SELECT id, room_token FROM `consultations` WHERE `meeting_link` IS NULL OR `meeting_link` = ''");
+            foreach ($pending as $p) {
+                $link = rtrim(APP_URL, '/') . '/consult/' . $p['room_token'];
+                $this->db->execute("UPDATE `consultations` SET `meeting_link` = ? WHERE id = ?", [$link, $p['id']]);
+            }
+        } catch (\Throwable $e) {
+            error_log('ConsultationController::ensureRoomSchema - ' . $e->getMessage());
+        }
+    }
+
     public function index() {
         $this->requireAuth();
+        $this->ensureRoomSchema();
         $statusFilter = $_GET['status'] ?? '';
         $where = $statusFilter ? "WHERE status = ?" : '';
         $params = $statusFilter ? [$statusFilter] : [];
@@ -21,7 +52,7 @@ class ConsultationController extends Controller {
         );
 
         $this->render('consultations/index', [
-            'pageTitle'     => 'Zoom Consultations',
+            'pageTitle'     => 'Video Consultations & Meetings',
             'consultations' => $consultations,
             'pagination'    => $pagination,
             'statusFilter'  => $statusFilter
@@ -30,6 +61,7 @@ class ConsultationController extends Controller {
 
     public function show($id) {
         $this->requireAuth();
+        $this->ensureRoomSchema();
         $consultation = $this->db->fetch("SELECT * FROM consultations WHERE id = ?", [$id]);
         if (!$consultation) {
             $this->session->flash('error', 'Consultation record not found.');
@@ -42,16 +74,53 @@ class ConsultationController extends Controller {
         ]);
     }
 
+    /**
+     * Public embedded meeting room. Anyone holding the secure token (client or staff) joins the
+     * open-source video room directly inside the app - no external service, no redirect.
+     */
+    public function room($token) {
+        $this->ensureRoomSchema();
+        $consultation = $this->db->fetch("SELECT * FROM consultations WHERE room_token = ?", [$token]);
+        if (!$consultation) {
+            http_response_code(404);
+            $this->session->flash('error', 'This meeting room link is invalid or has expired.');
+            redirect('/');
+            return;
+        }
+
+        // Prefer the logged-in participant's real name; otherwise default to the booked client.
+        $displayName = $consultation['name'] ?: 'Guest';
+        $userEmail = $consultation['email'] ?: '';
+        if ($this->auth->check()) {
+            $u = $this->auth->user();
+            if ($u) {
+                $displayName = trim(($u['first_name'] ?? '') . ' ' . ($u['last_name'] ?? '')) ?: $displayName;
+                $userEmail = $u['email'] ?? $userEmail;
+            }
+        }
+
+        $this->render('consultations/room', [
+            'pageTitle'     => 'Meeting Room: ' . ($consultation['name'] ?? 'Consultation'),
+            'consultation'  => $consultation,
+            'token'         => $token,
+            'roomName'      => JITSI_ROOM_PREFIX . '-consult-' . $token,
+            'jitsiDomain'   => JITSI_DOMAIN,
+            'displayName'   => $displayName,
+            'userEmail'     => $userEmail,
+        ], null);
+    }
+
     public function updateStatus($id) {
         $this->requireAuth();
         $this->verifyCsrf();
         $status = $_POST['status'] ?? 'confirmed';
-        $zoomLink = $_POST['zoom_link'] ?? null;
         $notes = $_POST['notes'] ?? null;
 
+        // The meeting link is derived from the secure room token (managed by the backend),
+        // so staff no longer paste external links.
         $this->db->execute(
-            "UPDATE consultations SET status = ?, zoom_link = COALESCE(?, zoom_link), notes = ?, updated_at = NOW() WHERE id = ?",
-            [$status, $zoomLink, $notes, $id]
+            "UPDATE consultations SET status = ?, notes = ?, updated_at = NOW() WHERE id = ?",
+            [$status, $notes, $id]
         );
 
         auditLog('update_consultation', 'consultations', $id, "Updated consultation status to $status");

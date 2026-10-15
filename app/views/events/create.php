@@ -21,7 +21,7 @@
                 <label>Event Type</label>
                 <select name="type" class="form-control">
                     <option value="meeting">Meeting</option>
-                    <option value="conference">Teleconference / Zoom</option>
+                    <option value="conference">Teleconference / Video Call</option>
                     <option value="deadline">Sprint Deadline</option>
                     <option value="holiday">Holiday / Office Closed</option>
                 </select>

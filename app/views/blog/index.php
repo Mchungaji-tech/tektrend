@@ -159,7 +159,7 @@ $visible = array_slice($posts, $offset, $perPage);
           <li><a href="<?= eurl('/') ?>">Main Agency</a></li>
           <li><a href="<?= eurl('/live-demos') ?>">Live Demos</a></li>
           <li><a href="<?= eurl('/blog') ?>">Blog</a></li>
-          <li><a href="<?= eurl('/#consultation') ?>">Book Zoom</a></li>
+          <li><a href="<?= eurl('/#consultation') ?>">Book Consultation</a></li>
         </ul>
       </div>
       <div class="akar-footer-links-col">

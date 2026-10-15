@@ -1,9 +1,9 @@
-<?php $pageTitle = 'Zoom Consultations'; ?>
+<?php $pageTitle = 'Video Consultations'; ?>
 <div class="card">
     <div class="card-header">
         <div>
-            <h3 class="card-title"><i class="fas fa-video" style="color: var(--primary); margin-right: 0.4rem;"></i> Zoom Consultations & Meetings</h3>
-            <p class="card-subtitle">Manage client technical scoping sessions and video briefings</p>
+            <h3 class="card-title"><i class="fas fa-video" style="color: var(--primary); margin-right: 0.4rem;"></i> Video Consultations &amp; Meetings</h3>
+            <p class="card-subtitle">Manage client technical scoping sessions and embedded video briefings</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <a href="<?= eurl('/consultations') ?>" class="btn <?= empty($statusFilter) ? 'btn-primary' : 'btn-outline' ?>" style="padding: 0.35rem 0.8rem; font-size: 0.8rem;">All</a>
@@ -21,7 +21,7 @@
                     <th>Company / Email</th>
                     <th>Consulting Topic</th>
                     <th>Date & Slot</th>
-                    <th>Zoom ID / Link</th>
+                    <th>Meeting Room</th>
                     <th>Status</th>
                     <th style="text-align: right;">Actions</th>
                 </tr>
@@ -53,9 +53,14 @@
                                 <div style="font-size: 0.78rem; color: var(--text-muted);"><i class="fas fa-clock"></i> <?= sanitize($c['preferred_time']) ?> (<?= $c['duration_minutes'] ?>m)</div>
                             </td>
                             <td>
-                                <a href="<?= sanitize($c['zoom_link']) ?>" target="_blank" class="btn btn-zoom" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;">
-                                    <i class="fas fa-video"></i> Launch Zoom
-                                </a>
+                                <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;"><?= sanitize($c['meeting_id'] ?? '') ?></div>
+                                <?php if (!empty($c['room_token'])): ?>
+                                    <a href="<?= eurl('/consult/' . $c['room_token']) ?>" target="_blank" class="btn btn-video" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;">
+                                        <i class="fas fa-video"></i> Open Room
+                                    </a>
+                                <?php else: ?>
+                                    <span style="color: var(--text-muted); font-size: 0.75rem;">No room</span>
+                                <?php endif; ?>
                             </td>
                             <td><span class="badge <?= sanitize($c['status']) ?>"><?= ucfirst(sanitize($c['status'])) ?></span></td>
                             <td style="text-align: right; white-space: nowrap;">

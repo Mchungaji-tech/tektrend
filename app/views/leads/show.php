@@ -85,7 +85,7 @@
                     <option value="note">Internal Note</option>
                     <option value="call">Phone Call</option>
                     <option value="email">Email Outreach</option>
-                    <option value="meeting">Zoom Consultation</option>
+                    <option value="meeting">Video Consultation</option>
                 </select>
             </div>
             <div class="form-group">

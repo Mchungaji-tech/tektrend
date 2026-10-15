@@ -895,7 +895,7 @@ $canonicalUrl = url('/live-demos');
           <li><a href="<?= eurl('/#akarShowcase') ?>">Featured Works</a></li>
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
            <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
-          <li><a href="<?= eurl('/#consultation') ?>">Book Scoping Zoom</a></li>
+          <li><a href="<?= eurl('/#consultation') ?>">Book a Free Consultation</a></li>
           <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>
       </div>

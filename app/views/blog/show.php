@@ -126,8 +126,8 @@ $pageImage         = $post['cover_image'] ?? '';
 
       <div style="margin-top: 4rem; padding: 2.4rem; border-radius: 1.8rem; background: var(--bg-card); border: 1px solid var(--border-subtle);">
         <strong style="font-size: 1.6rem;">Ready to build this with us?</strong>
-        <p style="font-size: 1.5rem; color: var(--text-secondary); margin: .8rem 0 1.4rem;">Book a free 45-minute Zoom architectural scoping session with the Tektrend team.</p>
-        <a href="<?= eurl('/#consultation') ?>" class="akar-consult-btn" style="display:inline-flex;">Schedule Zoom Session <i class="fas fa-arrow-right" style="margin-left:.6rem;"></i></a>
+        <p style="font-size: 1.5rem; color: var(--text-secondary); margin: .8rem 0 1.4rem;">Book a free 45-minute architectural scoping consultation with the Tektrend team.</p>
+        <a href="<?= eurl('/#consultation') ?>" class="akar-consult-btn" style="display:inline-flex;">Schedule a Free Consultation <i class="fas fa-arrow-right" style="margin-left:.6rem;"></i></a>
       </div>
 
       <?php if (!empty($related)): ?>

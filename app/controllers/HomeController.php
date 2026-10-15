@@ -1,7 +1,7 @@
 <?php
 /**
  * Home Controller
- * Serves the public consultancy platform, Zoom booking, Awwwards design bidding, AI chatbot demo & team showcase
+ * Serves the public consultancy platform, video consultation booking, Awwwards design bidding, AI chatbot demo & team showcase
  */
 class HomeController extends Controller {
 
@@ -85,7 +85,7 @@ class HomeController extends Controller {
     }
 
     /**
-     * Public Zoom Consultation Booking Handler
+     * Public Consultation Booking Handler (creates an embedded backend video room)
      */
     public function bookConsultation() {
         $name = trim($_POST['name'] ?? '');
@@ -103,24 +103,26 @@ class HomeController extends Controller {
             return;
         }
 
-        $zoomLink = 'https://zoom.us/j/' . rand(9000000000, 9999999999) . '?pwd=tektrend_consult_' . substr(md5(uniqid()), 0, 8);
+        // Backend-generated, open-source video room (no external service, no redirect).
+        $roomToken = substr(bin2hex(random_bytes(12)), 0, 18);
         $meetingId = substr(chunk_split((string)rand(1000000000, 9999999999), 3, '-'), 0, -1);
+        $meetingLink = rtrim(APP_URL, '/') . '/consult/' . $roomToken;
 
         // Insert Consultation
         $consultId = $this->db->insert(
-            "INSERT INTO consultations (name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, zoom_link, meeting_id, status, notes) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, 45, ?, ?, 'confirmed', ?)",
-            [$name, $email, $phone, $company, $serviceType, $preferredDate, $preferredTime, $zoomLink, $meetingId, $notes]
+            "INSERT INTO consultations (name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, meeting_link, room_token, meeting_id, status, notes) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, 45, ?, ?, ?, 'confirmed', ?)",
+            [$name, $email, $phone, $company, $serviceType, $preferredDate, $preferredTime, $meetingLink, $roomToken, $meetingId, $notes]
         );
 
         // Auto-create lead in CRM
         $this->db->insert(
             "INSERT INTO leads (source_id, assigned_to, first_name, last_name, email, phone, company, value, status, priority, notes, next_followup) 
              VALUES (1, 3, ?, '', ?, ?, ?, 5000.00, 'contacted', 'urgent', ?, ?)",
-            [$name, $email, $phone, $company, "Booked Zoom session for $serviceType. Notes: $notes", $preferredDate . ' ' . date('H:i:s', strtotime($preferredTime))]
+            [$name, $email, $phone, $company, "Booked video consultation for $serviceType. Room: $meetingLink. Notes: $notes", $preferredDate . ' ' . date('H:i:s', strtotime($preferredTime))]
         );
 
-        $this->session->flash('success', "🎉 Your Zoom Consultation session has been booked for $preferredDate at $preferredTime! Meeting ID: $meetingId. Our principal consultant will meet you online.");
+        $this->session->flash('success', "🎉 Your consultation video room is ready for $preferredDate at $preferredTime! Secure room code: $meetingId. Join link: $meetingLink");
         redirect('/#consultation');
     }
 
@@ -200,15 +202,15 @@ class HomeController extends Controller {
         $message = strtolower(trim($input['message'] ?? ''));
 
         if (empty($message)) {
-            echo json_encode(['reply' => "Hello! I am TekTrend's AI Solutions Architect. Ask me about our software consulting, custom PHP systems, Google Workspace automation, Awwwards design bidding, or book a live Zoom session!"]);
+            echo json_encode(['reply' => "Hello! I am TekTrend's AI Solutions Architect. Ask me about our software consulting, custom PHP systems, Google Workspace automation, Awwwards design bidding, or book a live video consultation!"]);
             exit;
         }
 
         $reply = "";
         if (str_contains($message, 'price') || str_contains($message, 'cost') || str_contains($message, 'quote') || str_contains($message, 'rate')) {
-            $reply = "💡 **Instant Estimate Guide**: Custom Enterprise Web Apps range from KSh 150,000 to KSh 850,000 depending on complexity. Our Awwwards-caliber design templates start at KSh 65,000 on live bid. Consulting retainers start at KSh 120,000/mo. Would you like to schedule a free 45-min Zoom consultation to scope your project?";
+            $reply = "💡 **Instant Estimate Guide**: Custom Enterprise Web Apps range from KSh 150,000 to KSh 850,000 depending on complexity. Our Awwwards-caliber design templates start at KSh 65,000 on live bid. Consulting retainers start at KSh 120,000/mo. Would you like to schedule a free 45-min video consultation to scope your project?";
         } elseif (str_contains($message, 'zoom') || str_contains($message, 'consult') || str_contains($message, 'book') || str_contains($message, 'meet')) {
-            $reply = "📅 **Schedule a Zoom Session**: You can book directly with David (CEO) or Alex (Chief Architect) right on this page! Simply scroll to the Consultation section, pick your preferred date and 45-minute slot, and you'll receive your instant Zoom link.";
+            $reply = "📅 **Schedule a Video Consultation**: You can book directly with David (CEO) or Alex (Chief Architect) right on this page! Simply scroll to the Consultation section, pick your preferred date and 45-minute slot, and you'll receive your instant secure video meeting room link.";
         } elseif (str_contains($message, 'whatsapp') || str_contains($message, 'call') || str_contains($message, 'phone') || str_contains($message, 'contact')) {
             $reply = "📱 **WhatsApp Quick Connect**: You can chat directly with our engineering team on WhatsApp at **+254 707 246 273** or click the green WhatsApp button in the corner for instant response.";
         } elseif (str_contains($message, 'bid') || str_contains($message, 'marketplace') || str_contains($message, 'awwwards') || str_contains($message, 'template') || str_contains($message, 'buy')) {
@@ -216,7 +218,7 @@ class HomeController extends Controller {
         } elseif (str_contains($message, 'tech') || str_contains($message, 'stack') || str_contains($message, 'php') || str_contains($message, 'google') || str_contains($message, 'ai')) {
             $reply = "⚡ **Our Core Tech Specializations**: High-performance PHP 8.x MVC, Google Apps Script & Sheets Enterprise ERP, MySQL/MariaDB database architecture, WebRTC teleconferencing, and custom OpenAI/LLM API integrations.";
         } else {
-            $reply = "Thank you for reaching out! Tek Trend Innovations delivers high-impact software systems, AI automation, and Awwwards-standard digital experiences. Would you like to book a 1-on-1 Zoom consultation or explore our live design marketplace?";
+            $reply = "Thank you for reaching out! Tek Trend Innovations delivers high-impact software systems, AI automation, and Awwwards-standard digital experiences. Would you like to book a 1-on-1 video consultation or explore our live design marketplace?";
         }
 
         echo json_encode([

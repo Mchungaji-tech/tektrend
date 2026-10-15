@@ -41,7 +41,7 @@ $chatEndpoint = eurl('/api/ai/chat');
       <div class="ai-msg ai-msg-bot">
         <div class="ai-bubble">
           <p>Hello! I am <strong>Nova</strong>, your AI Solutions Architect at Tek Trend.</p>
-          <p>I can help you review our <strong>9 live prototype templates</strong>, configure custom software builds, or book a 1-on-1 Zoom architecture consultation. How can I help you today?</p>
+          <p>I can help you review our <strong>9 live prototype templates</strong>, configure custom software builds, or book a 1-on-1 video architecture consultation. How can I help you today?</p>
         </div>
         <span class="ai-timestamp"><?= date('H:i') ?></span>
       </div>
@@ -51,8 +51,8 @@ $chatEndpoint = eurl('/api/ai/chat');
         <button onclick="sendQuickPrompt('What turnkey prototype templates do you offer and what are their prices?')" class="ai-chip">
           <i class="fas fa-tags"></i> Templates & Pricing
         </button>
-        <button onclick="sendQuickPrompt('How do I book a 45-minute Zoom consultation?')" class="ai-chip">
-          <i class="fas fa-video"></i> Book Zoom Call
+        <button onclick="sendQuickPrompt('How do I book a 45-minute video consultation?')" class="ai-chip">
+          <i class="fas fa-video"></i> Book Video Call
         </button>
         <button onclick="sendQuickPrompt('How do I request a custom software architecture for my company?')" class="ai-chip">
           <i class="fas fa-hammer"></i> Custom System Build
@@ -473,8 +473,8 @@ $chatEndpoint = eurl('/api/ai/chat');
         <button onclick="sendQuickPrompt('What turnkey prototype templates do you offer and what are their prices?')" class="ai-chip">
           <i class="fas fa-tags"></i> Templates & Pricing
         </button>
-        <button onclick="sendQuickPrompt('How do I book a 45-minute Zoom consultation?')" class="ai-chip">
-          <i class="fas fa-video"></i> Book Zoom Call
+        <button onclick="sendQuickPrompt('How do I book a 45-minute video consultation?')" class="ai-chip">
+          <i class="fas fa-video"></i> Book Video Call
         </button>
       </div>
     `;
@@ -518,7 +518,7 @@ $chatEndpoint = eurl('/api/ai/chat');
     })
     .catch(err => {
       document.getElementById('aiTypingIndicator').style.display = 'none';
-      appendAiMessage('bot', "Tek Trend's software engineering team is available! You can book a free Zoom consultation or contact our principal solutions architect on WhatsApp at +254 707 246 273.");
+      appendAiMessage('bot', "Tek Trend's software engineering team is available! You can book a free video consultation or contact our principal solutions architect on WhatsApp at +254 707 246 273.");
     });
   }
 

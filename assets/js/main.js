@@ -386,7 +386,7 @@
       'projects': { img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80', badge: 'Selected Architectures' },
       'services': { img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80', badge: 'Systems Capabilities' },
       'demos': { img: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80', badge: 'LuxeCart E-Commerce' },
-      'consultation': { img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80', badge: 'Book Zoom 45-Min' },
+      'consultation': { img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80', badge: 'Book Free Consultation 45-Min' },
       'portal': { img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80', badge: 'Virtual Headquarters' }
     };
 

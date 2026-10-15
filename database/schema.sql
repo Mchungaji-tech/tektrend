@@ -651,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- CONSULTATIONS & ZOOM BOOKINGS
+-- CONSULTATIONS & VIDEO MEETING BOOKINGS
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS `consultations` (
@@ -664,8 +664,9 @@ CREATE TABLE IF NOT EXISTS `consultations` (
     `preferred_date` DATE NOT NULL,
     `preferred_time` VARCHAR(20) NOT NULL DEFAULT '10:00 AM',
     `duration_minutes` INT DEFAULT 45,
-    `zoom_link` VARCHAR(255) DEFAULT 'https://zoom.us/j/9924883102?pwd=tektrend_consult',
-    `meeting_id` VARCHAR(50) DEFAULT '992-488-3102',
+    `meeting_link` VARCHAR(255) DEFAULT NULL,
+    `room_token` VARCHAR(40) DEFAULT NULL,
+    `meeting_id` VARCHAR(50) DEFAULT NULL,
     `status` ENUM('pending','confirmed','completed','cancelled') DEFAULT 'pending',
     `notes` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -673,7 +674,8 @@ CREATE TABLE IF NOT EXISTS `consultations` (
     PRIMARY KEY (`id`),
     KEY `email` (`email`),
     KEY `preferred_date` (`preferred_date`),
-    KEY `status` (`status`)
+    KEY `status` (`status`),
+    KEY `room_token` (`room_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================

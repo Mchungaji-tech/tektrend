@@ -65,7 +65,7 @@ class DashboardController extends Controller {
         // 5. CRM Pipeline Stages & Deals
         $stages = [
             'new'         => ['name' => 'New Inquiries', 'color' => '#3b82f6', 'deals' => [], 'total' => 0],
-            'contacted'   => ['name' => 'Contacted / Zoom', 'color' => '#8b5cf6', 'deals' => [], 'total' => 0],
+            'contacted'   => ['name' => 'Contacted / Video', 'color' => '#8b5cf6', 'deals' => [], 'total' => 0],
             'qualified'   => ['name' => 'Qualified Scope', 'color' => '#06b6d4', 'deals' => [], 'total' => 0],
             'proposal'    => ['name' => 'Proposal Sent', 'color' => '#f59e0b', 'deals' => [], 'total' => 0],
             'negotiation' => ['name' => 'Negotiation', 'color' => '#ec4899', 'deals' => [], 'total' => 0],

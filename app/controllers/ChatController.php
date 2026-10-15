@@ -27,6 +27,7 @@ class ChatController extends Controller {
 
     public function room($id) {
         $this->requireAuth();
+        $this->ensureTypingTable();
         $userId = $this->auth->id();
         $room = $this->db->fetch("SELECT * FROM chat_rooms WHERE id = ?", [$id]);
         if (!$room) { $this->session->flash('error', 'Room not found.'); redirect('/chat'); }
@@ -43,28 +44,136 @@ class ChatController extends Controller {
             "SELECT crm.*, u.first_name, u.last_name, u.avatar, u.is_online, u.work_status FROM chat_room_members crm LEFT JOIN users u ON crm.user_id = u.id WHERE crm.room_id = ?",
             [$id]
         );
-        $this->render('chat/room', ['room' => $room, 'messages' => $messages, 'members' => $members]);
+        $this->render('chat/room', [
+            'room' => $room,
+            'messages' => $messages,
+            'members' => $members,
+            'currentUserId' => $userId,
+        ]);
     }
 
     public function sendMessage($id) {
         $this->requireAuth();
-        $this->verifyCsrf();
-        $this->db->insert(
-            "INSERT INTO chat_messages (room_id, user_id, message, type) VALUES (?, ?, ?, ?)",
-            [$id, $this->auth->id(), $_POST['message'] ?? null, $_POST['type'] ?? 'text']
-        );
-        if (!$this->isAjax()) {
-            redirect("/chat/room/$id");
+        $message = trim($_POST['message'] ?? '');
+        $type = $_POST['type'] ?? 'text';
+        $isAjax = $this->isAjax();
+
+        // AJAX callers must present a valid token; fall back to redirect flow otherwise.
+        $token = $_POST['csrf_token'] ?? $_POST['_token'] ?? null;
+        if ($isAjax) {
+            if (!$token || !verifyCsrf($token)) { $this->json(['error' => 'Invalid security token.'], 419); }
+            if ($message === '') { $this->json(['error' => 'Message cannot be empty.'], 422); }
+        } else {
+            $this->verifyCsrf();
+            if ($message === '') { $this->session->flash('error', 'Message cannot be empty.'); redirect("/chat/room/$id"); }
         }
+
+        $newId = $this->db->insert(
+            "INSERT INTO chat_messages (room_id, user_id, message, type) VALUES (?, ?, ?, ?)",
+            [$id, $this->auth->id(), $message, $type]
+        );
+        // Clear this user's typing indicator now that the message is sent.
+        $this->db->execute("DELETE FROM chat_typing WHERE room_id = ? AND user_id = ?", [$id, $this->auth->id()]);
+
+        if ($isAjax) {
+            $row = $this->db->fetch(
+                "SELECT cm.*, u.first_name, u.last_name, u.avatar FROM chat_messages cm LEFT JOIN users u ON cm.user_id = u.id WHERE cm.id = ?",
+                [$newId]
+            );
+            $this->json(['message' => $this->formatMessage($row, $this->auth->id())]);
+        }
+        redirect("/chat/room/$id");
     }
 
     public function getMessages($id) {
         $this->requireAuth();
-        $messages = $this->db->fetchAll(
-            "SELECT cm.*, u.first_name, u.last_name, u.avatar FROM chat_messages cm LEFT JOIN users u ON cm.user_id = u.id WHERE cm.room_id = ? ORDER BY cm.created_at ASC LIMIT 50",
-            [$id]
+        $this->ensureTypingTable();
+        $userId = $this->auth->id();
+        $after = (int)($_GET['after'] ?? 0);
+
+        if ($after > 0) {
+            $rows = $this->db->fetchAll(
+                "SELECT cm.*, u.first_name, u.last_name, u.avatar FROM chat_messages cm LEFT JOIN users u ON cm.user_id = u.id WHERE cm.room_id = ? AND cm.id > ? ORDER BY cm.id ASC LIMIT 100",
+                [$id, $after]
+            );
+        } else {
+            $rows = $this->db->fetchAll(
+                "SELECT cm.*, u.first_name, u.last_name, u.avatar FROM chat_messages cm LEFT JOIN users u ON cm.user_id = u.id WHERE cm.room_id = ? ORDER BY cm.created_at ASC LIMIT 100",
+                [$id]
+            );
+        }
+        $messages = array_map(fn($r) => $this->formatMessage($r, $userId), $rows);
+        $maxId = $rows ? (int)end($rows)['id'] : $after;
+
+        // Anyone typing in this room within the last 6 seconds (excluding me).
+        $typing = $this->db->fetchAll(
+            "SELECT ct.user_id, u.first_name, u.last_name FROM chat_typing ct LEFT JOIN users u ON ct.user_id = u.id
+             WHERE ct.room_id = ? AND ct.updated_at > (NOW() - INTERVAL 6 SECOND) AND ct.user_id <> ?",
+            [$id, $userId]
         );
-        $this->json($messages);
+        $typing = array_map(function ($t) {
+            $name = trim(($t['first_name'] ?? '') . ' ' . ($t['last_name'] ?? ''));
+            return ['id' => (int)$t['user_id'], 'name' => $name ?: 'Someone'];
+        }, $typing);
+
+        $this->json(['messages' => $messages, 'typing' => $typing, 'max_id' => $maxId]);
+    }
+
+    /**
+     * Lightweight presence ping so other clients can show a typing indicator.
+     */
+    public function typing($id) {
+        $this->requireAuth();
+        $this->ensureTypingTable();
+        $userId = $this->auth->id();
+        $token = $_POST['csrf_token'] ?? $_POST['_token'] ?? null;
+        if (!$token || !verifyCsrf($token)) { $this->json(['ok' => false, 'error' => 'invalid_token'], 419); }
+
+        $isTyping = !empty($_POST['typing']);
+        if ($isTyping) {
+            $this->db->execute(
+                "INSERT INTO chat_typing (room_id, user_id, updated_at) VALUES (?, ?, NOW())
+                 ON DUPLICATE KEY UPDATE updated_at = NOW()",
+                [$id, $userId]
+            );
+        } else {
+            $this->db->execute("DELETE FROM chat_typing WHERE room_id = ? AND user_id = ?", [$id, $userId]);
+        }
+        $this->json(['ok' => true]);
+    }
+
+    /**
+     * Shape a chat_messages row into the JSON payload consumed by the front end.
+     */
+    private function formatMessage($row, $currentUserId) {
+        if (!$row) { return null; }
+        $fullName = trim(($row['first_name'] ?? '') . ' ' . ($row['last_name'] ?? ''));
+        return [
+            'id' => (int)$row['id'],
+            'user_id' => (int)$row['user_id'],
+            'name' => $fullName ?: 'Unknown',
+            'initial' => strtoupper(substr($row['first_name'] ?? '?', 0, 1)),
+            'message' => (string)($row['message'] ?? ''),
+            'type' => $row['type'] ?? 'text',
+            'time' => formatDateTime($row['created_at']),
+            'is_self' => (int)$row['user_id'] === (int)$currentUserId,
+        ];
+    }
+
+    /**
+     * Ensure the ephemeral typing-presence table exists (no manual migration needed).
+     */
+    private function ensureTypingTable() {
+        try {
+            $this->db->execute("CREATE TABLE IF NOT EXISTS `chat_typing` (
+                `room_id` INT UNSIGNED NOT NULL,
+                `user_id` INT UNSIGNED NOT NULL,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (`room_id`, `user_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+        } catch (\Throwable $e) {
+            error_log('ensureTypingTable error: ' . $e->getMessage());
+        }
     }
 
     public function onlineUsers() {
@@ -108,6 +217,25 @@ class ChatController extends Controller {
         }
         auditLog('create', 'meetings', $meetingId, 'Created meeting: ' . $data['title']);
         $this->redirectWithSuccess('/meetings', 'Meeting created successfully!');
+    }
+
+    /**
+     * Instant meeting: create a live room and drop the user straight into it (no scheduling, no redirect off-site).
+     */
+    public function startInstantMeeting() {
+        $this->requireAuth();
+        $this->verifyCsrf();
+        $title = trim($_POST['title'] ?? '');
+        if ($title === '') { $title = 'Instant Meeting - ' . date('M j, Y H:i'); }
+        $roomId = $this->buildRoomName($title);
+        $meetingId = $this->db->insert(
+            "INSERT INTO meetings (title, description, host_id, room_id, scheduled_at, started_at, status, max_participants) VALUES (?, ?, ?, ?, NOW(), NOW(), 'in_progress', ?)",
+            [$title, $_POST['description'] ?? 'Instant video meeting.', $this->auth->id(), $roomId, $_POST['max_participants'] ?? 50]
+        );
+        // Host counts as a participant.
+        $this->db->insert("INSERT INTO meeting_participants (meeting_id, user_id, status, joined_at) VALUES (?, ?, 'joined', NOW())", [$meetingId, $this->auth->id()]);
+        auditLog('start', 'meetings', $meetingId, 'Started instant meeting: ' . $title);
+        redirect("/meetings/$meetingId");
     }
 
     public function joinMeeting($id) {
