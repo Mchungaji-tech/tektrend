@@ -35,7 +35,7 @@
                     <th>Meeting Host</th>
                     <th>Scheduled Slot</th>
                     <th>Status</th>
-                    <th>Room Key</th>
+                    <th>Meet Link</th>
                     <th style="text-align: right;">Actions</th>
                 </tr>
             </thead>
@@ -53,13 +53,13 @@
                             <td><span style="color: var(--text-main);"><?= sanitize($m['first_name'] . ' ' . $m['last_name']) ?></span></td>
                             <td style="color: var(--text-muted);"><?= formatDateTime($m['scheduled_at'] ?? ($m['start_time'] ?? '')) ?></td>
                             <td><span class="badge <?= sanitize($m['status'] ?? 'scheduled') ?>"><?= ucfirst(sanitize($m['status'] ?? 'scheduled')) ?></span></td>
-                            <td><span style="font-family: monospace; font-size: 0.82rem; color: var(--text-muted);"><?= sanitize($m['room_id'] ?? '-') ?></span></td>
+                            <td><?php if (!empty($m['meeting_url'])): ?><a href="<?= sanitize($m['meeting_url']) ?>" target="_blank" rel="noopener" style="color: var(--primary); font-size: 0.82rem;"><i class="fas fa-video"></i> Open Meet</a><?php else: ?><span style="font-family: monospace; font-size: 0.82rem; color: var(--text-muted);">-</span><?php endif; ?></td>
                             <td style="text-align: right;">
                                 <div style="display: inline-flex; gap: 0.35rem;">
                                     <?php if (($m['status'] ?? 'scheduled') === 'scheduled'): ?>
                                         <a href="<?= eurl('/meetings/' . $m['id'] . '/start') ?>" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-play"></i> Start</a>
                                     <?php endif; ?>
-                                    <a href="<?= eurl('/meetings/' . $m['id']) ?>" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-video"></i> <?= ($m['status'] ?? '') === 'in_progress' ? 'Join Live' : 'Open Room' ?></a>
+                                    <a href="<?= eurl('/meetings/' . $m['id']) ?>" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;"><i class="fas fa-video"></i> <?= ($m['status'] ?? '') === 'in_progress' ? 'Join Live' : 'Open' ?></a>
                                 </div>
                             </td>
                         </tr>

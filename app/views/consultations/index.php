@@ -54,12 +54,12 @@
                             </td>
                             <td>
                                 <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;"><?= sanitize($c['meeting_id'] ?? '') ?></div>
-                                <?php if (!empty($c['room_token'])): ?>
-                                    <a href="<?= eurl('/consult/' . $c['room_token']) ?>" target="_blank" class="btn btn-video" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;">
-                                        <i class="fas fa-video"></i> Open Room
+                                <?php if (!empty($c['meeting_link'])): ?>
+                                    <a href="<?= sanitize($c['meeting_link']) ?>" target="_blank" rel="noopener" class="btn btn-video" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;">
+                                        <i class="fas fa-video"></i> Join Meet
                                     </a>
                                 <?php else: ?>
-                                    <span style="color: var(--text-muted); font-size: 0.75rem;">No room</span>
+                                    <span style="color: var(--text-muted); font-size: 0.75rem;">No link yet</span>
                                 <?php endif; ?>
                             </td>
                             <td><span class="badge <?= sanitize($c['status']) ?>"><?= ucfirst(sanitize($c['status'])) ?></span></td>

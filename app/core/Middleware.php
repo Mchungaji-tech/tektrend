@@ -74,21 +74,13 @@ class Middleware {
      * Set security headers
      */
     private function setSecurityHeaders() {
-        // LiveKit connects to its signaling/media server directly from the page over
-        // wss/https and spawns blob: Web Workers + media streams, which a bare
-        // default-src 'self' policy would silently block (the room then never loads).
-        $lkHost = '';
-        $lkUrl = defined('LIVEKIT_URL') ? LIVEKIT_URL : '';
-        if ($lkUrl !== '' && preg_match('#^(?:wss|https)://([^/]+)#i', $lkUrl, $m)) {
-            $lkHost = $m[1];
-        }
-        $lkConnect = $lkHost !== '' ? " wss://{$lkHost} https://{$lkHost}" : '';
-
+        // Meetings run in Google Meet opened in a new tab (external), so nothing needs to be
+        // iframed or streamed from a third-party conferencing origin here.
         header('X-Frame-Options: SAMEORIGIN');
         header('X-Content-Type-Options: nosniff');
         header('X-XSS-Protection: 1; mode=block');
         header('Referrer-Policy: strict-origin-when-cross-origin');
-        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; media-src 'self' blob: data:; worker-src 'self' blob:; child-src 'self' blob:; connect-src 'self' ws: wss: https:{$lkConnect}; frame-ancestors 'self';");
+        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' ws: wss: https:; frame-ancestors 'self';");
     }
 
     /**

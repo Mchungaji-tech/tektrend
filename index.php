@@ -55,7 +55,7 @@ require_once BASE_PATH . '/app/core/Controller.php';
 require_once BASE_PATH . '/app/core/Model.php';
 require_once BASE_PATH . '/app/core/Router.php';
 require_once BASE_PATH . '/app/core/Middleware.php';
-require_once BASE_PATH . '/app/core/LiveKit.php';
+require_once BASE_PATH . '/app/core/GoogleMeet.php';
 require_once BASE_PATH . '/app/App.php';
 
 // Start session

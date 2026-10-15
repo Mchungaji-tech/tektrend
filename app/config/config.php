@@ -82,22 +82,19 @@ define('GITHUB_OAUTH_TOKEN_ENDPOINT', 'https://github.com/login/oauth/access_tok
 define('GITHUB_OAUTH_USER_ENDPOINT', 'https://api.github.com/user');
 define('GITHUB_OAUTH_EMAILS_ENDPOINT', 'https://api.github.com/user/emails');
 
-// Jitsi Meet (embedded online meetings) - the room is generated/controlled by the backend.
-// Point JITSI_DOMAIN at your own Jitsi VPS later without touching code (e.g. meet.yourdomain.com).
-define('JITSI_DOMAIN', getenv('JITSI_DOMAIN') ?: 'meet.jit.si');
-// Prefix applied to every backend-generated room name so rooms are namespaced to TekTrend.
-define('JITSI_ROOM_PREFIX', getenv('JITSI_ROOM_PREFIX') ?: 'tektrend');
-
-// LiveKit (self-hosted / cloud WebRTC SFU) - replaces the throttled public Jitsi server.
-// LIVEKIT_URL is the secure signaling origin, e.g. wss://meet.yourdomain.com (self-host) or
-// wss://yourproject.livekit.cloud (LiveKit Cloud). The API secret stays ONLY on the server.
-define('LIVEKIT_URL', rtrim(getenv('LIVEKIT_URL') ?: '', '/'));
-define('LIVEKIT_API_KEY', getenv('LIVEKIT_API_KEY') ?: '');
-define('LIVEKIT_API_SECRET', getenv('LIVEKIT_API_SECRET') ?: '');
-// How long a minted room token stays valid (seconds). Keep short; re-join mints a fresh one.
-define('LIVEKIT_TOKEN_TTL', (int)(getenv('LIVEKIT_TOKEN_TTL') ?: 21600)); // 6 hours
-// Namespaces every backend-generated room so names never collide with other tenants on the SFU.
-define('LIVEKIT_ROOM_PREFIX', getenv('LIVEKIT_ROOM_PREFIX') ?: (getenv('JITSI_ROOM_PREFIX') ?: 'tektrend'));
+// Google Meet (online meetings) - a Google Calendar event is auto-created with a Meet
+// conference and its join link (https://meet.google.com/...) is stored per booking/meeting.
+// Uses a Google Cloud service account. The private key stays ONLY on the server and must
+// never be committed or exposed. Participants open the link in Google Meet (external tab).
+define('GOOGLE_MEET_ENABLED', filter_var(getenv('GOOGLE_MEET_ENABLED') ?: 'true', FILTER_VALIDATE_BOOLEAN));
+// Easiest: absolute path to the downloaded service-account JSON, kept OUTSIDE the web root.
+define('GOOGLE_MEET_KEY_FILE', getenv('GOOGLE_MEET_KEY_FILE') ?: '');
+// Alternative to the JSON file: set the client_email and the PEM private key directly.
+define('GOOGLE_MEET_CLIENT_EMAIL', getenv('GOOGLE_MEET_CLIENT_EMAIL') ?: '');
+define('GOOGLE_MEET_PRIVATE_KEY', getenv('GOOGLE_MEET_PRIVATE_KEY') ?: '');
+// Calendar that owns the events: 'primary' = the service account's own calendar.
+define('GOOGLE_MEET_CALENDAR_ID', getenv('GOOGLE_MEET_CALENDAR_ID') ?: 'primary');
+define('GOOGLE_MEET_TIMEZONE', getenv('GOOGLE_MEET_TIMEZONE') ?: 'Africa/Nairobi');
 
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');

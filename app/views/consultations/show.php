@@ -6,8 +6,8 @@
             <p class="card-subtitle">Client: <?= sanitize($consultation['name']) ?> (<?= sanitize($consultation['company'] ?? 'Individual') ?>)</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <?php if (!empty($consultation['room_token'])): ?>
-                <a href="<?= eurl('/consult/' . $consultation['room_token']) ?>" target="_blank" class="btn btn-primary"><i class="fas fa-video"></i> Open Meeting Room</a>
+            <?php if (!empty($consultation['meeting_link'])): ?>
+                <a href="<?= sanitize($consultation['meeting_link']) ?>" target="_blank" rel="noopener" class="btn btn-primary"><i class="fas fa-video"></i> Join Google Meet</a>
             <?php endif; ?>
             <a href="<?= eurl('/consultations') ?>" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to List</a>
         </div>
@@ -48,9 +48,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Secure Meeting Room Link</label>
-                    <input type="text" class="form-control" readonly value="<?= sanitize($consultation['meeting_link'] ?? '') ?>" onclick="this.select();">
-                    <small style="color: var(--text-muted); font-size: 0.78rem;">Share this link with the client. It opens the embedded video room inside Tek Trend — no external service.</small>
+                    <label>Google Meet Link</label>
+                    <input type="text" name="meeting_link" class="form-control" value="<?= sanitize($consultation['meeting_link'] ?? '') ?>" placeholder="https://meet.google.com/xxx-xxxx-xxx">
+                    <small style="color: var(--text-muted); font-size: 0.78rem;">Auto-created when the booking is confirmed (if Google Meet is configured). You can paste a Meet link here to override it.</small>
                 </div>
 
                 <div class="form-group">

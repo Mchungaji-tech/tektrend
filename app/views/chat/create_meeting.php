@@ -33,9 +33,9 @@
         </div>
 
         <div class="form-group">
-            <label>Meeting Room</label>
-            <input type="text" class="form-control" value="Auto-generated secure video room (managed by the backend)" disabled>
-            <small style="color: var(--text-muted); font-size: 0.78rem;">The video room runs embedded inside Tek Trend on the secure LiveKit server — no external link needed.</small>
+            <label>Video Meeting</label>
+            <input type="text" class="form-control" value="Google Meet link (auto-generated)" disabled>
+            <small style="color: var(--text-muted); font-size: 0.78rem;">A free Google Meet link is created automatically for the scheduled time (when Google Meet is configured). Participants open it in a new tab.</small>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">

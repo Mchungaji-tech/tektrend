@@ -508,6 +508,7 @@ CREATE TABLE `meetings` (
     `description` TEXT,
     `host_id` INT UNSIGNED NOT NULL,
     `room_id` VARCHAR(100) DEFAULT NULL,
+    `meeting_url` VARCHAR(255) DEFAULT NULL,
     `scheduled_at` DATETIME DEFAULT NULL,
     `started_at` TIMESTAMP NULL DEFAULT NULL,
     `ended_at` TIMESTAMP NULL DEFAULT NULL,

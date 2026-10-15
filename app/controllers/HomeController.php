@@ -85,7 +85,7 @@ class HomeController extends Controller {
     }
 
     /**
-     * Public Consultation Booking Handler (creates an embedded backend video room)
+     * Public Consultation Booking Handler (auto-creates a Google Meet join link)
      */
     public function bookConsultation() {
         $name = trim($_POST['name'] ?? '');
@@ -103,26 +103,31 @@ class HomeController extends Controller {
             return;
         }
 
-        // Backend-generated, open-source video room (no external service, no redirect).
-        $roomToken = substr(bin2hex(random_bytes(12)), 0, 18);
+        // Auto-create a Google Meet link for the booked slot (best-effort).
+        $startTs = strtotime($preferredDate . ' ' . $preferredTime) ?: time();
+        $start = date('Y-m-d H:i:s', $startTs);
+        $end = date('Y-m-d H:i:s', $startTs + (45 * 60));
+        $meetingLink = GoogleMeet::isConfigured()
+            ? GoogleMeet::createMeeting('Consultation: ' . $name, $start, $end, array_values(array_filter([$email])), $notes)
+            : null;
         $meetingId = substr(chunk_split((string)rand(1000000000, 9999999999), 3, '-'), 0, -1);
-        $meetingLink = rtrim(APP_URL, '/') . '/consult/' . $roomToken;
 
         // Insert Consultation
         $consultId = $this->db->insert(
-            "INSERT INTO consultations (name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, meeting_link, room_token, meeting_id, status, notes) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, 45, ?, ?, ?, 'confirmed', ?)",
-            [$name, $email, $phone, $company, $serviceType, $preferredDate, $preferredTime, $meetingLink, $roomToken, $meetingId, $notes]
+            "INSERT INTO consultations (name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, meeting_link, meeting_id, status, notes) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, 45, ?, ?, 'confirmed', ?)",
+            [$name, $email, $phone, $company, $serviceType, $preferredDate, $preferredTime, $meetingLink, $meetingId, $notes]
         );
 
         // Auto-create lead in CRM
         $this->db->insert(
             "INSERT INTO leads (source_id, assigned_to, first_name, last_name, email, phone, company, value, status, priority, notes, next_followup) 
              VALUES (1, 3, ?, '', ?, ?, ?, 5000.00, 'contacted', 'urgent', ?, ?)",
-            [$name, $email, $phone, $company, "Booked video consultation for $serviceType. Room: $meetingLink. Notes: $notes", $preferredDate . ' ' . date('H:i:s', strtotime($preferredTime))]
+            [$name, $email, $phone, $company, "Booked video consultation for $serviceType. Meet link: " . ($meetingLink ?: 'pending') . ". Notes: $notes", $preferredDate . ' ' . date('H:i:s', strtotime($preferredTime))]
         );
 
-        $this->session->flash('success', "🎉 Your consultation video room is ready for $preferredDate at $preferredTime! Secure room code: $meetingId. Join link: $meetingLink");
+        $joinMsg = $meetingLink ? "Join link: $meetingLink" : 'Your Google Meet link will be emailed once the session is confirmed.';
+        $this->session->flash('success', "🎉 Your consultation is booked for $preferredDate at $preferredTime! Booking code: $meetingId. $joinMsg");
         redirect('/#consultation');
     }
 

@@ -182,9 +182,10 @@ class ChatController extends Controller {
         $this->render('chat/online', ['onlineUsers' => $onlineUsers]);
     }
 
-    // Meetings / Teleconferencing
+    // Meetings / Teleconferencing (Google Meet links, auto-created server-side)
     public function meetings() {
         $this->requireAuth();
+        $this->ensureMeetingSchema();
         $meetings = $this->db->fetchAll(
             "SELECT m.*, u.first_name, u.last_name FROM meetings m LEFT JOIN users u ON m.host_id = u.id ORDER BY m.scheduled_at DESC"
         );
@@ -200,37 +201,42 @@ class ChatController extends Controller {
     public function storeMeeting() {
         $this->requireAuth();
         $this->verifyCsrf();
+        $this->ensureMeetingSchema();
         $rules = ['title' => ['required' => true, 'label' => 'Title']];
         $validation = $this->validatePost($rules);
         if (!$validation['valid']) { $this->session->flash('error', reset($validation['errors'])); $this->session->flash('old', $_POST); redirect('/meetings/create'); }
         $data = $validation['data'];
-        $roomId = $this->buildRoomName($data['title']);
         $scheduledAt = $_POST['start_time'] ?? ($_POST['scheduled_at'] ?? null);
+        $participantIds = isset($_POST['participants']) && is_array($_POST['participants']) ? $_POST['participants'] : [];
+
+        // Best-effort: auto-create a Google Meet link for the scheduled slot.
+        $meetingUrl = $this->generateMeetLink($data['title'], $scheduledAt ?: date('Y-m-d H:i:s'), $participantIds, (string)($_POST['description'] ?? ''));
+
         $meetingId = $this->db->insert(
-            "INSERT INTO meetings (title, description, host_id, room_id, scheduled_at, status, max_participants) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [$data['title'], $_POST['description'] ?? null, $this->auth->id(), $roomId, $scheduledAt ?: null, 'scheduled', $_POST['max_participants'] ?? 50]
+            "INSERT INTO meetings (title, description, host_id, meeting_url, scheduled_at, status, max_participants) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [$data['title'], $_POST['description'] ?? null, $this->auth->id(), $meetingUrl, $scheduledAt ?: null, 'scheduled', $_POST['max_participants'] ?? 50]
         );
-        if (isset($_POST['participants']) && is_array($_POST['participants'])) {
-            foreach ($_POST['participants'] as $userId) {
-                $this->db->insert("INSERT INTO meeting_participants (meeting_id, user_id, status) VALUES (?, ?, 'invited')", [$meetingId, $userId]);
-            }
+        foreach ($participantIds as $userId) {
+            $this->db->insert("INSERT INTO meeting_participants (meeting_id, user_id, status) VALUES (?, ?, 'invited')", [$meetingId, $userId]);
         }
         auditLog('create', 'meetings', $meetingId, 'Created meeting: ' . $data['title']);
-        $this->redirectWithSuccess('/meetings', 'Meeting created successfully!');
+        $this->redirectWithSuccess('/meetings', 'Meeting created!' . ($meetingUrl ? ' Google Meet link is ready.' : ' Open it to generate a Meet link.'));
     }
 
     /**
-     * Instant meeting: create a live room and drop the user straight into it (no scheduling, no redirect off-site).
+     * Instant meeting: create the record with a Google Meet link and drop the host straight into it.
      */
     public function startInstantMeeting() {
         $this->requireAuth();
         $this->verifyCsrf();
+        $this->ensureMeetingSchema();
         $title = trim($_POST['title'] ?? '');
         if ($title === '') { $title = 'Instant Meeting - ' . date('M j, Y H:i'); }
-        $roomId = $this->buildRoomName($title);
+        $description = $_POST['description'] ?? 'Instant video meeting.';
+        $meetingUrl = $this->generateMeetLink($title, date('Y-m-d H:i:s'), [], (string)$description);
         $meetingId = $this->db->insert(
-            "INSERT INTO meetings (title, description, host_id, room_id, scheduled_at, started_at, status, max_participants) VALUES (?, ?, ?, ?, NOW(), NOW(), 'in_progress', ?)",
-            [$title, $_POST['description'] ?? 'Instant video meeting.', $this->auth->id(), $roomId, $_POST['max_participants'] ?? 50]
+            "INSERT INTO meetings (title, description, host_id, meeting_url, scheduled_at, started_at, status, max_participants) VALUES (?, ?, ?, ?, NOW(), NOW(), 'in_progress', ?)",
+            [$title, $description, $this->auth->id(), $meetingUrl, $_POST['max_participants'] ?? 50]
         );
         // Host counts as a participant.
         $this->db->insert("INSERT INTO meeting_participants (meeting_id, user_id, status, joined_at) VALUES (?, ?, 'joined', NOW())", [$meetingId, $this->auth->id()]);
@@ -240,6 +246,7 @@ class ChatController extends Controller {
 
     public function joinMeeting($id) {
         $this->requireAuth();
+        $this->ensureMeetingSchema();
         $meeting = $this->db->fetch(
             "SELECT m.*, u.first_name AS host_first, u.last_name AS host_last
              FROM meetings m LEFT JOIN users u ON m.host_id = u.id WHERE m.id = ?",
@@ -247,10 +254,17 @@ class ChatController extends Controller {
         );
         if (!$meeting) { $this->session->flash('error', 'Meeting not found.'); redirect('/meetings'); }
 
-        // The backend owns the room name. Guarantee one exists (older rows may be NULL).
-        $roomName = $meeting['room_id'] ?: $this->buildRoomName($meeting['title']);
-        if (!$meeting['room_id']) {
-            $this->db->execute("UPDATE meetings SET room_id = ? WHERE id = ?", [$roomName, $id]);
+        // Guarantee a Google Meet link exists; create one on demand when it is still empty.
+        if (empty($meeting['meeting_url']) && GoogleMeet::isConfigured()) {
+            $participantIds = array_column(
+                $this->db->fetchAll("SELECT user_id FROM meeting_participants WHERE meeting_id = ?", [$id]),
+                'user_id'
+            );
+            $url = $this->generateMeetLink($meeting['title'], $meeting['scheduled_at'] ?: date('Y-m-d H:i:s'), $participantIds, (string)($meeting['description'] ?? ''));
+            if ($url) {
+                $this->db->execute("UPDATE meetings SET meeting_url = ? WHERE id = ?", [$url, $id]);
+                $meeting['meeting_url'] = $url;
+            }
         }
 
         // Mark the current user as joined for attendance tracking.
@@ -262,60 +276,21 @@ class ChatController extends Controller {
             $this->db->insert("INSERT INTO meeting_participants (meeting_id, user_id, status, joined_at) VALUES (?, ?, 'joined', NOW())", [$id, $userId]);
         }
 
-        $currentUser = $this->auth->user();
-        $displayName = trim(($currentUser['first_name'] ?? '') . ' ' . ($currentUser['last_name'] ?? '')) ?: 'Guest';
-
         $this->render('chat/join_meeting', [
-            'meeting'      => $meeting,
-            'roomName'     => LiveKit::normalizeRoom($roomName),
-            'livekitUrl'   => LiveKit::url(),
-            'lkConfigured' => LiveKit::isConfigured(),
-            'displayName'  => $displayName,
-            'userEmail'    => $currentUser['email'] ?? '',
-        ]);
-    }
-
-    /**
-     * Mint a short-lived, server-signed LiveKit token for a staff member to join a meeting room.
-     * Route is gated by ['staff'] middleware; the API secret never leaves the server.
-     */
-    public function meetingToken($id) {
-        $this->requireAuth();
-
-        if (!LiveKit::isConfigured()) {
-            return $this->json(['error' => 'The live meeting server is not configured yet. Set LIVEKIT_URL and API keys in .env.'], 503);
-        }
-
-        $meeting = $this->db->fetch("SELECT * FROM meetings WHERE id = ?", [$id]);
-        if (!$meeting) {
-            return $this->json(['error' => 'Meeting not found.'], 404);
-        }
-
-        // Backend owns the room name; guarantee one exists (older rows may be NULL).
-        $roomName = LiveKit::normalizeRoom($meeting['room_id'] ?: $this->buildRoomName($meeting['title']));
-        if ($meeting['room_id'] !== $roomName) {
-            $this->db->execute("UPDATE meetings SET room_id = ? WHERE id = ?", [$roomName, $id]);
-        }
-
-        $userId = $this->auth->id();
-        $identity = LiveKit::identity('staff-' . $userId, 'staff');
-        $currentUser = $this->auth->user();
-        $displayName = trim(($currentUser['first_name'] ?? '') . ' ' . ($currentUser['last_name'] ?? '')) ?: 'Staff';
-
-        $token = LiveKit::accessToken($identity, $displayName, $roomName);
-        auditLog('livekit_token', 'meetings', $id, "Issued LiveKit room token for {$identity}");
-
-        return $this->json([
-            'url'         => LiveKit::url(),
-            'token'       => $token,
-            'room'        => $roomName,
-            'identity'    => $identity,
-            'displayName' => $displayName,
+            'meeting' => $meeting,
         ]);
     }
 
     public function startMeeting($id) {
         $this->requireAuth();
+        $this->ensureMeetingSchema();
+        // Ensure a Meet link exists before flipping the meeting to live.
+        $meeting = $this->db->fetch("SELECT * FROM meetings WHERE id = ?", [$id]);
+        if ($meeting && empty($meeting['meeting_url'])) {
+            $participantIds = array_column($this->db->fetchAll("SELECT user_id FROM meeting_participants WHERE meeting_id = ?", [$id]), 'user_id');
+            $url = $this->generateMeetLink($meeting['title'], $meeting['scheduled_at'] ?: date('Y-m-d H:i:s'), $participantIds, (string)($meeting['description'] ?? ''));
+            if ($url) { $this->db->execute("UPDATE meetings SET meeting_url = ? WHERE id = ?", [$url, $id]); }
+        }
         $this->db->execute("UPDATE meetings SET status = 'in_progress', started_at = NOW() WHERE id = ?", [$id]);
         auditLog('start', 'meetings', $id, 'Started meeting');
         $this->redirectWithSuccess("/meetings/$id", 'Meeting started!');
@@ -329,13 +304,43 @@ class ChatController extends Controller {
     }
 
     /**
-     * Build a LiveKit-safe, backend-controlled room name from the meeting title.
-     * Result looks like: tektrend-architecture-review-5f3c9a  (lowercase, hyphenated, unique).
+     * Build a Google Meet link via the Calendar API (best-effort). Returns the meet.google.com
+     * URL, or null when Google Meet is not configured or the request fails.
      */
-    private function buildRoomName($title) {
-        $prefix = preg_replace('/[^a-z0-9]+/i', '', LIVEKIT_ROOM_PREFIX) ?: 'tektrend';
-        $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', (string)$title), '-'));
-        $slug = substr($slug ?: 'meeting', 0, 40);
-        return $prefix . '-' . $slug . '-' . substr(uniqid(), -6);
+    private function generateMeetLink($title, $start, array $participantIds = [], $description = '') {
+        if (!GoogleMeet::isConfigured()) {
+            return null;
+        }
+        $startTs = strtotime((string)$start) ?: time();
+        $end = date('Y-m-d H:i:s', $startTs + 3600);
+        $attendees = $this->participantEmails($participantIds);
+        // Always invite the host so the event has an owner.
+        $host = $this->auth->user();
+        if (!empty($host['email'])) { $attendees[] = $host['email']; }
+        return GoogleMeet::createMeeting((string)$title, date('Y-m-d H:i:s', $startTs), $end, array_values(array_unique($attendees)), (string)$description);
+    }
+
+    /** Resolve user IDs to their email addresses for Meet invites. */
+    private function participantEmails(array $ids) {
+        $ids = array_values(array_filter(array_map('intval', $ids)));
+        if (empty($ids)) { return []; }
+        $in = implode(',', array_fill(0, count($ids), '?'));
+        $rows = $this->db->fetchAll("SELECT email FROM users WHERE id IN ($in)", $ids);
+        return array_column($rows, 'email');
+    }
+
+    /**
+     * Ensure the meetings table has a column for the stored Google Meet URL (no manual migration).
+     */
+    private function ensureMeetingSchema() {
+        try {
+            $cols = $this->db->fetchAll("SHOW COLUMNS FROM `meetings`");
+            $names = array_column($cols, 'Field');
+            if (!in_array('meeting_url', $names)) {
+                $this->db->execute("ALTER TABLE `meetings` ADD COLUMN `meeting_url` VARCHAR(255) DEFAULT NULL AFTER `room_id`");
+            }
+        } catch (\Throwable $e) {
+            error_log('ChatController::ensureMeetingSchema - ' . $e->getMessage());
+        }
     }
 }

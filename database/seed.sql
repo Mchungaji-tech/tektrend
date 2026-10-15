@@ -74,10 +74,10 @@ INSERT INTO customers (id, first_name, last_name, email, phone, company, address
 -- CONSULTATIONS & VIDEO MEETING SESSIONS
 -- ============================================================
 TRUNCATE TABLE consultations;
-INSERT INTO consultations (id, name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, room_token, meeting_id, status, notes, created_at) VALUES
-(1, 'Fatima Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'AI & Enterprise Automation', CURDATE(), '03:00 PM', 45, 'f1a2b3c4d5e6070809aa', '948-201-3375', 'confirmed', 'Exploring automated AI customer service & lead intake workflow.', NOW()),
-(2, 'Dr. Samuel Kariuki', 'samuel@medicareplus.org', '+254733445566', 'MediCare Plus Africa', 'Full Stack PHP Architecture', DATE_ADD(CURDATE(), INTERVAL 1 DAY), '10:00 AM', 60, 'b2c3d4e5f607080910bb', '311-774-9028', 'confirmed', 'Consultation on scaling clinic management system across 8 branches.', NOW()),
-(3, 'Sophie Dubois', 'sophie@luxeparis.fr', '+33140506070', 'Luxe Paris Digital', 'UI/UX & Awwwards Web Design', DATE_ADD(CURDATE(), INTERVAL 2 DAY), '02:30 PM', 45, 'c3d4e5f60708091011cc', '605-118-2743', 'pending', 'Interested in custom bidding for brand launch web platform.', NOW());
+INSERT INTO consultations (id, name, email, phone, company, service_type, preferred_date, preferred_time, duration_minutes, meeting_link, meeting_id, status, notes, created_at) VALUES
+(1, 'Fatima Al-Mansoor', 'fatima@dubaiventures.ae', '+971501234567', 'Al-Mansoor Ventures', 'AI & Enterprise Automation', CURDATE(), '03:00 PM', 45, 'https://meet.google.com/fat-almn-sor', '948-201-3375', 'confirmed', 'Exploring automated AI customer service & lead intake workflow.', NOW()),
+(2, 'Dr. Samuel Kariuki', 'samuel@medicareplus.org', '+254733445566', 'MediCare Plus Africa', 'Full Stack PHP Architecture', DATE_ADD(CURDATE(), INTERVAL 1 DAY), '10:00 AM', 60, 'https://meet.google.com/sam-kar-iuk', '311-774-9028', 'confirmed', 'Consultation on scaling clinic management system across 8 branches.', NOW()),
+(3, 'Sophie Dubois', 'sophie@luxeparis.fr', '+33140506070', 'Luxe Paris Digital', 'UI/UX & Awwwards Web Design', DATE_ADD(CURDATE(), INTERVAL 2 DAY), '02:30 PM', 45, NULL, '605-118-2743', 'pending', 'Interested in custom bidding for brand launch web platform.', NOW());
 
 -- ============================================================
 -- E-COMMERCE DESIGN MARKETPLACE & AWWWARDS BIDDING ITEMS
