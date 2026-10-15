@@ -33,8 +33,9 @@
         </div>
 
         <div class="form-group">
-            <label>Meeting Platform Link</label>
-            <input type="url" name="meeting_url" class="form-control" value="https://zoom.us/j/9924883102?pwd=tektrend_consult">
+            <label>Meeting Room</label>
+            <input type="text" class="form-control" value="Auto-generated secure Jitsi room (managed by the backend)" disabled>
+            <small style="color: var(--text-muted); font-size: 0.78rem;">The video room runs embedded inside Tek Trend — no external link needed.</small>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">

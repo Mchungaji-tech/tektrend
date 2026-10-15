@@ -82,6 +82,12 @@ define('GITHUB_OAUTH_TOKEN_ENDPOINT', 'https://github.com/login/oauth/access_tok
 define('GITHUB_OAUTH_USER_ENDPOINT', 'https://api.github.com/user');
 define('GITHUB_OAUTH_EMAILS_ENDPOINT', 'https://api.github.com/user/emails');
 
+// Jitsi Meet (embedded online meetings) - the room is generated/controlled by the backend.
+// Point JITSI_DOMAIN at your own Jitsi VPS later without touching code (e.g. meet.yourdomain.com).
+define('JITSI_DOMAIN', getenv('JITSI_DOMAIN') ?: 'meet.jit.si');
+// Prefix applied to every backend-generated room name so rooms are namespaced to TekTrend.
+define('JITSI_ROOM_PREFIX', getenv('JITSI_ROOM_PREFIX') ?: 'tektrend');
+
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('DB_NAME') ?: 'tektrend');

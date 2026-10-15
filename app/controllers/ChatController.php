@@ -95,10 +95,11 @@ class ChatController extends Controller {
         $validation = $this->validatePost($rules);
         if (!$validation['valid']) { $this->session->flash('error', reset($validation['errors'])); $this->session->flash('old', $_POST); redirect('/meetings/create'); }
         $data = $validation['data'];
-        $roomId = 'room_' . uniqid();
+        $roomId = $this->buildRoomName($data['title']);
+        $scheduledAt = $_POST['start_time'] ?? ($_POST['scheduled_at'] ?? null);
         $meetingId = $this->db->insert(
             "INSERT INTO meetings (title, description, host_id, room_id, scheduled_at, status, max_participants) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [$data['title'], $_POST['description'] ?? null, $this->auth->id(), $roomId, $_POST['scheduled_at'] ?? null, 'scheduled', $_POST['max_participants'] ?? 50]
+            [$data['title'], $_POST['description'] ?? null, $this->auth->id(), $roomId, $scheduledAt ?: null, 'scheduled', $_POST['max_participants'] ?? 50]
         );
         if (isset($_POST['participants']) && is_array($_POST['participants'])) {
             foreach ($_POST['participants'] as $userId) {
@@ -111,9 +112,38 @@ class ChatController extends Controller {
 
     public function joinMeeting($id) {
         $this->requireAuth();
-        $meeting = $this->db->fetch("SELECT * FROM meetings WHERE id = ?", [$id]);
+        $meeting = $this->db->fetch(
+            "SELECT m.*, u.first_name AS host_first, u.last_name AS host_last
+             FROM meetings m LEFT JOIN users u ON m.host_id = u.id WHERE m.id = ?",
+            [$id]
+        );
         if (!$meeting) { $this->session->flash('error', 'Meeting not found.'); redirect('/meetings'); }
-        $this->render('chat/join_meeting', ['meeting' => $meeting]);
+
+        // The backend owns the room name. Guarantee one exists (older rows may be NULL).
+        $roomName = $meeting['room_id'] ?: $this->buildRoomName($meeting['title']);
+        if (!$meeting['room_id']) {
+            $this->db->execute("UPDATE meetings SET room_id = ? WHERE id = ?", [$roomName, $id]);
+        }
+
+        // Mark the current user as joined for attendance tracking.
+        $userId = $this->auth->id();
+        $existing = $this->db->fetch("SELECT id FROM meeting_participants WHERE meeting_id = ? AND user_id = ?", [$id, $userId]);
+        if ($existing) {
+            $this->db->execute("UPDATE meeting_participants SET status = 'joined', joined_at = NOW() WHERE id = ?", [$existing['id']]);
+        } else {
+            $this->db->insert("INSERT INTO meeting_participants (meeting_id, user_id, status, joined_at) VALUES (?, ?, 'joined', NOW())", [$id, $userId]);
+        }
+
+        $currentUser = $this->auth->user();
+        $displayName = trim(($currentUser['first_name'] ?? '') . ' ' . ($currentUser['last_name'] ?? '')) ?: 'Guest';
+
+        $this->render('chat/join_meeting', [
+            'meeting'     => $meeting,
+            'roomName'    => $roomName,
+            'jitsiDomain' => JITSI_DOMAIN,
+            'displayName' => $displayName,
+            'userEmail'   => $currentUser['email'] ?? '',
+        ]);
     }
 
     public function startMeeting($id) {
@@ -128,5 +158,16 @@ class ChatController extends Controller {
         $this->db->execute("UPDATE meetings SET status = 'ended', ended_at = NOW() WHERE id = ?", [$id]);
         auditLog('end', 'meetings', $id, 'Ended meeting');
         $this->redirectWithSuccess('/meetings', 'Meeting ended!');
+    }
+
+    /**
+     * Build a Jitsi-safe, backend-controlled room name from the meeting title.
+     * Result looks like: tektrend-architecture-review-5f3c9a  (lowercase, hyphenated, unique).
+     */
+    private function buildRoomName($title) {
+        $prefix = preg_replace('/[^a-z0-9]+/i', '', JITSI_ROOM_PREFIX) ?: 'tektrend';
+        $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', (string)$title), '-'));
+        $slug = substr($slug ?: 'meeting', 0, 40);
+        return $prefix . '-' . $slug . '-' . substr(uniqid(), -6);
     }
 }
