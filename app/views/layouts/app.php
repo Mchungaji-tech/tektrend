@@ -644,6 +644,9 @@
                 <a href="<?= eurl('/users') ?>" class="nav-link <?= ($currentPage ?? '') === 'users' ? 'active' : '' ?>">
                     <i class="fas fa-user-shield"></i> System Users
                 </a>
+                <a href="<?= eurl('/admin/partners') ?>" class="nav-link <?= ($currentPage ?? '') === 'partners' ? 'active' : '' ?>">
+                    <i class="fas fa-handshake"></i> Partner Applications
+                </a>
                 <a href="<?= eurl('/settings') ?>" class="nav-link <?= ($currentPage ?? '') === 'settings' ? 'active' : '' ?>">
                     <i class="fas fa-cog"></i> Settings
                 </a>

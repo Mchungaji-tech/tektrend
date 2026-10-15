@@ -31,7 +31,7 @@ class Auth {
         }
 
         $user = $this->db->fetch(
-            "SELECT * FROM users WHERE email = ? AND status IN ('active', 'suspended') LIMIT 1",
+            "SELECT * FROM users WHERE email = ? AND status IN ('active', 'suspended', 'pending') LIMIT 1",
             [$email]
         );
 
@@ -80,6 +80,7 @@ class Auth {
         $this->session->set('user_name', $user['first_name'] . ' ' . $user['last_name']);
         $this->session->set('user_avatar', $user['avatar']);
         $this->session->set('user_department', $user['department_id']);
+        $this->session->set('user_status', $user['status']);
         $this->session->set('login_time', time());
 
         // Remember me
@@ -128,6 +129,7 @@ class Auth {
         $this->session->set('user_name', $user['first_name'] . ' ' . $user['last_name']);
         $this->session->set('user_avatar', $user['avatar'] ?? null);
         $this->session->set('user_department', $user['department_id'] ?? null);
+        $this->session->set('user_status', $user['status'] ?? 'active');
         $this->session->set('login_time', time());
 
         auditLog('login', 'users', $user['id'], 'User logged in via ' . $provider . ' OAuth');
@@ -215,6 +217,13 @@ class Auth {
      */
     public function role() {
         return $this->session->get('user_role');
+    }
+
+    /**
+     * Resolve the correct landing URL for the currently logged-in user.
+     */
+    public function homeUrl() {
+        return homeUrlForRole($this->session->get('user_role'), $this->session->get('user_status', 'active'));
     }
 
     /**

@@ -21,6 +21,35 @@ define('ROLE_HIERARCHY', [
     'admin'     => 6
 ]);
 
+// Internal staff roles that can access the admin console. Clients/partners are external.
+define('STAFF_ROLES', ['admin', 'manager', 'employee', 'accountant', 'sales', 'support']);
+
+/**
+ * Is this role an internal staff role?
+ */
+function isStaffRole($role) {
+    return in_array($role, STAFF_ROLES, true);
+}
+
+/**
+ * Resolve the correct landing page for a role/status combination.
+ */
+function homeUrlForRole($role, $status = 'active') {
+    if (isStaffRole($role)) {
+        return '/admin';
+    }
+    if ($role === 'client') {
+        return '/portal';
+    }
+    if ($role === 'partner') {
+        if ($status === 'pending') {
+            return '/partners/pending';
+        }
+        return $status === 'active' ? '/partners' : '/login?area=partner';
+    }
+    return '/login';
+}
+
 // Permission constants
 define('PERM_VIEW', 'view');
 define('PERM_CREATE', 'create');

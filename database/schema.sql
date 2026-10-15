@@ -34,10 +34,10 @@ CREATE TABLE `users` (
     `email` VARCHAR(100) NOT NULL,
     `phone` VARCHAR(20) DEFAULT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `role` ENUM('admin','manager','employee','accountant','sales','support') DEFAULT 'employee',
+    `role` ENUM('admin','manager','employee','accountant','sales','support','client','partner') DEFAULT 'employee',
     `position` VARCHAR(100) DEFAULT NULL,
     `avatar` VARCHAR(255) DEFAULT NULL,
-    `status` ENUM('active','inactive','suspended') DEFAULT 'active',
+    `status` ENUM('active','inactive','suspended','pending') DEFAULT 'active',
     `last_login` TIMESTAMP NULL DEFAULT NULL,
     `last_activity` TIMESTAMP NULL DEFAULT NULL,
     `is_online` TINYINT(1) DEFAULT 0,
@@ -137,6 +137,7 @@ CREATE TABLE `lead_activities` (
 
 CREATE TABLE `customers` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` INT UNSIGNED DEFAULT NULL,
     `first_name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
     `email` VARCHAR(100) DEFAULT NULL,
@@ -154,7 +155,23 @@ CREATE TABLE `customers` (
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     KEY `email` (`email`),
+    KEY `user_id` (`user_id`),
     KEY `company` (`company`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `partners` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` INT UNSIGNED NOT NULL,
+    `company_name` VARCHAR(150) DEFAULT NULL,
+    `website` VARCHAR(255) DEFAULT NULL,
+    `about` TEXT,
+    `status` ENUM('pending','approved','rejected') DEFAULT 'pending',
+    `commission_rate` DECIMAL(5,2) DEFAULT 10.00,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `user_id` (`user_id`),
+    KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `invoices` (

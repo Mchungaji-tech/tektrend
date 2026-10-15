@@ -26,6 +26,11 @@ class GoogleAuthController extends Controller {
         // Ensure the users table can store a Google ID before anyone signs in.
         $this->ensureGoogleColumn();
 
+        // Capture the intended area (client / partner / staff) so a brand-new
+        // Google account is provisioned with the right role.
+        $intent = $_GET['to'] ?? '';
+        $this->session->set('oauth_intent', in_array($intent, ['client', 'partner', 'staff'], true) ? $intent : 'staff');
+
         $state = bin2hex(random_bytes(16));
         $this->session->set('google_oauth_state', $state);
 
@@ -118,7 +123,9 @@ class GoogleAuthController extends Controller {
         }
 
         try {
-            $user = $this->findOrCreateUser($googleId, $email, $profile);
+            $intent = $this->session->get('oauth_intent', 'staff');
+            $this->session->remove('oauth_intent');
+            $user = $this->findOrCreateUser($googleId, $email, $profile, $intent);
         } catch (\Throwable $e) {
             error_log('Google OAuth user provisioning error: ' . $e->getMessage());
             $this->session->flash('error', 'Something went wrong preparing your account. Please try again.');
@@ -138,7 +145,7 @@ class GoogleAuthController extends Controller {
             return;
         }
 
-        $this->redirectWithSuccess('/dashboard', 'Welcome, ' . $user['first_name'] . '! You are signed in with Google.');
+        $this->redirectWithSuccess($this->auth->homeUrl(), 'Welcome, ' . $user['first_name'] . '! You are signed in with Google.');
     }
 
     // ---------------------------------------------------------------------
@@ -176,14 +183,15 @@ class GoogleAuthController extends Controller {
      * Locate a local user by Google ID, otherwise by email (linking the account),
      * otherwise create a fresh employee account from the Google profile.
      */
-    private function findOrCreateUser($googleId, $email, array $profile) {
+    private function findOrCreateUser($googleId, $email, array $profile, $intent = 'staff') {
         $email    = strtolower(trim($email));
         $googleId = (string)$googleId;
 
         // 1) Already linked.
         $user = $this->db->fetch("SELECT * FROM users WHERE google_id = ? LIMIT 1", [$googleId]);
         if ($user) {
-            return $user['status'] === 'active' ? $user : null;
+            // Allow active + pending (a pending partner can view their approval page).
+            return in_array($user['status'], ['active', 'pending'], true) ? $user : null;
         }
 
         $first = trim($profile['given_name'] ?? '');
@@ -201,29 +209,79 @@ class GoogleAuthController extends Controller {
         if ($user) {
             $this->db->execute("UPDATE users SET google_id = ?, avatar = COALESCE(avatar, ?) WHERE id = ?", [$googleId, $avatar, $user['id']]);
             $user['google_id'] = $googleId;
-            return $user['status'] === 'active' ? $user : null;
+            return in_array($user['status'], ['active', 'pending'], true) ? $user : null;
         }
 
-        // 3) Brand-new account provisioned as an employee.
+        // 3) Brand-new account, provisioned with the role implied by the intent.
         $this->ensureGoogleColumn();
-        $employeeId = $this->generateEmployeeId();
+
+        $role   = 'employee';
+        $status = 'active';
+        $prefix = 'G';
+        if ($intent === 'client') {
+            $role = 'client'; $prefix = 'CL';
+        } elseif ($intent === 'partner') {
+            $role = 'partner'; $status = 'pending'; $prefix = 'PB';
+        }
+
+        $employeeId = $this->generateEmployeeId($prefix);
         $randPass   = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT, ['cost' => BCRYPT_ROUNDS]);
 
         $newId = $this->db->insert(
             "INSERT INTO users (employee_id, first_name, last_name, email, google_id, password, role, avatar, status)
-             VALUES (?, ?, ?, ?, ?, ?, 'employee', ?, 'active')",
-            [$employeeId, $first, $last, $email, $googleId, $randPass, $avatar]
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [$employeeId, $first, $last, $email, $googleId, $randPass, $role, $avatar, $status]
         );
+
+        if ($intent === 'client') {
+            $this->linkClientCustomer($newId, $first, $last, $email);
+        } elseif ($intent === 'partner') {
+            $this->createPendingPartner($newId);
+        }
 
         return $this->db->fetch("SELECT * FROM users WHERE id = ? LIMIT 1", [$newId]);
     }
 
     /**
-     * Generate a unique, non-colliding employee_id for auto-provisioned Google users.
+     * Attach a self-provisioned client OAuth user to a customer record (by email or new).
      */
-    private function generateEmployeeId() {
+    private function linkClientCustomer($userId, $first, $last, $email) {
+        try {
+            $existing = $this->db->fetch("SELECT id FROM customers WHERE email = ? AND user_id IS NULL LIMIT 1", [$email]);
+            if ($existing) {
+                $this->db->execute("UPDATE customers SET user_id = ? WHERE id = ?", [$userId, $existing['id']]);
+                return;
+            }
+            $this->db->insert(
+                "INSERT INTO customers (user_id, first_name, last_name, email, status) VALUES (?, ?, ?, ?, 'active')",
+                [$userId, $first, $last, $email]
+            );
+        } catch (\Throwable $e) {
+            error_log('Google OAuth linkClientCustomer: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Create a pending partners row for a partner-intent OAuth signup.
+     */
+    private function createPendingPartner($userId) {
+        try {
+            $this->db->insert(
+                "INSERT INTO partners (user_id, status, commission_rate) VALUES (?, 'pending', 10.00)",
+                [$userId]
+            );
+        } catch (\Throwable $e) {
+            error_log('Google OAuth createPendingPartner: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Generate a unique, non-colliding employee_id for auto-provisioned users.
+     */
+    private function generateEmployeeId($prefix = 'G') {
+        $suffixLen = in_array($prefix, ['CL', 'PB'], true) ? 8 : 7;
         do {
-            $candidate = 'G' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 7)); // e.g. G1A2B3C4D (<= 20 chars)
+            $candidate = $prefix . strtoupper(substr(bin2hex(random_bytes(8)), 0, $suffixLen));
             $exists = $this->db->fetchColumn("SELECT id FROM users WHERE employee_id = ? LIMIT 1", [$candidate]);
         } while ($exists);
         return $candidate;

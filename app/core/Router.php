@@ -111,7 +111,58 @@ class Router {
                 break;
             case 'guest':
                 if ($this->auth->check()) {
-                    redirect('/dashboard');
+                    redirect(homeUrlForRole($this->session->get('user_role'), $this->session->get('user_status', 'active')));
+                    return false;
+                }
+                break;
+            case 'staff':
+                if (!$this->auth->check()) {
+                    $this->session->flash('error', 'Please log in to continue.');
+                    redirect('/login');
+                    return false;
+                }
+                if (!isStaffRole($this->session->get('user_role'))) {
+                    redirect(homeUrlForRole($this->session->get('user_role'), $this->session->get('user_status', 'active')));
+                    return false;
+                }
+                break;
+            case 'client':
+                if (!$this->auth->check()) {
+                    redirect('/login?area=client');
+                    return false;
+                }
+                if ($this->session->get('user_role') !== 'client') {
+                    redirect(homeUrlForRole($this->session->get('user_role'), $this->session->get('user_status', 'active')));
+                    return false;
+                }
+                break;
+            case 'partner':
+                if (!$this->auth->check()) {
+                    redirect('/login?area=partner');
+                    return false;
+                }
+                if ($this->session->get('user_role') !== 'partner') {
+                    redirect(homeUrlForRole($this->session->get('user_role'), $this->session->get('user_status', 'active')));
+                    return false;
+                }
+                break;
+            case 'approved_partner':
+                if (!$this->auth->check()) {
+                    redirect('/login?area=partner');
+                    return false;
+                }
+                if ($this->session->get('user_role') !== 'partner') {
+                    redirect(homeUrlForRole($this->session->get('user_role'), $this->session->get('user_status', 'active')));
+                    return false;
+                }
+                $pStatus = $this->session->get('user_status', 'active');
+                if ($pStatus === 'pending') {
+                    redirect('/partners/pending');
+                    return false;
+                }
+                if ($pStatus !== 'active') {
+                    $this->session->flash('error', 'Your partner account is not active.');
+                    redirect('/login?area=partner');
                     return false;
                 }
                 break;

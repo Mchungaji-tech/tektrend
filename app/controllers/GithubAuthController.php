@@ -25,6 +25,10 @@ class GithubAuthController extends Controller {
 
         $this->ensureGithubColumn();
 
+        // Capture the intended area (client / partner / staff) for new-account provisioning.
+        $intent = $_GET['to'] ?? '';
+        $this->session->set('oauth_intent', in_array($intent, ['client', 'partner', 'staff'], true) ? $intent : 'staff');
+
         $state = bin2hex(random_bytes(16));
         $this->session->set('github_oauth_state', $state);
 
@@ -112,7 +116,9 @@ class GithubAuthController extends Controller {
         }
 
         try {
-            $user = $this->findOrCreateUser((string)$githubId, $email, $profile);
+            $intent = $this->session->get('oauth_intent', 'staff');
+            $this->session->remove('oauth_intent');
+            $user = $this->findOrCreateUser((string)$githubId, $email, $profile, $intent);
         } catch (\Throwable $e) {
             error_log('GitHub OAuth user provisioning error: ' . $e->getMessage());
             $this->session->flash('error', 'Something went wrong preparing your account. Please try again.');
@@ -132,7 +138,7 @@ class GithubAuthController extends Controller {
             return;
         }
 
-        $this->redirectWithSuccess('/dashboard', 'Welcome, ' . $user['first_name'] . '! You are signed in with GitHub.');
+        $this->redirectWithSuccess($this->auth->homeUrl(), 'Welcome, ' . $user['first_name'] . '! You are signed in with GitHub.');
     }
 
     // ---------------------------------------------------------------------
@@ -188,13 +194,13 @@ class GithubAuthController extends Controller {
     /**
      * Locate a local user by GitHub ID, else by email (link), else create a fresh employee.
      */
-    private function findOrCreateUser($githubId, $email, array $profile) {
+    private function findOrCreateUser($githubId, $email, array $profile, $intent = 'staff') {
         $email    = strtolower(trim($email));
         $githubId = (string)$githubId;
 
         $user = $this->db->fetch("SELECT * FROM users WHERE github_id = ? LIMIT 1", [$githubId]);
         if ($user) {
-            return $user['status'] === 'active' ? $user : null;
+            return in_array($user['status'], ['active', 'pending'], true) ? $user : null;
         }
 
         $full  = trim($profile['name'] ?? '') ?: trim($profile['login'] ?? '');
@@ -207,25 +213,69 @@ class GithubAuthController extends Controller {
         if ($user) {
             $this->db->execute("UPDATE users SET github_id = ?, avatar = COALESCE(avatar, ?) WHERE id = ?", [$githubId, $avatar, $user['id']]);
             $user['github_id'] = $githubId;
-            return $user['status'] === 'active' ? $user : null;
+            return in_array($user['status'], ['active', 'pending'], true) ? $user : null;
         }
 
         $this->ensureGithubColumn();
-        $employeeId = $this->generateEmployeeId();
+
+        $role   = 'employee';
+        $status = 'active';
+        $prefix = 'GH';
+        if ($intent === 'client') {
+            $role = 'client'; $prefix = 'CL';
+        } elseif ($intent === 'partner') {
+            $role = 'partner'; $status = 'pending'; $prefix = 'PB';
+        }
+
+        $employeeId = $this->generateEmployeeId($prefix);
         $randPass   = password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT, ['cost' => BCRYPT_ROUNDS]);
 
         $newId = $this->db->insert(
             "INSERT INTO users (employee_id, first_name, last_name, email, github_id, password, role, avatar, status)
-             VALUES (?, ?, ?, ?, ?, ?, 'employee', ?, 'active')",
-            [$employeeId, $first, $last, $email, $githubId, $randPass, $avatar]
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [$employeeId, $first, $last, $email, $githubId, $randPass, $role, $avatar, $status]
         );
+
+        if ($intent === 'client') {
+            $this->linkClientCustomer($newId, $first, $last, $email);
+        } elseif ($intent === 'partner') {
+            $this->createPendingPartner($newId);
+        }
 
         return $this->db->fetch("SELECT * FROM users WHERE id = ? LIMIT 1", [$newId]);
     }
 
-    private function generateEmployeeId() {
+    private function linkClientCustomer($userId, $first, $last, $email) {
+        try {
+            $existing = $this->db->fetch("SELECT id FROM customers WHERE email = ? AND user_id IS NULL LIMIT 1", [$email]);
+            if ($existing) {
+                $this->db->execute("UPDATE customers SET user_id = ? WHERE id = ?", [$userId, $existing['id']]);
+                return;
+            }
+            $this->db->insert(
+                "INSERT INTO customers (user_id, first_name, last_name, email, status) VALUES (?, ?, ?, ?, 'active')",
+                [$userId, $first, $last, $email]
+            );
+        } catch (\Throwable $e) {
+            error_log('GitHub OAuth linkClientCustomer: ' . $e->getMessage());
+        }
+    }
+
+    private function createPendingPartner($userId) {
+        try {
+            $this->db->insert(
+                "INSERT INTO partners (user_id, status, commission_rate) VALUES (?, 'pending', 10.00)",
+                [$userId]
+            );
+        } catch (\Throwable $e) {
+            error_log('GitHub OAuth createPendingPartner: ' . $e->getMessage());
+        }
+    }
+
+    private function generateEmployeeId($prefix = 'GH') {
+        $suffixLen = in_array($prefix, ['CL', 'PB'], true) ? 8 : 6;
         do {
-            $candidate = 'GH' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 6)); // e.g. GH1A2B3C (<= 20 chars)
+            $candidate = $prefix . strtoupper(substr(bin2hex(random_bytes(8)), 0, $suffixLen));
             $exists = $this->db->fetchColumn("SELECT id FROM users WHERE employee_id = ? LIMIT 1", [$candidate]);
         } while ($exists);
         return $candidate;
