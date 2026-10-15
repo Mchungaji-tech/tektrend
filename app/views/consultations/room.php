@@ -1,10 +1,11 @@
 <?php
-// Self-contained public meeting room (no staff layout). Token is the access secret.
+// Self-contained public meeting room (no staff layout). The room token is the access secret.
+// Media is carried by LiveKit; the browser fetches a short-lived, server-signed token on join.
 $c = $consultation;
 $jsRoom = json_encode($roomName, JSON_UNESCAPED_SLASHES);
-$jsDomain = json_encode($jitsiDomain ?? JITSI_DOMAIN);
 $jsName = json_encode($displayName ?? 'Guest');
-$jsEmail = json_encode($userEmail ?? '');
+$jsTokenUrl = json_encode(eurl('/consult/' . $token . '/token'), JSON_UNESCAPED_SLASHES);
+$lkConfigured = !empty($lkConfigured);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,13 +40,24 @@ $jsEmail = json_encode($userEmail ?? '');
         .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.35); }
         .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #e2e8f0; padding: 0.85rem 1.5rem; }
         .btn-outline:hover { background: rgba(255,255,255,0.06); }
+        .btn-danger { background: #ef4444; color: #fff; padding: 0.85rem 1.5rem; }
         .btn[disabled] { opacity: 0.6; cursor: default; }
         .actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
         .note { margin-top: 1rem; font-size: 0.78rem; color: #64748b; }
         .err { display: none; margin-top: 1.1rem; color: #f87171; font-size: 0.85rem; }
         #meetingWrap { display: none; }
         #meetingStatus { font-size: 0.82rem; color: #94a3b8; margin-bottom: 0.6rem; }
-        #jitsiContainer { width: 100%; height: 78vh; min-height: 78vh; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #000; }
+        #lkGrid { width: 100%; min-height: 68vh; max-height: 78vh; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.6rem; background: #060b16; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 0.6rem; overflow: hidden; }
+        .lk-tile { position: relative; background: #111a2b; border-radius: 10px; overflow: hidden; min-height: 200px; display: flex; align-items: center; justify-content: center; }
+        .lk-tile video { width: 100%; height: 100%; object-fit: cover; background: #000; }
+        .lk-tile .lk-name { position: absolute; left: 8px; bottom: 8px; font-size: 0.72rem; font-weight: 600; background: rgba(0,0,0,0.55); padding: 0.2rem 0.5rem; border-radius: 6px; color: #e2e8f0; }
+        .lk-tile .lk-mic { position: absolute; right: 8px; bottom: 8px; font-size: 0.7rem; color: #94a3b8; }
+        .lk-placeholder { color: #334155; font-size: 2.4rem; }
+        #lkControls { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+        .lk-ctl { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: #e2e8f0; border-radius: 10px; padding: 0.6rem 1rem; font-weight: 600; cursor: pointer; }
+        .lk-ctl:hover { background: rgba(255,255,255,0.08); }
+        .lk-ctl.off { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+        .lk-ctl.leave { background: #ef4444; border-color: #ef4444; color: #fff; }
     </style>
 </head>
 <body>
@@ -71,105 +83,198 @@ $jsEmail = json_encode($userEmail ?? '');
             <div class="room-key">Joining as <strong style="color:#e2e8f0;"><?= sanitize($displayName ?? 'Guest') ?></strong> · Room <code><?= sanitize($roomName) ?></code></div>
 
             <div class="actions">
-                <button type="button" id="joinMeetingBtn" class="btn btn-primary"><i class="fas fa-video"></i> Join Video Meeting</button>
+                <button type="button" id="joinMeetingBtn" class="btn btn-primary" <?= $lkConfigured ? '' : 'disabled' ?>><i class="fas fa-video"></i> Join Video Meeting</button>
                 <a href="<?= eurl('/') ?>" class="btn btn-outline"><i class="fas fa-home"></i> Home</a>
             </div>
-            <p class="note">Runs entirely inside Tek Trend using the open-source meeting server — no external links, no app install.</p>
+            <?php if (!$lkConfigured): ?>
+                <p class="note" style="color:#f87171;">The live meeting server isn't configured yet. An administrator must set <code>LIVEKIT_URL</code> and API keys.</p>
+            <?php else: ?>
+                <p class="note">Runs entirely inside Tek Trend on the secure LiveKit server — no external links, no app install.</p>
+            <?php endif; ?>
             <p class="err" id="landingError"></p>
         </div>
 
         <div id="meetingWrap">
             <div id="meetingStatus"><i class="fas fa-spinner fa-spin"></i> Connecting to the meeting server…</div>
-            <div id="jitsiContainer"></div>
-            <div style="text-align:center; margin-top:1rem;" class="actions">
+            <div id="lkGrid"></div>
+            <div id="lkControls">
+                <button type="button" class="lk-ctl" id="micBtn"><i class="fas fa-microphone"></i> Mute</button>
+                <button type="button" class="lk-ctl" id="camBtn"><i class="fas fa-video"></i> Stop camera</button>
+                <button type="button" class="lk-ctl" id="screenBtn"><i class="fas fa-display"></i> Share screen</button>
+                <button type="button" class="lk-ctl leave" id="leaveBtn"><i class="fas fa-phone-slash"></i> Leave</button>
+            </div>
+            <div style="text-align:center; margin-top:0.8rem;">
                 <button type="button" id="retryBtn" class="btn btn-outline" style="display:none;"><i class="fas fa-redo"></i> Retry Connection</button>
-                <a href="<?= eurl('/') ?>" class="btn btn-outline"><i class="fas fa-phone-slash"></i> Leave Meeting</a>
             </div>
         </div>
     </div>
 
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 (function () {
     const ROOM = <?= $jsRoom ?>;
-    const DOMAIN = <?= $jsDomain ?>;
     const displayName = <?= $jsName ?>;
-    const email = <?= $jsEmail ?>;
+    const TOKEN_URL = <?= $jsTokenUrl ?>;
 
     const landing = document.getElementById('meetingLanding');
     const wrap = document.getElementById('meetingWrap');
     const btn = document.getElementById('joinMeetingBtn');
     const retryBtn = document.getElementById('retryBtn');
     const status = document.getElementById('meetingStatus');
-    const container = document.getElementById('jitsiContainer');
+    const grid = document.getElementById('lkGrid');
     const landingError = document.getElementById('landingError');
+    const micBtn = document.getElementById('micBtn');
+    const camBtn = document.getElementById('camBtn');
+    const screenBtn = document.getElementById('screenBtn');
+    const leaveBtn = document.getElementById('leaveBtn');
 
-    let api = null;
+    const tiles = new Map(); // participantSid -> {el, nameEl}
+    let room = null;
 
     function setStatus(html, color) { status.innerHTML = html; status.style.color = color || '#94a3b8'; }
-    function clearRoom() { if (api) { try { api.dispose(); } catch (e) {} api = null; } container.innerHTML = ''; }
 
-    function loadExternalApi(onSuccess, onFailure) {
-        if (window.JitsiMeetExternalAPI) { onSuccess(); return; }
-        const existing = document.querySelector('script[data-jitsi]');
-        if (existing) { existing.addEventListener('load', onSuccess); existing.addEventListener('error', onFailure); return; }
-        const s = document.createElement('script');
-        s.src = 'https://' + DOMAIN + '/external_api.js';
-        s.async = true;
-        s.setAttribute('data-jitsi', '1');
-        s.onload = onSuccess; s.onerror = onFailure;
-        document.head.appendChild(s);
+    function tileFor(participant, isLocal) {
+        if (tiles.has(participant.sid)) return tiles.get(participant.sid);
+        const el = document.createElement('div');
+        el.className = 'lk-tile';
+        el.innerHTML = '<div class="lk-placeholder"><i class="fas fa-user"></i></div>'
+            + '<span class="lk-name"></span><span class="lk-mic"></span>';
+        grid.appendChild(el);
+        const rec = { el: el, nameEl: el.querySelector('.lk-name'), micEl: el.querySelector('.lk-mic'), videos: [] };
+        tiles.set(participant.sid, rec);
+        updateName(rec, participant);
+        return rec;
     }
 
-    function fail(msg) { setStatus('<i class="fas fa-triangle-exclamation"></i> ' + msg, '#f87171'); retryBtn.style.display = 'inline-flex'; }
+    function updateName(rec, participant) {
+        const nm = (participant.identity === room?.localParticipant?.identity) ? (displayName || 'You')
+            : (participant.name || participant.identity || 'Guest');
+        rec.nameEl.textContent = nm;
+    }
+
+    function addTrack(track, participant) {
+        const rec = tileFor(participant, participant.sid === room.localParticipant.sid);
+        if (track.kind === 'video') {
+            const ph = rec.el.querySelector('.lk-placeholder');
+            if (ph) ph.remove();
+            const video = document.createElement('video');
+            video.autoplay = true; video.playsInline = true; video.muted = participant.sid === room.localParticipant.sid;
+            track.attach(video);
+            rec.el.appendChild(video);
+            rec.videos.push({ track: track, el: video });
+        } else if (track.kind === 'audio') {
+            const audio = document.createElement('audio');
+            audio.autoplay = true;
+            track.attach(audio);
+            rec.el.appendChild(audio);
+            rec.videos.push({ track: track, el: audio });
+            rec.micEl.innerHTML = '<i class="fas fa-microphone"></i>';
+        }
+    }
+
+    function removeTrack(track) {
+        tiles.forEach((rec) => {
+            const idx = rec.videos.findIndex(v => v.track === track);
+            if (idx > -1) {
+                try { track.detach(rec.videos[idx].el); } catch (e) {}
+                rec.videos[idx].el.remove();
+                rec.videos.splice(idx, 1);
+            }
+        });
+    }
+
+    function removeTile(sid) {
+        const rec = tiles.get(sid);
+        if (rec) { rec.el.remove(); tiles.delete(sid); }
+    }
 
     function reset() {
+        tiles.clear();
+        grid.innerHTML = '';
         wrap.style.display = 'none';
         landing.style.display = 'block';
+        retryBtn.style.display = 'none';
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-video"></i> Join Video Meeting';
     }
 
-    function startMeeting() {
+    function fail(msg) {
+        setStatus('<i class="fas fa-triangle-exclamation"></i> ' + msg, '#f87171');
+        retryBtn.style.display = 'inline-flex';
+        landingError.style.display = 'block';
+        landingError.textContent = msg;
+    }
+
+    async function fetchToken() {
+        const res = await fetch(TOKEN_URL, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.token) {
+            throw new Error(data.error || ('Could not get a meeting token (HTTP ' + res.status + ').'));
+        }
+        return data;
+    }
+
+    async function startMeeting() {
+        if (!window.LivekitClient) { fail('Live meeting client failed to load. Check your connection and retry.'); return; }
         retryBtn.style.display = 'none';
         landing.style.display = 'none';
         wrap.style.display = 'block';
         setStatus('<i class="fas fa-spinner fa-spin"></i> Connecting to the meeting server…');
-        loadExternalApi(function () {
-            clearRoom();
-            api = new JitsiMeetExternalAPI(DOMAIN, {
-                roomName: ROOM,
-                parentNode: container,
-                width: '100%',
-                height: '100%',
-                userInfo: { displayName: displayName, email: email },
-                configOverwrite: {
-                    prejoinConfig: { enabled: true },
-                    disableZoomNoLock: true
-                },
-                interfaceConfigOverwrite: {
-                    SHOW_JITSI_WATERMARK: false,
-                    SHOW_WATERMARK_FOR_GUESTS: false
-                }
-            });
-            api.addListener('videoConferenceJoined', function () {
-                setStatus('<i class="fas fa-circle" style="color:#34d399;"></i> Connected · ' + ROOM);
-                retryBtn.style.display = 'none';
-            });
-            api.addListener('readyToClose', reset);
-            ['connectionFailed', 'networkIncompatible', 'disconnected'].forEach(function (ev) {
-                api.addListener(ev, function () { fail('Lost connection to the meeting server. Check your network and retry.'); });
-            });
-        }, function () {
-            fail('Could not reach the meeting server (' + DOMAIN + ').');
-            landingError.style.display = 'block';
-            landingError.textContent = 'Could not load the meeting client from ' + DOMAIN + '. Verify the connection and retry.';
+
+        const { Room, RoomEvent } = window.LivekitClient;
+        room = new Room({ adaptiveStream: true, dynacast: true });
+
+        room.on(RoomEvent.TrackSubscribed, (track, pub, participant) => addTrack(track, participant));
+        room.on(RoomEvent.TrackUnsubscribed, (track) => removeTrack(track));
+        room.on(RoomEvent.LocalTrackPublished, (pub) => { if (pub.track) addTrack(pub.track, room.localParticipant); });
+        room.on(RoomEvent.ParticipantConnected, () => {});
+        room.on(RoomEvent.ParticipantDisconnected, (p) => removeTile(p.sid));
+        room.on(RoomEvent.Reconnected, () => setStatus('<i class="fas fa-circle" style="color:#34d399;"></i> Reconnected'));
+        room.on(RoomEvent.Disconnected, () => fail('Disconnected from the meeting server.'));
+
+        try {
+            const cfg = await fetchToken();
+            await room.connect(cfg.url, cfg.token);
+            try {
+                await room.localParticipant.setMicrophoneEnabled(true);
+                await room.localParticipant.setCameraEnabled(true);
+            } catch (mediaErr) {
+                setStatus('<i class="fas fa-triangle-exclamation" style="color:#fbbf24;"></i> Joined without camera/mic — allow device access and retry.', '#fbbf24');
+            }
+            setStatus('<i class="fas fa-circle" style="color:#34d399;"></i> Connected · ' + cfg.room);
+            retryBtn.style.display = 'none';
+            updateControls();
+        } catch (err) {
+            fail(err.message || 'Could not connect to the meeting server.');
             reset();
-        });
+        }
     }
+
+    function updateControls() {
+        if (!room) return;
+        const p = room.localParticipant;
+        const micOn = p.isMicrophoneEnabled();
+        const camOn = p.isCameraEnabled();
+        micBtn.classList.toggle('off', !micOn);
+        micBtn.innerHTML = micOn ? '<i class="fas fa-microphone"></i> Mute' : '<i class="fas fa-microphone-slash"></i> Unmute';
+        camBtn.classList.toggle('off', !camOn);
+        camBtn.innerHTML = camOn ? '<i class="fas fa-video"></i> Stop camera' : '<i class="fas fa-video-slash"></i> Start camera';
+    }
+
+    micBtn.addEventListener('click', async () => { if (room) { await room.localParticipant.setMicrophoneEnabled(!room.localParticipant.isMicrophoneEnabled()); updateControls(); } });
+    camBtn.addEventListener('click', async () => { if (room) { await room.localParticipant.setCameraEnabled(!room.localParticipant.isCameraEnabled()); updateControls(); } });
+    screenBtn.addEventListener('click', async () => {
+        if (!room) return;
+        const pub = room.localParticipant.getTrackPublication('screen');
+        if (pub && pub.track) { await room.localParticipant.setScreenShareEnabled(false); screenBtn.classList.remove('off'); }
+        else { try { await room.localParticipant.setScreenShareEnabled(true); screenBtn.classList.add('off'); } catch (e) {} }
+    });
+    leaveBtn.addEventListener('click', async () => { if (room) { try { await room.disconnect(); } catch (e) {} } reset(); });
 
     btn.addEventListener('click', function () {
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting…';
+        landingError.style.display = 'none';
         startMeeting();
     });
     retryBtn.addEventListener('click', function () { setStatus('<i class="fas fa-spinner fa-spin"></i> Reconnecting…'); startMeeting(); });

@@ -266,11 +266,51 @@ class ChatController extends Controller {
         $displayName = trim(($currentUser['first_name'] ?? '') . ' ' . ($currentUser['last_name'] ?? '')) ?: 'Guest';
 
         $this->render('chat/join_meeting', [
-            'meeting'     => $meeting,
-            'roomName'    => $roomName,
-            'jitsiDomain' => JITSI_DOMAIN,
+            'meeting'      => $meeting,
+            'roomName'     => LiveKit::normalizeRoom($roomName),
+            'livekitUrl'   => LiveKit::url(),
+            'lkConfigured' => LiveKit::isConfigured(),
+            'displayName'  => $displayName,
+            'userEmail'    => $currentUser['email'] ?? '',
+        ]);
+    }
+
+    /**
+     * Mint a short-lived, server-signed LiveKit token for a staff member to join a meeting room.
+     * Route is gated by ['staff'] middleware; the API secret never leaves the server.
+     */
+    public function meetingToken($id) {
+        $this->requireAuth();
+
+        if (!LiveKit::isConfigured()) {
+            return $this->json(['error' => 'The live meeting server is not configured yet. Set LIVEKIT_URL and API keys in .env.'], 503);
+        }
+
+        $meeting = $this->db->fetch("SELECT * FROM meetings WHERE id = ?", [$id]);
+        if (!$meeting) {
+            return $this->json(['error' => 'Meeting not found.'], 404);
+        }
+
+        // Backend owns the room name; guarantee one exists (older rows may be NULL).
+        $roomName = LiveKit::normalizeRoom($meeting['room_id'] ?: $this->buildRoomName($meeting['title']));
+        if ($meeting['room_id'] !== $roomName) {
+            $this->db->execute("UPDATE meetings SET room_id = ? WHERE id = ?", [$roomName, $id]);
+        }
+
+        $userId = $this->auth->id();
+        $identity = LiveKit::identity('staff-' . $userId, 'staff');
+        $currentUser = $this->auth->user();
+        $displayName = trim(($currentUser['first_name'] ?? '') . ' ' . ($currentUser['last_name'] ?? '')) ?: 'Staff';
+
+        $token = LiveKit::accessToken($identity, $displayName, $roomName);
+        auditLog('livekit_token', 'meetings', $id, "Issued LiveKit room token for {$identity}");
+
+        return $this->json([
+            'url'         => LiveKit::url(),
+            'token'       => $token,
+            'room'        => $roomName,
+            'identity'    => $identity,
             'displayName' => $displayName,
-            'userEmail'   => $currentUser['email'] ?? '',
         ]);
     }
 
@@ -289,11 +329,11 @@ class ChatController extends Controller {
     }
 
     /**
-     * Build a Jitsi-safe, backend-controlled room name from the meeting title.
+     * Build a LiveKit-safe, backend-controlled room name from the meeting title.
      * Result looks like: tektrend-architecture-review-5f3c9a  (lowercase, hyphenated, unique).
      */
     private function buildRoomName($title) {
-        $prefix = preg_replace('/[^a-z0-9]+/i', '', JITSI_ROOM_PREFIX) ?: 'tektrend';
+        $prefix = preg_replace('/[^a-z0-9]+/i', '', LIVEKIT_ROOM_PREFIX) ?: 'tektrend';
         $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', (string)$title), '-'));
         $slug = substr($slug ?: 'meeting', 0, 40);
         return $prefix . '-' . $slug . '-' . substr(uniqid(), -6);

@@ -103,11 +103,52 @@ class ConsultationController extends Controller {
             'pageTitle'     => 'Meeting Room: ' . ($consultation['name'] ?? 'Consultation'),
             'consultation'  => $consultation,
             'token'         => $token,
-            'roomName'      => JITSI_ROOM_PREFIX . '-consult-' . $token,
-            'jitsiDomain'   => JITSI_DOMAIN,
+            'roomName'      => LiveKit::roomName('consult-' . $token),
+            'livekitUrl'    => LiveKit::url(),
+            'lkConfigured'  => LiveKit::isConfigured(),
             'displayName'   => $displayName,
             'userEmail'     => $userEmail,
         ], null);
+    }
+
+    /**
+     * Public, token-gated LiveKit token endpoint. The unguessable room_token IS the access
+     * secret; a valid signed, short-lived token is minted server-side (API secret never sent).
+     */
+    public function roomAccessToken($token) {
+        $this->ensureRoomSchema();
+
+        if (!LiveKit::isConfigured()) {
+            return $this->json(['error' => 'The live meeting server is not configured yet. Set LIVEKIT_URL and API keys in .env.'], 503);
+        }
+
+        $consultation = $this->db->fetch("SELECT * FROM consultations WHERE room_token = ?", [$token]);
+        if (!$consultation) {
+            return $this->json(['error' => 'This meeting room link is invalid or has expired.'], 404);
+        }
+
+        $roomName = LiveKit::roomName('consult-' . $consultation['room_token']);
+
+        // Logged-in staff keep their real identity; anonymous guests get a stable, scoped id.
+        if ($this->auth->check()) {
+            $u = $this->auth->user();
+            $identity = LiveKit::identity('staff-' . ($u['id'] ?? 0), 'staff');
+            $displayName = trim(($u['first_name'] ?? '') . ' ' . ($u['last_name'] ?? '')) ?: ($consultation['name'] ?: 'Guest');
+        } else {
+            $identity = LiveKit::identity('guest-' . substr(hash('sha256', (string)$token), 0, 12), 'guest');
+            $displayName = $consultation['name'] ?: 'Guest';
+        }
+
+        $accessToken = LiveKit::accessToken($identity, $displayName, $roomName);
+        auditLog('livekit_token', 'consultations', $consultation['id'], "Issued LiveKit room token for {$identity}");
+
+        return $this->json([
+            'url'         => LiveKit::url(),
+            'token'       => $accessToken,
+            'room'        => $roomName,
+            'identity'    => $identity,
+            'displayName' => $displayName,
+        ]);
     }
 
     public function updateStatus($id) {

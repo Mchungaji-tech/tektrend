@@ -88,6 +88,17 @@ define('JITSI_DOMAIN', getenv('JITSI_DOMAIN') ?: 'meet.jit.si');
 // Prefix applied to every backend-generated room name so rooms are namespaced to TekTrend.
 define('JITSI_ROOM_PREFIX', getenv('JITSI_ROOM_PREFIX') ?: 'tektrend');
 
+// LiveKit (self-hosted / cloud WebRTC SFU) - replaces the throttled public Jitsi server.
+// LIVEKIT_URL is the secure signaling origin, e.g. wss://meet.yourdomain.com (self-host) or
+// wss://yourproject.livekit.cloud (LiveKit Cloud). The API secret stays ONLY on the server.
+define('LIVEKIT_URL', rtrim(getenv('LIVEKIT_URL') ?: '', '/'));
+define('LIVEKIT_API_KEY', getenv('LIVEKIT_API_KEY') ?: '');
+define('LIVEKIT_API_SECRET', getenv('LIVEKIT_API_SECRET') ?: '');
+// How long a minted room token stays valid (seconds). Keep short; re-join mints a fresh one.
+define('LIVEKIT_TOKEN_TTL', (int)(getenv('LIVEKIT_TOKEN_TTL') ?: 21600)); // 6 hours
+// Namespaces every backend-generated room so names never collide with other tenants on the SFU.
+define('LIVEKIT_ROOM_PREFIX', getenv('LIVEKIT_ROOM_PREFIX') ?: (getenv('JITSI_ROOM_PREFIX') ?: 'tektrend'));
+
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('DB_NAME') ?: 'tektrend');

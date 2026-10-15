@@ -98,6 +98,8 @@ class App {
         $this->router->get('/consultations/{id}/delete', 'ConsultationController@delete', ['staff']);
         // Public, token-protected embedded meeting room (client or staff joins in-app; no redirect)
         $this->router->get('/consult/{token}', 'ConsultationController@room');
+                // Public LiveKit access-token endpoint for the embedded consultation room (unguessable token is the secret)
+        $this->router->get('/consult/{token}/token', 'ConsultationController@roomAccessToken');
 
         // Investor Relations & Capital
         $this->router->get('/investments', 'InvestmentController@index', ['staff']);
@@ -225,6 +227,8 @@ class App {
         $this->router->post('/meetings', 'ChatController@storeMeeting', ['staff']);
         $this->router->post('/meetings/instant', 'ChatController@startInstantMeeting', ['staff']);
         $this->router->get('/meetings/{id}', 'ChatController@joinMeeting', ['staff']);
+                // Staff LiveKit access-token endpoint (server-signed, short-lived)
+        $this->router->get('/meetings/{id}/token', 'ChatController@meetingToken', ['staff']);
         $this->router->get('/meetings/{id}/join', 'ChatController@joinMeeting', ['staff']);
         $this->router->get('/meetings/{id}/start', 'ChatController@startMeeting', ['staff']);
         $this->router->get('/meetings/{id}/end', 'ChatController@endMeeting', ['staff']);

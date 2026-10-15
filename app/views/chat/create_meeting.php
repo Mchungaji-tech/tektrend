@@ -34,8 +34,8 @@
 
         <div class="form-group">
             <label>Meeting Room</label>
-            <input type="text" class="form-control" value="Auto-generated secure Jitsi room (managed by the backend)" disabled>
-            <small style="color: var(--text-muted); font-size: 0.78rem;">The video room runs embedded inside Tek Trend — no external link needed.</small>
+            <input type="text" class="form-control" value="Auto-generated secure video room (managed by the backend)" disabled>
+            <small style="color: var(--text-muted); font-size: 0.78rem;">The video room runs embedded inside Tek Trend on the secure LiveKit server — no external link needed.</small>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
