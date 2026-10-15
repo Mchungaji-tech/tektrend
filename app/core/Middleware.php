@@ -74,11 +74,16 @@ class Middleware {
      * Set security headers
      */
     private function setSecurityHeaders() {
+        // Allow the (configurable) embedded Jitsi Meet server to load its API
+        // script and render the conference iframe; otherwise CSP silently
+        // blocks external_api.js and the room shows "Could not load the meeting client".
+        $jitsiOrigin = 'https://' . (defined('JITSI_DOMAIN') ? JITSI_DOMAIN : 'meet.jit.si');
+
         header('X-Frame-Options: SAMEORIGIN');
         header('X-Content-Type-Options: nosniff');
         header('X-XSS-Protection: 1; mode=block');
         header('Referrer-Policy: strict-origin-when-cross-origin');
-        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' ws: wss: https:;");
+        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com {$jitsiOrigin}; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com {$jitsiOrigin}; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' {$jitsiOrigin}; connect-src 'self' ws: wss: https:;");
     }
 
     /**
