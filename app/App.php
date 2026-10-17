@@ -77,13 +77,22 @@ class App {
         $this->router->post('/reset-password', 'AuthController@updatePassword');
         $this->router->get('/logout', 'AuthController@logout', ['staff']);
 
-        // Google OAuth 2.0 (Sign in with Google)
+        // Google OAuth 2.0 (Sign in with Google & direct callbacks)
         $this->router->get('/auth/google', 'GoogleAuthController@redirect', ['guest']);
-        $this->router->get('/auth/google/callback', 'GoogleAuthController@callback', ['guest']);
+        $this->router->get('/auth/google/callback', 'GoogleAuthController@callback');
+        $this->router->get('/callback.php', 'GoogleAuthController@callback');
+        $this->router->get('/callback', 'GoogleAuthController@callback');
 
         // GitHub OAuth 2.0 (Sign in with GitHub)
         $this->router->get('/auth/github', 'GithubAuthController@redirect', ['guest']);
         $this->router->get('/auth/github/callback', 'GithubAuthController@callback', ['guest']);
+
+        // Public Turnkey Software Shop & Legal / FAQ
+        $this->router->get('/shop', 'PortfolioController@shop');
+        $this->router->get('/privacy', 'HomeController@privacy');
+        $this->router->get('/privacy-policy', 'HomeController@privacy');
+        $this->router->get('/faq', 'HomeController@faq');
+        $this->router->get('/faqs', 'HomeController@faq');
 
         // Dashboard
         $this->router->get('/dashboard', 'DashboardController@index', ['staff']);
@@ -301,6 +310,7 @@ class App {
         $this->router->get('/portal/invoices', 'ClientController@invoices', ['client']);
         $this->router->get('/portal/invoices/{id}', 'ClientController@invoice', ['client']);
         $this->router->get('/portal/projects', 'ClientController@projects', ['client']);
+        $this->router->get('/portal/shop', 'ClientController@shop', ['client']);
         $this->router->get('/portal/profile', 'ClientController@profile', ['client']);
         $this->router->post('/portal/profile', 'ClientController@updateProfile', ['client']);
         $this->router->get('/portal/logout', 'AuthController@logout', ['client']);
@@ -308,7 +318,9 @@ class App {
         // ---- Partner portal ----
         $this->router->get('/partners/pending', 'PartnerController@pending', ['partner']);
         $this->router->get('/partners', 'PartnerController@dashboard', ['approved_partner']);
+        $this->router->get('/partners/shop', 'PartnerController@shop', ['approved_partner']);
         $this->router->get('/partners/referrals', 'PartnerController@referrals', ['approved_partner']);
+        $this->router->post('/partners/referrals/submit', 'PartnerController@submitReferral', ['approved_partner']);
         $this->router->get('/partners/payouts', 'PartnerController@payouts', ['approved_partner']);
         $this->router->get('/partners/profile', 'PartnerController@profile', ['partner']);
         $this->router->post('/partners/profile', 'PartnerController@updateProfile', ['partner']);

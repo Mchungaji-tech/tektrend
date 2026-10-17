@@ -66,6 +66,7 @@ define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: (getenv('GEMINI_API_KEY') ?
 // Google OAuth 2.0 (Sign in with Google)
 define('GOOGLE_CLIENT_ID', getenv('GOOGLE_CLIENT_ID') ?: '');
 define('GOOGLE_CLIENT_SECRET', getenv('GOOGLE_CLIENT_SECRET') ?: '');
+define('GOOGLE_REDIRECT_URI', getenv('GOOGLE_REDIRECT_URI') ?: '');
 // Optional: restrict account creation to a single Google Workspace domain (e.g. tektrend.co.ke). Empty = allow any verified email.
 define('GOOGLE_ALLOWED_DOMAIN', getenv('GOOGLE_ALLOWED_DOMAIN') ?: '');
 define('GOOGLE_OAUTH_AUTH_ENDPOINT', 'https://accounts.google.com/o/oauth2/v2/auth');

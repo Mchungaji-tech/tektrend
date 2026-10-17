@@ -52,6 +52,9 @@
                 <a href="<?= eurl('/portal/projects') ?>" class="nav-link <?= ($portalPage ?? '') === 'projects' ? 'active' : '' ?>">
                     <i class="fas fa-diagram-project"></i> My Projects
                 </a>
+                <a href="<?= eurl('/portal/shop') ?>" class="nav-link <?= ($portalPage ?? '') === 'shop' ? 'active' : '' ?>">
+                    <i class="fas fa-shopping-bag"></i> Shop Templates
+                </a>
                 <a href="<?= eurl('/portal/profile') ?>" class="nav-link <?= ($portalPage ?? '') === 'profile' ? 'active' : '' ?>">
                     <i class="fas fa-user-gear"></i> Profile
                 </a>

@@ -46,6 +46,9 @@
                 <a href="<?= eurl('/partners') ?>" class="nav-link <?= ($partnerPage ?? '') === 'dashboard' ? 'active' : '' ?>">
                     <i class="fas fa-chart-pie"></i> Dashboard
                 </a>
+                <a href="<?= eurl('/partners/shop') ?>" class="nav-link <?= ($partnerPage ?? '') === 'shop' ? 'active' : '' ?>">
+                    <i class="fas fa-shopping-bag"></i> Shop & Resell
+                </a>
                 <a href="<?= eurl('/partners/referrals') ?>" class="nav-link <?= ($partnerPage ?? '') === 'referrals' ? 'active' : '' ?>">
                     <i class="fas fa-users-rays"></i> Referrals
                 </a>

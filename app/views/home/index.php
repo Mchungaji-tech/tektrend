@@ -29,7 +29,8 @@ if (!empty($portfolioDemos)) {
             'image' => $pDemo['preview_image'] ?: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
             'demo_url' => strpos($demoLink, 'http') === 0 ? $demoLink : url($demoLink),
             'tech' => $pDemo['tech_stack'] ?? 'PHP 8.2 MVC, MySQL, Redis, GSAP',
-            'price' => (float)($pDemo['price'] ?? 79.00)
+            'price' => (float)($pDemo['price'] ?? 79.00),
+            'is_for_sale' => Controller::isProjectForSale($pDemo) ? 1 : 0
         ];
     }
 } else {
@@ -541,22 +542,32 @@ if (!empty($portfolioDemos)) {
         </li>
         <li class="akar-nav-item" data-teaser="demos">
           <a href="<?= eurl('/live-demos') ?>" class="akar-nav-link">
-            04 / Live Demos (11) <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+            04 / Works &amp; Demos <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="shop">
+          <a href="<?= eurl('/shop') ?>" class="akar-nav-link">
+            05 / Software Store <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="blog">
           <a href="<?= eurl('/blog') ?>" class="akar-nav-link">
-            Insights &amp; Blog <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+            06 / Insights &amp; Blog <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="faq">
+          <a href="<?= eurl('/faq') ?>" class="akar-nav-link">
+            07 / FAQ <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="consultation">
           <a href="<?= eurl('/#consultation') ?>" class="akar-nav-link">
-            05 / Book Consultation <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+            08 / Book Consultation <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="portal">
           <a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>" class="akar-nav-link">
-            06 / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
+            09 / Sign In <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
           </a>
         </li>
       </ul>
@@ -674,7 +685,13 @@ if (!empty($portfolioDemos)) {
 
             <div class="akar-card-media">
               <img src="<?= $proj['image'] ?>" alt="<?= sanitize($proj['title']) ?>" loading="lazy">
-              <div class="akar-media-overlay-badge"><i class="fas fa-code"></i> Live System</div>
+              <div class="akar-media-overlay-badge">
+                <?php if (!empty($proj['is_for_sale'])): ?>
+                  <i class="fas fa-code"></i> Live Template
+                <?php else: ?>
+                  <i class="fas fa-globe" style="color:#60a5fa;"></i> Client Production · Live Domain
+                <?php endif; ?>
+              </div>
             </div>
 
             <div class="akar-card-bottom">
@@ -948,8 +965,11 @@ if (!empty($portfolioDemos)) {
           <li><a href="<?= eurl('/') ?>">Home</a></li>
           <li><a href="<?= eurl('/#akarShowcase') ?>">Selected Works</a></li>
           <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
-          <li><a href="<?= eurl('/live-demos') ?>">11 Live Demos</a></li>
-           <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
+          <li><a href="<?= eurl('/live-demos') ?>">Completed Works &amp; Demos</a></li>
+          <li><a href="<?= eurl('/shop') ?>">Turnkey Software Store</a></li>
+          <li><a href="<?= eurl('/faq') ?>">FAQ</a></li>
+          <li><a href="<?= eurl('/privacy') ?>">Privacy Policy</a></li>
+          <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Consultation</a></li>
           <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>

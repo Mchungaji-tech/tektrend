@@ -32,6 +32,7 @@
                     <th>Hosting Domain / URL</th>
                     <th>Type</th>
                     <th>Tech Stack</th>
+                    <th>Status</th>
                     <th>Featured</th>
                     <th style="text-align: right;">Actions</th>
                 </tr>
@@ -39,6 +40,7 @@
             <tbody>
                 <?php if (!empty($demos)): ?>
                     <?php foreach ($demos as $d): ?>
+                        <?php $isForSale = Controller::isProjectForSale($d); ?>
                         <tr>
                             <td>
                                 <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -73,6 +75,17 @@
                             </td>
                             <td style="font-size: 0.8rem; color: var(--text-muted); max-width: 180px;">
                                 <?= sanitize($d['tech_stack']) ?>
+                            </td>
+                            <td>
+                                <?php if ($isForSale): ?>
+                                    <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 700;">
+                                        <i class="fas fa-tag"></i> For Sale ($<?= number_format((float)($d['price'] ?? 49), 0) ?>)
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; font-weight: 700;">
+                                        <i class="fas fa-globe"></i> Client Work (Not For Sale)
+                                    </span>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <span class="badge <?= $d['is_featured'] ? 'active' : 'inactive' ?>">

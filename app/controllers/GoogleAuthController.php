@@ -34,9 +34,12 @@ class GoogleAuthController extends Controller {
         $state = bin2hex(random_bytes(16));
         $this->session->set('google_oauth_state', $state);
 
+        $redirectUri = $this->redirectUri();
+        $this->session->set('google_redirect_uri', $redirectUri);
+
         $params = [
             'client_id'     => GOOGLE_CLIENT_ID,
-            'redirect_uri'  => $this->redirectUri(),
+            'redirect_uri'  => $redirectUri,
             'response_type' => 'code',
             'scope'         => 'openid email profile',
             'state'         => $state,
@@ -77,12 +80,15 @@ class GoogleAuthController extends Controller {
             return;
         }
 
+        $redirectUri = $this->session->get('google_redirect_uri') ?: $this->redirectUri();
+        $this->session->remove('google_redirect_uri');
+
         // Exchange the authorization code for tokens.
         $tokenRes = $this->httpPost(GOOGLE_OAUTH_TOKEN_ENDPOINT, [
             'code'          => $code,
             'client_id'     => GOOGLE_CLIENT_ID,
             'client_secret' => GOOGLE_CLIENT_SECRET,
-            'redirect_uri'  => $this->redirectUri(),
+            'redirect_uri'  => $redirectUri,
             'grant_type'    => 'authorization_code',
         ]);
 
@@ -161,7 +167,14 @@ class GoogleAuthController extends Controller {
      * Google Cloud Console > Credentials > Authorized redirect URIs.
      */
     private function redirectUri() {
-        return url('/auth/google/callback');
+        if (defined('GOOGLE_REDIRECT_URI') && GOOGLE_REDIRECT_URI !== '') {
+            return GOOGLE_REDIRECT_URI;
+        }
+        $envUri = getenv('GOOGLE_REDIRECT_URI');
+        if ($envUri) {
+            return $envUri;
+        }
+        return url('/callback.php');
     }
 
     /**

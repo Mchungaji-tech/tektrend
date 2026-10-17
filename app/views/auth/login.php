@@ -48,11 +48,12 @@
         include VIEW_PATH . '/partials/social_buttons.php';
     ?>
 
-    <?php if (($googleOn || $githubOn) && APP_DEBUG): ?>
+    <?php if (APP_DEBUG): ?>
         <p style="margin:.85rem 0 0;font-size:.72rem;color:rgba(255,255,255,0.45);line-height:1.6;">
-            <strong>Set up in your OAuth app &rarr; Authorized redirect URI:</strong><br>
-            <?php if ($googleOn): ?>Google: <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/auth/google/callback'), ENT_QUOTES, 'UTF-8') ?></code><br><?php endif; ?>
-            <?php if ($githubOn): ?>GitHub: <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/auth/github/callback'), ENT_QUOTES, 'UTF-8') ?></code><?php endif; ?>
+            <strong>Google OAuth &rarr; Authorized redirect URI in Google Console:</strong><br>
+            <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/callback.php'), ENT_QUOTES, 'UTF-8') ?></code><br>
+            <em>or:</em> <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/auth/google/callback'), ENT_QUOTES, 'UTF-8') ?></code>
+            <?php if ($githubOn): ?><br>GitHub: <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/auth/github/callback'), ENT_QUOTES, 'UTF-8') ?></code><?php endif; ?>
         </p>
     <?php endif; ?>
 

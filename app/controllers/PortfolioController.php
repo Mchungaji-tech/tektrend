@@ -26,6 +26,41 @@ class PortfolioController extends Controller {
     }
 
     /**
+     * Dedicated Shop & Turnkey Software Store
+     * Accessible by guests, clients, and partners.
+     */
+    public function shop() {
+        $this->view->setLayout(null);
+        $this->ensurePortfolioDemosTable();
+        $templates = [];
+        try {
+            $templates = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_for_sale = 1 ORDER BY sort_order ASC, id DESC");
+        } catch (\Throwable $e) {
+            $templates = [];
+        }
+        if (empty($templates)) {
+            $all = self::getDefaultPrototypes();
+            $templates = array_filter($all, function($p) {
+                return !empty($p['is_for_sale']);
+            });
+        }
+        $settings = $this->getSettings();
+        $user = $this->auth->check() ? $this->auth->user() : null;
+        $role = $this->auth->check() ? $this->auth->role() : null;
+        $partner = null;
+        if ($role === 'partner' && $this->auth->check()) {
+            $partner = $this->db->fetch("SELECT * FROM partners WHERE user_id = ? LIMIT 1", [$this->auth->id()]);
+        }
+        $this->render('home/shop', [
+            'templates' => $templates,
+            'settings'  => $settings,
+            'user'      => $user,
+            'role'      => $role,
+            'partner'   => $partner
+        ], null);
+    }
+
+    /**
      * Public handler for Request System & Buy Template inquiries
      */
     public function requestSystem() {
@@ -152,8 +187,11 @@ class PortfolioController extends Controller {
             $previewImage = trim($_POST['preview_image']);
         }
 
+        $price = isset($_POST['price']) ? (float)$_POST['price'] : 49.00;
+        $isForSale = isset($_POST['is_for_sale']) ? (int)$_POST['is_for_sale'] : (self::isProjectForSale(['demo_url' => $data['demo_url'], 'demo_type' => $_POST['demo_type'] ?? 'external']) ? 1 : 0);
+
         $demoId = $this->db->insert(
-            "INSERT INTO portfolio_demos (title, category, short_description, icon, demo_type, demo_url, hosting_domain, tech_stack, preview_image, award_badge, is_featured, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO portfolio_demos (title, category, short_description, icon, demo_type, demo_url, hosting_domain, tech_stack, preview_image, award_badge, price, is_featured, is_for_sale, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $data['title'],
                 $data['category'],
@@ -165,7 +203,9 @@ class PortfolioController extends Controller {
                 $_POST['tech_stack'] ?? 'PHP, HTML, CSS',
                 $previewImage,
                 $_POST['award_badge'] ?? '',
+                $price,
                 isset($_POST['is_featured']) ? 1 : 0,
+                $isForSale,
                 (int)($_POST['sort_order'] ?? 0)
             ]
         );
@@ -230,8 +270,11 @@ class PortfolioController extends Controller {
             $previewImage = trim($_POST['preview_image']);
         }
 
+        $price = isset($_POST['price']) ? (float)$_POST['price'] : ($demo['price'] ?? 49.00);
+        $isForSale = isset($_POST['is_for_sale']) ? (int)$_POST['is_for_sale'] : (isset($_POST['is_for_sale_present']) ? 0 : ($demo['is_for_sale'] ?? 1));
+
         $this->db->execute(
-            "UPDATE portfolio_demos SET title = ?, category = ?, short_description = ?, icon = ?, demo_type = ?, demo_url = ?, hosting_domain = ?, tech_stack = ?, preview_image = ?, award_badge = ?, is_featured = ?, sort_order = ? WHERE id = ?",
+            "UPDATE portfolio_demos SET title = ?, category = ?, short_description = ?, icon = ?, demo_type = ?, demo_url = ?, hosting_domain = ?, tech_stack = ?, preview_image = ?, award_badge = ?, price = ?, is_featured = ?, is_for_sale = ?, sort_order = ? WHERE id = ?",
             [
                 $data['title'],
                 $data['category'],
@@ -243,7 +286,9 @@ class PortfolioController extends Controller {
                 $_POST['tech_stack'] ?? 'PHP, HTML, CSS',
                 $previewImage,
                 $_POST['award_badge'] ?? '',
+                $price,
                 isset($_POST['is_featured']) ? 1 : 0,
+                $isForSale,
                 (int)($_POST['sort_order'] ?? 0),
                 $id
             ]
@@ -290,6 +335,54 @@ class PortfolioController extends Controller {
     public static function getDefaultPrototypes() {
         return [
             [
+                'id' => 101,
+                'title' => 'Apex Logistics & Fleet Cloud · Real-Time Freight',
+                'category' => 'Logistics & Supply Chain',
+                'short_description' => 'Custom engineered enterprise freight platform with live GPS telemetry, automated cargo manifest generation, customs clearance vaults, and driver dispatch mobile API.',
+                'icon' => 'fas fa-truck-fast',
+                'demo_type' => 'external',
+                'demo_url' => 'https://apexlogistics.co.ke',
+                'hosting_domain' => 'apexlogistics.co.ke',
+                'tech_stack' => 'PHP 8.2, MySQL 8, Leaflet GIS, WebSockets, REST API',
+                'preview_image' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Client Production System',
+                'price' => 0.00,
+                'is_featured' => 1,
+                'is_for_sale' => 0
+            ],
+            [
+                'id' => 102,
+                'title' => 'Eldoret Tech Innovation Hub · Community Portal',
+                'category' => 'Technology & Incubation',
+                'short_description' => 'Regional innovation ecosystem platform featuring co-working desk reservations, developer fellowship application funnel, tech mentor registry, and event streaming.',
+                'icon' => 'fas fa-microchip',
+                'demo_type' => 'external',
+                'demo_url' => 'https://eldorettechhub.org',
+                'hosting_domain' => 'eldorettechhub.org',
+                'tech_stack' => 'PHP MVC, MySQL, Calendar Sync, Inter Font, Tailored CSS',
+                'preview_image' => 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Client Production System',
+                'price' => 0.00,
+                'is_featured' => 1,
+                'is_for_sale' => 0
+            ],
+            [
+                'id' => 103,
+                'title' => 'Rift Valley Specialty Agribusiness & Commodity Auction',
+                'category' => 'AgriTech & Export',
+                'short_description' => 'High-volume direct trade commodity exchange platform with digital lot bidding, moisture analytics reporting, exporter KYC verification, and M-Pesa B2B escrow.',
+                'icon' => 'fas fa-seedling',
+                'demo_type' => 'external',
+                'demo_url' => 'https://riftvalleycoffee.co.ke',
+                'hosting_domain' => 'riftvalleycoffee.co.ke',
+                'tech_stack' => 'PHP 8, Real-time Bidding Engine, Chart.js, M-Pesa API',
+                'preview_image' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Client Production System',
+                'price' => 0.00,
+                'is_featured' => 1,
+                'is_for_sale' => 0
+            ],
+            [
                 'id' => 1,
                 'title' => 'Studio Maven · Creative Studio',
                 'category' => 'Creative & Design',
@@ -302,7 +395,8 @@ class PortfolioController extends Controller {
                 'preview_image' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
                 'award_badge' => 'Site of the Day',
                 'price' => 49.00,
-                'is_featured' => 1
+                'is_featured' => 1,
+                'is_for_sale' => 1
             ],
             [
                 'id' => 2,

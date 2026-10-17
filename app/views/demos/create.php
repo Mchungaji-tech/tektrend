@@ -120,6 +120,21 @@
             </div>
         </div>
 
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; background: var(--bg-card-subtle, rgba(255,255,255,0.02)); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+            <div class="form-group mb-0">
+                <label style="font-weight: 700;">Commercial Status</label>
+                <select name="is_for_sale" id="isForSaleSelect" class="form-control" onchange="togglePriceField(this.value)">
+                    <option value="1">Turnkey Template / Prototype (FOR SALE)</option>
+                    <option value="0">Completed Client Project · Real Domain (NOT FOR SALE)</option>
+                </select>
+                <small style="color: var(--text-muted); font-size: 0.75rem;">Completed client works on live domains will display 'Completed Client Project' without price or buy button.</small>
+            </div>
+            <div class="form-group mb-0" id="priceGroup">
+                <label style="font-weight: 700;">Turnkey License Price ($ USD)</label>
+                <input type="number" step="0.01" name="price" id="priceInput" class="form-control" value="49.00" placeholder="49.00">
+            </div>
+        </div>
+
         <div class="form-group mb-4">
             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                 <input type="checkbox" name="is_featured" value="1" checked style="width: 18px; height: 18px;">

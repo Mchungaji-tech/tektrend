@@ -255,4 +255,31 @@ class ClientController extends Controller {
             $this->redirectWithError('/portal/profile', 'Could not update profile.');
         }
     }
+
+    /**
+     * Client Portal Shop: Browse and order turnkey software packages & templates
+     */
+    public function shop() {
+        $this->requireAuth();
+        $this->ensurePortfolioDemosTable();
+        $templates = [];
+        try {
+            $templates = $this->db->fetchAll("SELECT * FROM portfolio_demos WHERE is_for_sale = 1 ORDER BY sort_order ASC, id DESC");
+        } catch (\Throwable $e) {
+            $templates = [];
+        }
+        if (empty($templates)) {
+            $all = PortfolioController::getDefaultPrototypes();
+            $templates = array_filter($all, function($p) {
+                return !empty($p['is_for_sale']);
+            });
+        }
+        $this->view->setLayout('layouts/portal');
+        $this->render('portal/shop', [
+            'pageTitle'  => 'Turnkey Template Store',
+            'portalPage' => 'shop',
+            'templates'  => $templates,
+            'customer'   => $this->customerId() ? $this->db->fetch("SELECT * FROM customers WHERE id = ?", [$this->customerId()]) : null
+        ]);
+    }
 }

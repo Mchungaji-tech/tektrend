@@ -448,5 +448,40 @@ class HomeController extends Controller {
             return false;
         }
     }
+
+    /**
+     * Privacy Policy page
+     */
+    public function privacy() {
+        $settings = $this->getSettings();
+        $this->view->setLayout(null);
+        $this->render('home/privacy', [
+            'settings' => $settings,
+            'pageTitle' => 'Privacy Policy · Tektrend Softwares'
+        ], null);
+    }
+
+    /**
+     * Frequently Asked Questions (FAQ) page
+     */
+    public function faq() {
+        $settings = $this->getSettings();
+        $this->view->setLayout(null);
+        $this->render('home/faq', [
+            'settings' => $settings,
+            'pageTitle' => 'Frequently Asked Questions (FAQ) · Tektrend Softwares'
+        ], null);
+    }
+
+    private function getSettings() {
+        $settings = [];
+        try {
+            $rows = $this->db->fetchAll("SELECT `key`, `value` FROM settings");
+            foreach ($rows as $row) {
+                $settings[$row['key']] = $row['value'];
+            }
+        } catch (\Throwable $e) {}
+        return $settings;
+    }
 }
 

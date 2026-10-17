@@ -425,6 +425,24 @@
     if (drawerTech) drawerTech.textContent = projectData.tech || 'PHP 8, HTML5, CSS3';
     if (drawerPrice) drawerPrice.textContent = projectData.price ? `$${projectData.price}` : '$49';
 
+    const drawerPriceBox = document.querySelector('.akar-price-callout');
+    const drawerBuyBtn = document.querySelector('button[onclick="openBuyFromDrawer()"]');
+    const isForSale = !(projectData.is_for_sale === 0 || projectData.is_for_sale === false || projectData.is_for_sale === '0');
+
+    if (!isForSale) {
+      if (drawerPriceBox) drawerPriceBox.style.display = 'none';
+      if (drawerBuyBtn) drawerBuyBtn.style.display = 'none';
+      if (drawerExternalLink) {
+        drawerExternalLink.innerHTML = '<i class="fas fa-arrow-up-right-from-square"></i> Visit Live Client Website';
+      }
+    } else {
+      if (drawerPriceBox) drawerPriceBox.style.display = 'block';
+      if (drawerBuyBtn) drawerBuyBtn.style.display = 'inline-flex';
+      if (drawerExternalLink) {
+        drawerExternalLink.innerHTML = '<i class="fas fa-up-right-from-square"></i> Open Live Prototype in New Tab';
+      }
+    }
+
     const targetUrl = projectData.demo_url || projectData.url || '';
     if (drawerExternalLink && targetUrl) {
       drawerExternalLink.href = targetUrl;

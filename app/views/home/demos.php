@@ -507,22 +507,32 @@ $canonicalUrl = url('/live-demos');
         </li>
         <li class="akar-nav-item" data-teaser="demos">
           <a href="<?= eurl('/live-demos') ?>" class="akar-nav-link">
-            04 / Live Demos (<?= count($demos) ?>) <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+            04 / Works &amp; Demos (<?= count($demos) ?>) <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="shop">
+          <a href="<?= eurl('/shop') ?>" class="akar-nav-link">
+            05 / Software Store <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </li>
+        <li class="akar-nav-item" data-teaser="faq">
+          <a href="<?= eurl('/faq') ?>" class="akar-nav-link">
+            06 / FAQ <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="consultation">
           <a href="<?= eurl('/#consultation') ?>" class="akar-nav-link">
-            05 / Book Consultation <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
+            07 / Book Consultation <span class="akar-nav-arrow"><i class="fas fa-arrow-right"></i></span>
           </a>
         </li>
         <li class="akar-nav-item" data-teaser="portal">
           <?php if (isset($_SESSION['user_id'])): ?>
             <a href="<?= eurl('/dashboard') ?>" class="akar-nav-link">
-              06 / Company Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
+              08 / Company Dashboard <span class="akar-nav-arrow"><i class="fas fa-chart-pie"></i></span>
             </a>
           <?php else: ?>
             <a href="<?= eurl('/login') ?>" class="akar-nav-link">
-              06 / Sign In / Portal <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
+              08 / Sign In / Portal <span class="akar-nav-arrow"><i class="fas fa-arrow-right-to-bracket"></i></span>
             </a>
           <?php endif; ?>
         </li>
@@ -592,6 +602,12 @@ $canonicalUrl = url('/live-demos');
       <button class="akar-filter-btn --active" data-filter="all" onclick="filterAkaruDemos('all')">
         <span class="akar-filter-dot"></span> All Showcases (<?= count($demos) ?>)
       </button>
+      <button class="akar-filter-btn" data-filter="client-works" onclick="filterAkaruDemos('client-works')">
+        <span class="akar-filter-dot" style="background: #60a5fa;"></span> Featured Client Sites (Real Domains)
+      </button>
+      <button class="akar-filter-btn" data-filter="templates-for-sale" onclick="filterAkaruDemos('templates-for-sale')">
+        <span class="akar-filter-dot" style="background: #4ade80;"></span> Turnkey Templates (For Sale)
+      </button>
       <button class="akar-filter-btn" data-filter="creative" onclick="filterAkaruDemos('creative')">
         <span class="akar-filter-dot"></span> Creative & Agency
       </button>
@@ -631,14 +647,33 @@ $canonicalUrl = url('/live-demos');
         if (strpos($catLower, 'saas') !== false || strpos($catLower, 'fintech') !== false || strpos($catLower, 'publishing') !== false) $filterClasses .= ' saas';
 
         $priceVal = !empty($demo['price']) ? (float)$demo['price'] : 49.00;
+        $isForSale = Controller::isProjectForSale($demo);
+        $rawUrl = $demo['demo_url'] ?? '';
+        $isRealExternalDomain = false;
+        if (preg_match('#^https?://#i', $rawUrl)) {
+            $host = strtolower((string)parse_url($rawUrl, PHP_URL_HOST));
+            if ($host && stripos($host, 'tektrend.online') === false && stripos($host, 'localhost') === false && stripos($host, '127.0.0.1') === false) {
+                $isRealExternalDomain = true;
+            }
+        }
+        $targetUrl = (strpos($rawUrl, 'http') === 0) ? $rawUrl : url($rawUrl);
+
+        if (!$isForSale) {
+            $filterClasses .= ' client-works';
+        } else {
+            $filterClasses .= ' templates-for-sale';
+        }
+
         $projData = [
             'id' => $demo['id'] ?? $index,
             'title' => $demo['title'],
             'category' => $demo['category'],
             'desc' => $demo['short_description'],
-            'url' => url($demo['demo_url']),
+            'url' => $targetUrl,
+            'demo_url' => $targetUrl,
             'tech' => $demo['tech_stack'] ?? 'HTML5, CSS3, JavaScript',
-            'price' => $priceVal
+            'price' => $isForSale ? $priceVal : 0,
+            'is_for_sale' => $isForSale ? 1 : 0
         ];
       ?>
       <div class="portfolio-grid-card akar-portfolio-item" data-category="<?= $filterClasses ?>">
@@ -648,9 +683,13 @@ $canonicalUrl = url('/live-demos');
             <span style="font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--terra);">
               0<?= $index + 1 ?>
             </span>
-            <div style="display: flex; gap: 0.8rem;">
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
               <span class="akar-pill-tag"><?= sanitize($demo['category']) ?></span>
-              <?php if (!empty($demo['award_badge'])): ?>
+              <?php if (!$isForSale): ?>
+                <span class="akar-pill-tag" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);">
+                  <i class="fas fa-globe"></i> Live Client Production
+                </span>
+              <?php elseif (!empty($demo['award_badge'])): ?>
                 <span class="akar-pill-tag" style="background: rgba(228, 147, 102, 0.15); color: var(--terra);"><i class="fas fa-medal"></i> <?= sanitize($demo['award_badge']) ?></span>
               <?php endif; ?>
             </div>
@@ -682,27 +721,53 @@ $canonicalUrl = url('/live-demos');
         </div>
 
         <div>
-          <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
-            <div style="font-size: 1.35rem; color: var(--text-secondary);">
-              Turnkey License: <strong style="font-size: 1.8rem; color: var(--text-primary); margin-left: 0.4rem;">$<?= number_format($priceVal, 0) ?></strong>
+          <?php if (!$isForSale): ?>
+            <!-- Real Client Domain Project: Completed & NOT FOR SALE -->
+            <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
+              <div style="font-size: 1.3rem; color: #94a3b8; font-weight: 600;">
+                <i class="fas fa-circle-check" style="color: #60a5fa; margin-right: 0.5rem;"></i> Completed Client Deployment
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 700; text-transform: uppercase; color: #f59e0b; background: rgba(245, 158, 11, 0.12); padding: 0.35rem 0.9rem; border-radius: 20rem; border: 1px solid rgba(245, 158, 11, 0.25);">
+                <i class="fas fa-lock"></i> Not for Sale
+              </div>
             </div>
-            <div style="font-size: 1.15rem; font-weight: 700; text-transform: uppercase; color: #22c55e;">
-              <i class="fas fa-check"></i> Commercial Ready
-            </div>
-          </div>
 
-          <!-- Trio Action Row -->
-          <div class="card-actions-trio">
-            <button type="button" class="btn-quick-run" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($projData), ENT_QUOTES) ?>)">
-              <i class="fas fa-play"></i> Interactive View
-            </button>
-            <button type="button" class="btn-card-sub" onclick="openRequestCustomModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>')">
-              <i class="fas fa-cogs"></i> Custom Build
-            </button>
-            <button type="button" class="btn-card-sub" onclick="openBuyTurnkeyModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>', '<?= $priceVal ?>')">
-              <i class="fas fa-shopping-cart"></i> Buy Code ($<?= number_format($priceVal, 0) ?>)
-            </button>
-          </div>
+            <!-- Trio Action Row for Client Projects -->
+            <div class="card-actions-trio">
+              <a href="<?= htmlspecialchars($targetUrl) ?>" target="_blank" rel="noopener noreferrer" class="btn-quick-run" style="background: #2563eb; color: #ffffff; text-decoration: none;">
+                <i class="fas fa-arrow-up-right-from-square"></i> Visit Live Domain
+              </a>
+              <button type="button" class="btn-card-sub" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($projData), ENT_QUOTES) ?>)">
+                <i class="fas fa-eye"></i> Case Study
+              </button>
+              <button type="button" class="btn-card-sub" onclick="openRequestCustomModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>')">
+                <i class="fas fa-cogs"></i> Request Similar System
+              </button>
+            </div>
+          <?php else: ?>
+            <!-- Turnkey Template: FOR SALE -->
+            <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
+              <div style="font-size: 1.35rem; color: var(--text-secondary);">
+                Turnkey License: <strong style="font-size: 1.8rem; color: var(--text-primary); margin-left: 0.4rem;">$<?= number_format($priceVal, 0) ?></strong>
+              </div>
+              <div style="font-size: 1.15rem; font-weight: 700; text-transform: uppercase; color: #22c55e;">
+                <i class="fas fa-check"></i> Commercial Ready
+              </div>
+            </div>
+
+            <!-- Trio Action Row for Turnkey Templates -->
+            <div class="card-actions-trio">
+              <button type="button" class="btn-quick-run" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($projData), ENT_QUOTES) ?>)">
+                <i class="fas fa-play"></i> Interactive View
+              </button>
+              <button type="button" class="btn-card-sub" onclick="openRequestCustomModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>')">
+                <i class="fas fa-cogs"></i> Custom Build
+              </button>
+              <button type="button" class="btn-card-sub" onclick="openBuyTurnkeyModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>', '<?= $priceVal ?>')">
+                <i class="fas fa-shopping-cart"></i> Buy Code ($<?= number_format($priceVal, 0) ?>)
+              </button>
+            </div>
+          <?php endif; ?>
         </div>
       </div>
     <?php endforeach; ?>
@@ -893,8 +958,11 @@ $canonicalUrl = url('/live-demos');
         <ul>
           <li><a href="<?= eurl('/') ?>">Main Agency</a></li>
           <li><a href="<?= eurl('/#akarShowcase') ?>">Featured Works</a></li>
-          <li><a href="<?= eurl('/#services') ?>">Capabilities</a></li>
-           <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
+          <li><a href="<?= eurl('/live-demos') ?>">Completed Works &amp; Demos</a></li>
+          <li><a href="<?= eurl('/shop') ?>">Turnkey Software Store</a></li>
+          <li><a href="<?= eurl('/faq') ?>">FAQ</a></li>
+          <li><a href="<?= eurl('/privacy') ?>">Privacy Policy</a></li>
+          <li><a href="<?= eurl('/blog') ?>">Blog &amp; Insights</a></li>
           <li><a href="<?= eurl('/#consultation') ?>">Book a Free Consultation</a></li>
           <li><a href="<?= eurl(isset($_SESSION['user_id']) ? '/dashboard' : '/login') ?>">Sign In</a></li>
         </ul>
