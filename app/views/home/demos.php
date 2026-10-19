@@ -698,7 +698,7 @@ $canonicalUrl = url('/live-demos');
           <!-- Thumbnail -->
           <?php if (!empty($demo['preview_image'])): ?>
             <div class="portfolio-card-thumb" onclick="openAkaruCaseStudy(<?= htmlspecialchars(json_encode($projData), ENT_QUOTES) ?>)">
-              <img src="<?= eurl($demo['preview_image']) ?>" alt="<?= sanitize($demo['title']) ?>" loading="lazy">
+              <img src="<?= eurl($demo['preview_image']) ?>" alt="<?= sanitize($demo['title']) ?>" loading="lazy" onerror="this.onerror=null;this.src='<?= eurl('/assets/img/demo-placeholder.svg') ?>';">
             </div>
           <?php endif; ?>
 

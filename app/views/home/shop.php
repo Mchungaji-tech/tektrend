@@ -258,7 +258,7 @@ $commissionRate = $partner['commission_rate'] ?? 10.0;
         <div>
           <!-- Thumbnail & Price -->
           <div class="shop-thumb">
-            <img src="<?= eurl($item['preview_image'] ?: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80') ?>" alt="<?= sanitize($item['title']) ?>" loading="lazy">
+            <img src="<?= eurl($item['preview_image'] ?: '/assets/img/demo-placeholder.svg') ?>" alt="<?= sanitize($item['title']) ?>" loading="lazy" onerror="this.onerror=null;this.src='<?= eurl('/assets/img/demo-placeholder.svg') ?>';">
             <div class="shop-price-badge">
               $<?= number_format($price, 0) ?>
             </div>

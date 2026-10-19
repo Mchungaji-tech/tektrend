@@ -26,7 +26,7 @@ if (!empty($portfolioDemos)) {
             'color' => $colors[$idx % count($colors)],
             'year' => date('Y', strtotime($pDemo['created_at'] ?? 'now')),
             'short_desc' => $pDemo['short_description'] ?? 'High-performance cloud management system with real-time financial tracking.',
-            'image' => $pDemo['preview_image'] ?: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
+            'image' => $pDemo['preview_image'] ?: eurl('/assets/img/demo-placeholder.svg'),
             'demo_url' => strpos($demoLink, 'http') === 0 ? $demoLink : url($demoLink),
             'tech' => $pDemo['tech_stack'] ?? 'PHP 8.2 MVC, MySQL, Redis, GSAP',
             'price' => (float)($pDemo['price'] ?? 79.00),
@@ -720,7 +720,7 @@ if (!empty($portfolioDemos)) {
             </div>
 
             <div class="akar-card-media">
-              <img src="<?= $proj['image'] ?>" alt="<?= sanitize($proj['title']) ?>" loading="lazy">
+              <img src="<?= $proj['image'] ?>" alt="<?= sanitize($proj['title']) ?>" loading="lazy" onerror="this.onerror=null;this.src='<?= eurl('/assets/img/demo-placeholder.svg') ?>';">
               <div class="akar-media-overlay-badge">
                 <?php if (!empty($proj['is_for_sale'])): ?>
                   <i class="fas fa-code"></i> Live Template

@@ -381,7 +381,7 @@ function getCmsVal($key, $contentMap, $defaultContent) {
                                 <div style="display: grid; grid-template-columns: 140px 1fr 1fr 120px; gap: 1rem; align-items: center;">
                                     <!-- Photo Preview -->
                                     <div style="width: 140px; height: 90px; border-radius: var(--radius-sm); overflow: hidden; background: #000; border: 1px solid var(--border);">
-                                        <img id="preview_demo_<?= $demo['id'] ?>" src="<?= sanitize($demo['preview_image']) ?>" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80'">
+                                        <img id="preview_demo_<?= $demo['id'] ?>" src="<?= sanitize($demo['preview_image']) ?>" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='<?= eurl('/assets/img/demo-placeholder.svg') ?>';">
                                     </div>
 
                                     <div>
