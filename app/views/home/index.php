@@ -107,6 +107,42 @@ if (!empty($portfolioDemos)) {
             'demo_url' => url('/live_demo/restaurant.html'),
             'tech' => 'Playfair Typography, CSS Motion, Booking Form',
             'price' => 49.00
+        ],
+        [
+            'id' => 7,
+            'title' => 'FORMA Creative Studio',
+            'category' => 'Creative & Design',
+            'color' => 'pink',
+            'year' => '2026',
+            'short_desc' => 'Award-site inspired studio portfolio with inertia scrolling, split-text reveals, pinned horizontal galleries and cursor-following case studies.',
+            'image' => 'https://images.unsplash.com/photo-1618005182384-a81a0e104d95?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/agency.html'),
+            'tech' => 'MM Motion Engine, CSS Scroll Pinning, Editorial Type',
+            'price' => 69.00
+        ],
+        [
+            'id' => 8,
+            'title' => 'Arbor Living Residences',
+            'category' => 'Real Estate & Architecture',
+            'color' => 'blue',
+            'year' => '2026',
+            'short_desc' => 'Cinematic property experience with Ken Burns hero, sticky manifesto, full-bleed parallax image breaks and horizontal typology showcase.',
+            'image' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/residence.html'),
+            'tech' => 'MM Motion Engine, Parallax Layers, Scroll Counters',
+            'price' => 79.00
+        ],
+        [
+            'id' => 9,
+            'title' => 'Casa Sala Heritage Hotel',
+            'category' => 'Hospitality & Travel',
+            'color' => 'terra',
+            'year' => '2026',
+            'short_desc' => 'Boutique hotel storysite with wipe-in ritual rows, pinned suite carousel, destination walk-times and a direct-booking strip.',
+            'image' => 'https://images.unsplash.com/photo-1564501049405-7bbd324bf842?auto=format&fit=crop&w=1200&q=85',
+            'demo_url' => url('/live_demo/hotel.html'),
+            'tech' => 'MM Motion Engine, Scroll-Pin, Warm Editorial CSS',
+            'price' => 59.00
         ]
     ];
 }

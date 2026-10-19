@@ -10,3 +10,7 @@ public/uploads/*
 # OS / editor cruft
 .DS_Store
 Thumbs.db
+
+# Local test/debug screenshots dropped at repo root
+/*.png
+cookie.txt

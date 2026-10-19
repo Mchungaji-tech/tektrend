@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arbor Living · Signature Residences</title>
+  <meta name="description" content="Arbor Living — a collection of signature residences where architecture, light and landscape converge. Editorial property experience with cinematic motion." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --mm-accent: #a88d68; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #141311;
+      color: #eee8de;
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    .serif { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+    .ital { font-family: 'Cormorant Garamond', serif; font-style: italic; }
+    .eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--mm-accent); font-weight: 600;
+    }
+
+    /* ---------- Nav ---------- */
+    .navbar {
+      position: fixed; inset: 0 0 auto 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 3.4rem;
+      z-index: 900;
+      background: linear-gradient(rgba(15,14,12,.75), rgba(15,14,12,0));
+      transition: background .4s;
+    }
+    .navbar.is-scrolled { background: rgba(15, 14, 12, 0.88); backdrop-filter: blur(14px); }
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; letter-spacing: 0.3em; text-transform: uppercase; }
+    .logo span { color: var(--mm-accent); }
+    .nav-links { display: flex; gap: 2.6rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(238,232,222,0.6); transition: color .3s;
+    }
+    .nav-links a:hover { color: #eee8de; }
+    .nav-cta {
+      border: 1px solid rgba(238,232,222,0.4);
+      padding: 0.8rem 1.8rem;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      transition: background .4s, color .4s, border-color .4s;
+    }
+    .nav-cta:hover { background: #eee8de; color: #141311; border-color: #eee8de; }
+
+    /* ---------- Cinematic hero ---------- */
+    .hero { height: 100svh; position: relative; overflow: hidden; display: flex; align-items: flex-end; }
+    .hero-bg { position: absolute; inset: -6%; z-index: -1; }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; animation: arbor-kenburns 18s ease-in-out infinite alternate; }
+    @keyframes arbor-kenburns { from { transform: scale(1); } to { transform: scale(1.09); } }
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,14,12,.32) 0%, rgba(15,14,12,.05) 40%, rgba(15,14,12,.85) 100%); z-index: -1; }
+    .hero-inner { padding: 0 3.4rem 4rem; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      font-size: clamp(3rem, 8.4vw, 8rem);
+      line-height: 0.96; letter-spacing: 0.01em;
+    }
+    .hero h1 .ital { color: var(--mm-accent); }
+    .hero-meta { text-align: right; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(238,232,222,0.65); }
+    .hero-meta b { display: block; font-size: 1.05rem; color: #eee8de; font-weight: 500; letter-spacing: 0.06em; text-transform: none; font-family: 'Cormorant Garamond', serif; }
+
+    /* ---------- Sticky manifesto ---------- */
+    .creed { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 7vw, 7rem); padding: clamp(6rem, 13vw, 11rem) 3.4rem; }
+    .creed-sticky { position: sticky; top: 22vh; align-self: start; }
+    .creed-sticky .eyebrow { margin-bottom: 1.2rem; }
+    .creed-sticky h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem, 4vw, 3.6rem); line-height: 1.05; }
+    .creed-blocks > div { padding: 2.6rem 0; border-top: 1px solid rgba(238,232,222,0.14); }
+    .creed-blocks > div:last-child { border-bottom: 1px solid rgba(238,232,222,0.14); }
+    .creed-blocks h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 1.7rem; margin-bottom: 0.7rem; }
+    .creed-blocks h3 i { font-style: normal; color: var(--mm-accent); font-family: 'Inter'; font-size: 0.8rem; letter-spacing: 0.1em; vertical-align: middle; margin-right: 0.8rem; }
+    .creed-blocks p { color: rgba(238,232,222,0.62); font-size: 0.95rem; max-width: 52ch; }
+
+    /* ---------- Full-bleed parallax image breaks ---------- */
+    .break { height: 78vh; overflow: hidden; position: relative; }
+    .break img { width: 100%; height: 118%; object-fit: cover; position: absolute; top: -9%; left: 0; }
+    .break figcaption {
+      position: absolute; bottom: 2.2rem; left: 3.4rem;
+      font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase;
+      background: rgba(15,14,12,.55); backdrop-filter: blur(8px);
+      padding: 0.7rem 1.3rem; border: 1px solid rgba(238,232,222,0.18);
+    }
+
+    /* ---------- Marquee band ---------- */
+    .band { border-block: 1px solid rgba(238,232,222,0.14); background: #191713; }
+    .band .mm-strip { border: 0; color: rgba(238,232,222,0.8); font-weight: 500; font-family: 'Cormorant Garamond', serif; text-transform: none; letter-spacing: 0.12em; font-size: clamp(1.4rem, 3.4vw, 2.6rem); }
+
+    /* ---------- Residences horizontal pinned gallery ---------- */
+    .plans { padding-top: clamp(5rem, 10vw, 8rem); }
+    .plans-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 3.4rem 1rem; }
+    .plans-head h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem, 4.4vw, 3.8rem); }
+    .plans-head span { font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(238,232,222,0.5); }
+    .mm-hs__track { gap: 2.2rem; padding: 1.5rem 3.4rem; }
+    .plan-card { width: min(80vw, 560px); }
+    .plan-media { aspect-ratio: 5/6; overflow: hidden; position: relative; background: #211f1b; }
+    .plan-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s cubic-bezier(.23,1,.32,1); }
+    .plan-card:hover .plan-media img { transform: scale(1.06); }
+    .plan-badge {
+      position: absolute; top: 1.2rem; left: 1.2rem;
+      font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase;
+      background: rgba(15,14,12,.6); backdrop-filter: blur(6px);
+      border: 1px solid rgba(238,232,222,0.2);
+      padding: 0.5rem 1rem;
+    }
+    .plan-info { display: flex; justify-content: space-between; align-items: baseline; padding-top: 1.1rem; }
+    .plan-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; }
+    .plan-info small { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(238,232,222,0.55); }
+    .plan-price { color: var(--mm-accent); font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; }
+
+    /* ---------- Stats ---------- */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2rem; padding: clamp(4rem, 9vw, 7rem) 3.4rem;
+      border-top: 1px solid rgba(238,232,222,0.14);
+      margin-top: clamp(4rem, 9vw, 7rem);
+      text-align: center;
+    }
+    .stats b { display: block; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2.4rem, 5vw, 4.4rem); color: #eee8de; font-variant-numeric: tabular-nums; }
+    .stats span { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(238,232,222,0.5); }
+
+    /* ---------- Enquire ---------- */
+    .enquire { padding: clamp(6rem, 14vw, 10rem) 3.4rem; text-align: center; position: relative; overflow: hidden; }
+    .enquire h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2.4rem, 7vw, 6rem); line-height: 1.02; }
+    .enquire h2 .ital { color: var(--mm-accent); }
+    .enquire p { color: rgba(238,232,222,0.6); max-width: 44ch; margin: 1.6rem auto 0; }
+    .enquire .cta {
+      display: inline-block; margin-top: 2.6rem;
+      padding: 1.05rem 2.8rem;
+      border: 1px solid rgba(238,232,222,0.4);
+      font-size: 0.74rem; letter-spacing: 0.22em; text-transform: uppercase;
+      transition: background .4s, color .4s;
+    }
+    .enquire .cta:hover { background: #eee8de; color: #141311; }
+    footer {
+      border-top: 1px solid rgba(238,232,222,0.14);
+      padding: 2rem 3.4rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(238,232,222,0.45);
+    }
+
+    @media (max-width: 900px) {
+      .navbar { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero-inner, .creed, .plans-head, .mm-hs__track, .stats, .enquire, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .creed { grid-template-columns: 1fr; }
+      .creed-sticky { position: static; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .hero-meta { text-align: left; }
+    }
+  </style>
+  <!-- MM Motion Engine — award-style scroll & hover motion -->
+  <script>window.MM_OPTIONS = { accent: '#a88d68', brand: 'ARBOR LIVING' };</script>
+  <link rel="stylesheet" href="enhance.css">
+  <script src="enhance.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="#" class="logo">Arbor<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#creed" class="mm-link">Philosophy</a></li>
+      <li><a href="#residences" class="mm-link">Residences</a></li>
+      <li><a href="#gallery" class="mm-link">Gallery</a></li>
+      <li><a href="#enquire" class="mm-link">Enquire</a></li>
+    </ul>
+    <a href="#enquire" class="nav-cta">Private viewing</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1900&q=85" alt="Arbor residence exterior at dusk">
+    </div>
+    <div class="hero-inner">
+      <h1 class="mm-hero-rise">Homes that hold <span class="ital">light</span></h1>
+      <div class="hero-meta mm-hero-rise">
+        <b>Belgrade Waterfront · Phase II</b>
+        32 residences — completion 2027
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY CREED -->
+  <section class="creed" id="creed">
+    <div class="creed-sticky">
+      <p class="eyebrow">Philosophy</p>
+      <h2>Architecture is patience made <span class="ital">visible</span></h2>
+    </div>
+    <div class="creed-blocks">
+      <div data-mm-reveal>
+        <h3><i>01</i>Orientation</h3>
+        <p>Every residence is mapped to the sun's arc — living rooms catch the morning, terraces hold the evening. Light is the first material we design with.</p>
+      </div>
+      <div data-mm-reveal>
+        <h3><i>02</i>Material honesty</h3>
+        <p>Licensed oak, travertine, blackened steel. Nothing imitates anything. Surfaces are chosen to age gracefully and be touched often.</p>
+      </div>
+      <div data-mm-reveal>
+        <h3><i>03</i>Landscape continuity</h3>
+        <p>A two-hectare arboretum dissolves the line between garden and façade. Ground-floor homes open fully into the planting — the park becomes your threshold.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE BREAK -->
+  <figure class="break" id="gallery">
+    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1900&q=85" alt="Interior with double-height glazing" data-mm-speed="0.14">
+    <figcaption>Residence 12 — double-height living hall</figcaption>
+  </figure>
+
+  <!-- MARQUEE BAND -->
+  <div class="band">
+    <div class="mm-strip mm-marquee" data-mm-duration="26"><span>Travertine<span style="color:var(--mm-accent)"> ✦ </span>Blackened Steel<span style="color:var(--mm-accent)"> ✦ </span>Licensed Oak<span style="color:var(--mm-accent)"> ✦ </span>Honed Limestone<span style="color:var(--mm-accent)"> ✦ </span>Living Glass<span style="color:var(--mm-accent)"> ✦ </span></span></div>
+  </div>
+
+  <!-- RESIDENCES: PINNED HORIZONTAL GALLERY -->
+  <section class="plans" id="residences">
+    <div class="plans-head">
+      <h2>The <span class="ital">collection</span></h2>
+      <span>Scroll sideways — 05 typologies</span>
+    </div>
+    <div data-mm-hscroll>
+      <div class="mm-hs__track">
+        <article class="plan-card">
+          <div class="plan-media"><span class="plan-badge">Garden maisonette</span><img src="https://images.unsplash.com/photo-1600566753190-17e0c7788045?auto=format&fit=crop&w=1000&q=80" alt="Garden maisonette interior"></div>
+          <div class="plan-info"><div><h3>Typology A — Fern</h3><small>2 bed · 128 m² + garden</small></div><span class="plan-price">€ 690k</span></div>
+        </article>
+        <article class="plan-card">
+          <div class="plan-media"><span class="plan-badge">Corner suite</span><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1000&q=80" alt="Corner suite living room"></div>
+          <div class="plan-info"><div><h3>Typology B — Ridge</h3><small>3 bed · 164 m² corner</small></div><span class="plan-price">€ 870k</span></div>
+        </article>
+        <article class="plan-card">
+          <div class="plan-media"><span class="plan-badge">Sky level</span><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=80" alt="Sky level apartment"></div>
+          <div class="plan-info"><div><h3>Typology C — Crown</h3><small>3 bed · 181 m² terrace</small></div><span class="plan-price">€ 1.02M</span></div>
+        </article>
+        <article class="plan-card">
+          <div class="plan-media"><span class="plan-badge">Duplex</span><img src="https://images.unsplash.com/photo-1600607687644-a7c6f0f5d4f3?auto=format&fit=crop&w=1000&q=80" alt="Duplex residence staircase"></div>
+          <div class="plan-info"><div><h3>Typology D — Vault</h3><small>4 bed · 240 m² duplex</small></div><span class="plan-price">€ 1.46M</span></div>
+        </article>
+        <article class="plan-card">
+          <div class="plan-media"><span class="plan-badge">Penthouse</span><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=80" alt="Penthouse roof terrace"></div>
+          <div class="plan-info"><div><h3>Typology E — Canopy</h3><small>5 bed · 320 m² roof garden</small></div><span class="plan-price">€ 2.30M</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE BREAK -->
+  <figure class="break">
+    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1900&q=85" alt="Arbor Living façade at blue hour" data-mm-speed="0.12">
+    <figcaption>West elevation — blue hour</figcaption>
+  </figure>
+
+  <!-- STATS -->
+  <section class="stats" data-mm-stagger>
+    <div><b data-mm-count="32">0</b><span>Residences</span></div>
+    <div><b data-mm-count="2" data-mm-suffix=" ha">0</b><span>Private arboretum</span></div>
+    <div><b data-mm-count="94" data-mm-suffix="%">0</b><span>Daylight autonomy</span></div>
+    <div><b data-mm-count="18" data-mm-suffix=" min">0</b><span>To city centre</span></div>
+  </section>
+
+  <!-- ENQUIRE -->
+  <section class="enquire" id="enquire">
+    <p class="eyebrow" data-mm-reveal>By appointment only</p>
+    <h2 data-mm-reveal>Reserve your <span class="ital">viewing</span></h2>
+    <p data-mm-reveal>The sales gallery is open Tuesday to Saturday. Register interest and our residence advisor will compose a private appointment around your day.</p>
+    <a class="cta" href="mailto:viewings@arborliving.demo" data-mm-magnetic>Request appointment</a>
+  </section>
+
+  <footer>
+    <span>© 2026 Arbor Living — Developments by Arbor d.o.o.</span>
+    <div>
+      <a href="#" class="mm-link">Instagram</a>&nbsp;&nbsp;&nbsp;
+      <a href="#" class="mm-link">Brochure (PDF)</a>
+    </div>
+    <span>TekTrend Live Demo</span>
+  </footer>
+</body>
+</html>

@@ -517,6 +517,54 @@ class PortfolioController extends Controller {
                 'award_badge' => 'Developer Award',
                 'price' => 89.00,
                 'is_featured' => 1
+            ],
+            [
+                'id' => 10,
+                'title' => 'FORMA · Independent Creative Studio',
+                'category' => 'Creative & Design',
+                'short_description' => 'Award-site inspired studio showcase with inertia scrolling, split-text reveals, pinned horizontal work gallery, cursor-following case index and magnetic interactions.',
+                'icon' => 'fas fa-feather-pointed',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/agency.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, MM Motion Engine, Scroll Pinning, Editorial Type',
+                'preview_image' => 'https://images.unsplash.com/photo-1618005182384-a81a0e104d95?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Awwwards Aesthetic',
+                'price' => 69.00,
+                'is_featured' => 1,
+                'is_for_sale' => 1
+            ],
+            [
+                'id' => 11,
+                'title' => 'Arbor Living · Signature Residences',
+                'category' => 'Real Estate & Architecture',
+                'short_description' => 'Cinematic property experience with Ken Burns hero, sticky philosophy section, full-bleed parallax image breaks and horizontal typology collection.',
+                'icon' => 'fas fa-building',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/residence.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, MM Motion Engine, Parallax Layers, Scroll Counters',
+                'preview_image' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Design Award Nominee',
+                'price' => 79.00,
+                'is_featured' => 1,
+                'is_for_sale' => 1
+            ],
+            [
+                'id' => 12,
+                'title' => 'Casa Sala · Boutique Heritage Hotel',
+                'category' => 'Hospitality & Travel',
+                'short_description' => 'Editorial hotel storysite with wipe-in ritual rows, pinned suite carousel, destination walk-times, marquee bands and direct booking strip.',
+                'icon' => 'fas fa-hotel',
+                'demo_type' => 'local',
+                'demo_url' => '/live_demo/hotel.html',
+                'hosting_domain' => 'Turnkey Template',
+                'tech_stack' => 'HTML5, MM Motion Engine, Scroll-Pin, Warm Editorial CSS',
+                'preview_image' => 'https://images.unsplash.com/photo-1564501049405-7bbd324bf842?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Travel Aesthetic Award',
+                'price' => 59.00,
+                'is_featured' => 1,
+                'is_for_sale' => 1
             ]
         ];
     }

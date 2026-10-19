@@ -1,0 +1,277 @@
+/* ============================================================
+   MM Motion Engine styles — pairs with enhance.js
+   Adaptive: html.mm-dark / html.mm-light set by the engine.
+   Accent defaults can be overridden per page:
+   :root { --mm-accent: #c9a87c; }
+   ============================================================ */
+
+:root {
+  --mm-accent: #c9a87c;
+  --mm-fg: #f5f0e8;
+  --mm-bg: #101010;
+}
+html.mm-dark { --mm-fg: #f5f0e8; --mm-bg: #0d0d0d; }
+html.mm-light { --mm-fg: #141414; --mm-bg: #f4f1ec; }
+
+/* ---------- preload state: hide content until counter finishes ---------- */
+html.mm-preloading body > :not(.mm-preload) {
+  visibility: hidden;
+}
+
+/* ---------- Preloader ---------- */
+.mm-preload {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--mm-bg);
+  color: var(--mm-fg);
+  display: block;
+  transition: transform 0.9s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.mm-preload.is-done { transform: translateY(-100%); }
+.mm-preload__bar {
+  position: absolute;
+  left: 4vw; right: 4vw; top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'Inter', sans-serif;
+}
+.mm-preload__brand {
+  font-size: clamp(1rem, 2.4vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.mm-preload__num {
+  font-size: clamp(3rem, 12vw, 9rem);
+  font-weight: 200;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.mm-preload__pct {
+  position: absolute;
+  left: 4vw; right: 4vw; bottom: 6vh;
+  height: 1px;
+  background: rgba(128, 128, 128, 0.25);
+  overflow: hidden;
+}
+.mm-preload__pct i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--mm-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ---------- Scroll progress ---------- */
+.mm-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 9998;
+  pointer-events: none;
+}
+.mm-progress i {
+  display: block;
+  height: 100%;
+  background: var(--mm-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+/* ---------- Film grain ---------- */
+.mm-grain {
+  position: fixed;
+  inset: -100%;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: mm-grain-shift 0.9s steps(4) infinite;
+}
+@keyframes mm-grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 1%); }
+  50% { transform: translate(1%, -2%); }
+  75% { transform: translate(-1%, 2%); }
+  100% { transform: translate(2%, -1%); }
+}
+
+/* ---------- Custom cursor ---------- */
+html.mm-cursor-on, html.mm-cursor-on * { cursor: none !important; }
+.mm-cursor {
+  position: fixed; top: -4px; left: -4px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--mm-accent);
+  z-index: 99996;
+  pointer-events: none;
+}
+.mm-cursor-ring {
+  position: fixed; top: -20px; left: -20px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  z-index: 99995;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mm-bg);
+  transition: width .35s cubic-bezier(.23,1,.32,1), height .35s cubic-bezier(.23,1,.32,1),
+              top .35s cubic-bezier(.23,1,.32,1), left .35s cubic-bezier(.23,1,.32,1),
+              background .35s, border-color .35s;
+}
+.mm-cursor-ring.is-link {
+  top: -28px; left: -28px;
+  width: 56px; height: 56px;
+  background: var(--mm-accent);
+  border-color: transparent;
+  mix-blend-mode: normal;
+}
+.mm-cursor-ring.is-hover:not(.is-link) {
+  top: -26px; left: -26px;
+  width: 52px; height: 52px;
+  border-color: var(--mm-accent);
+}
+.mm-cursor-ring:not(:empty) {
+  top: -44px; left: -44px;
+  width: 88px; height: 88px;
+  background: var(--mm-accent);
+  border-color: transparent;
+  color: var(--mm-bg);
+}
+
+/* ---------- Split word reveal (obys mask-up) ---------- */
+.mm-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.mm-word__i {
+  display: inline-block;
+  transform: translateY(110%) rotate(4deg);
+  transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+.mm-in .mm-word__i { transform: translateY(0) rotate(0); }
+
+/* ---------- Generic reveal / media entrance ---------- */
+[data-mm-reveal] {
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 1.1s cubic-bezier(0.23,1,0.32,1), transform 1.1s cubic-bezier(0.23,1,0.32,1);
+  will-change: opacity, transform;
+}
+[data-mm-reveal].mm-in { opacity: 1; transform: none; }
+[data-mm-reveal="scale"] { transform: scale(0.94); }
+[data-mm-reveal="left"] { transform: translateX(-48px); }
+[data-mm-reveal="right"] { transform: translateX(48px); }
+
+[data-mm-stagger] > * {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity .9s cubic-bezier(0.23,1,0.32,1), transform .9s cubic-bezier(0.23,1,0.32,1);
+}
+[data-mm-stagger] > .mm-in { opacity: 1; transform: none; }
+
+/* ---------- Parallax images ---------- */
+.mm-par { will-change: transform; backface-visibility: hidden; }
+
+/* ---------- Marquee ---------- */
+.mm-marquee {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+.mm-marquee__inner {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: mm-marq 22s linear infinite;
+  min-width: 100%;
+}
+.mm-marquee__copy { /* second lane sits in flow for a seamless loop */ }
+.mm-marquee { position: relative; }
+@keyframes mm-marq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+html.mm-preloading .mm-marquee__inner { animation-play-state: paused; }
+
+/* ticker strip skin used across the demos */
+.mm-strip {
+  padding: clamp(14px, 2vw, 26px) 0;
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+  font-size: clamp(1.15rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  background: transparent;
+}
+.mm-strip i { font-style: normal; color: var(--mm-accent); padding: 0 0.6em; }
+
+/* ---------- Nav auto-hide ---------- */
+.mm-nav { transition: transform .5s cubic-bezier(.23,1,.32,1), background .4s; }
+.mm-nav--hidden { transform: translateY(-110%); }
+
+/* ---------- Horizontal pinned gallery ---------- */
+.mm-hs__track {
+  display: flex;
+  align-items: center;
+  will-change: transform;
+  min-height: 100vh;
+}
+.mm-hs__track > * { flex-shrink: 0; }
+
+/* ---------- Misc niceties ---------- */
+html.mm-ready { scroll-behavior: auto; }
+html.mm-loaded .mm-hero-rise {
+  animation: mm-rise 1.2s cubic-bezier(.23,1,.32,1) both;
+}
+html.mm-loaded .mm-hero-rise:nth-child(2) { animation-delay: .12s; }
+html.mm-loaded .mm-hero-rise:nth-child(3) { animation-delay: .24s; }
+@keyframes mm-rise {
+  from { opacity: 0; transform: translateY(60px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* underline sweep for links that opt in */
+.mm-link {
+  position: relative;
+  text-decoration: none;
+}
+.mm-link::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .5s cubic-bezier(.23,1,.32,1);
+}
+.mm-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* ---------- Reduced motion / small screens ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .mm-word__i, [data-mm-reveal], [data-mm-stagger] > * { transition: none !important; transform: none !important; opacity: 1 !important; }
+  .mm-marquee__inner { animation: none !important; }
+  .mm-grain, .mm-preload { display: none; }
+}
+@media (max-width: 768px) {
+  .mm-cursor, .mm-cursor-ring, .mm-grain { display: none; }
+}

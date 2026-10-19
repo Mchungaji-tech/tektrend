@@ -257,7 +257,10 @@ class HomeController extends Controller {
             '/live_demo/restaurant.html',
             '/live_demo/nexus.html',
             '/live_demo/engineering.html',
-            '/live_demo/magazine.html'
+            '/live_demo/magazine.html',
+            '/live_demo/agency.html',
+            '/live_demo/residence.html',
+            '/live_demo/hotel.html'
         ];
 
         $today = date('Y-m-d');

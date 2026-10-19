@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Sala · Boutique Heritage Hotel</title>
+  <meta name="description" content="Casa Sala — a boutique heritage hotel of fourteen suites, a courtyard restaurant and rooftop sea views. Slow hospitality, editorially told." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --mm-accent: #b0876a; --ink: #2c2420; --sand: #f3ece3; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--sand);
+      color: var(--ink);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    .serif { font-family: 'Cormorant Garamond', serif; }
+    .ital { font-family: 'Cormorant Garamond', serif; font-style: italic; }
+    .eyebrow { font-size: 0.7rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--mm-accent); font-weight: 600; }
+    .wrap { width: min(1360px, 90vw); margin: 0 auto; }
+
+    /* ---------- Nav ---------- */
+    .navbar {
+      position: fixed; inset: 0 0 auto 0; z-index: 900;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(243, 236, 227, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(44, 36, 32, 0.08);
+    }
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; }
+    .logo span { color: var(--mm-accent); }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(44,36,32,0.6); transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      background: var(--ink); color: var(--sand);
+      padding: 0.85rem 1.9rem; border-radius: 40px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: background .4s;
+    }
+    .nav-cta:hover { background: var(--mm-accent); }
+
+    /* ---------- Hero ---------- */
+    .hero { min-height: 100svh; display: grid; grid-template-columns: 1.05fr 0.95fr; }
+    .hero-copy {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 8rem 4rem 4rem;
+    }
+    .hero-copy .eyebrow { margin-bottom: 1.6rem; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      font-size: clamp(2.8rem, 6.6vw, 6.4rem);
+      line-height: 1.0; letter-spacing: -0.01em;
+    }
+    .hero h1 .ital { color: var(--mm-accent); }
+    .hero-copy p { margin-top: 1.8rem; max-width: 42ch; color: rgba(44,36,32,0.68); font-size: 1.02rem; }
+    .hero-facts { margin-top: 3rem; display: flex; gap: 2.8rem; flex-wrap: wrap; }
+    .hero-facts div { border-left: 1px solid rgba(44,36,32,0.25); padding-left: 1.1rem; }
+    .hero-facts b { display: block; font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 600; line-height: 1.1; }
+    .hero-facts span { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(44,36,32,0.55); }
+    .hero-media { position: relative; overflow: hidden; min-height: 45vh; }
+    .hero-media img { position: absolute; inset: -7%; width: 100%; height: 114%; object-fit: cover; }
+    .hero-stamp {
+      position: absolute; top: 50%; right: 2rem; transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      font-size: 0.66rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      background: rgba(44,36,32,0.45); backdrop-filter: blur(6px);
+      padding: 1.2rem 0.55rem;
+    }
+
+    /* ---------- Intro with drop cap ---------- */
+    .welcome { padding: clamp(5rem, 11vw, 9rem) 0; text-align: center; }
+    .welcome .eyebrow { margin-bottom: 1.4rem; }
+    .welcome h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(1.9rem, 4.4vw, 3.4rem); line-height: 1.15; max-width: 24ch; margin: 0 auto; }
+    .welcome p { max-width: 58ch; margin: 2rem auto 0; color: rgba(44,36,32,0.7); }
+    .welcome .sig { margin-top: 2.4rem; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.4rem; color: var(--mm-accent); }
+
+    /* ---------- Marquee band ---------- */
+    .band { background: var(--ink); color: var(--sand); border-block: 1px solid rgba(44,36,32,.9); }
+    .band .mm-strip { border: 0; font-family: 'Cormorant Garamond', serif; text-transform: none; letter-spacing: 0.1em; font-weight: 500; font-size: clamp(1.3rem, 3vw, 2.2rem); }
+    .band .mm-strip i { color: var(--mm-accent); }
+
+    /* ---------- Suites: pinned horizontal ---------- */
+    .suites { padding-top: clamp(5rem, 10vw, 8rem); }
+    .suites-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+    .suites-head h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem, 4.6vw, 3.6rem); }
+    .suites-head span { font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(44,36,32,0.5); }
+    .mm-hs__track { gap: 2.2rem; padding: 1.4rem 0; }
+    .suite-card { width: min(78vw, 520px); }
+    .suite-media { aspect-ratio: 4/3.4; overflow: hidden; border-radius: 2px; position: relative; }
+    .suite-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s cubic-bezier(.23,1,.32,1); }
+    .suite-card:hover .suite-media img { transform: scale(1.055); }
+    .suite-tag {
+      position: absolute; left: 1.1rem; bottom: 1.1rem;
+      background: rgba(243,236,227,.9); color: var(--ink);
+      font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
+      padding: 0.55rem 1rem;
+    }
+    .suite-info { display: flex; justify-content: space-between; align-items: baseline; padding-top: 1rem; gap: 1rem; }
+    .suite-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; }
+    .suite-info small { display: block; font-size: 0.74rem; color: rgba(44,36,32,0.6); letter-spacing: 0.04em; }
+    .suite-price { text-align: right; }
+    .suite-price b { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; display: block; }
+    .suite-price span { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(44,36,32,0.5); }
+
+    /* ---------- Rituals (experience rows with hover reveal) ---------- */
+    .rituals { padding: clamp(6rem, 12vw, 9rem) 0 clamp(3rem, 6vw, 5rem); }
+    .rituals h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem, 4.6vw, 3.6rem); margin-bottom: 2.6rem; }
+    .ritual-row {
+      position: relative; display: flex; align-items: center; gap: 2rem;
+      padding: 1.5rem 0.6rem;
+      border-top: 1px solid rgba(44,36,32,0.16);
+      transition: padding .5s cubic-bezier(.23,1,.32,1), color .4s;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .ritual-row:last-of-type { border-bottom: 1px solid rgba(44,36,32,0.16); }
+    .ritual-row h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(1.5rem, 3.4vw, 2.6rem); flex: 1; }
+    .ritual-row h3 .ital { color: var(--mm-accent); }
+    .ritual-row p { width: min(38ch, 42%); font-size: 0.9rem; color: rgba(44,36,32,0.6); }
+    .ritual-row i.far { color: var(--mm-accent); width: 30px; text-align: center; font-size: 1.15rem; }
+    .ritual-row::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--ink); transform: scaleX(0); transform-origin: right;
+      transition: transform .6s cubic-bezier(.23,1,.32,1); z-index: 0;
+    }
+    .ritual-row:hover::before { transform: scaleX(1); transform-origin: left; }
+    .ritual-row:hover { padding-left: 1.6rem; color: var(--sand); }
+    .ritual-row:hover > * { position: relative; z-index: 1; }
+    .ritual-row:hover p { color: rgba(243,236,227,0.72); }
+    .ritual-row:hover i.far { color: var(--mm-accent); }
+
+    /* ---------- Destination split ---------- */
+    .destination { padding: clamp(4rem, 9vw, 7rem) 0; }
+    .dest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+    .dest-media { aspect-ratio: 3/3.7; overflow: hidden; position: relative; }
+    .dest-media img { width: 100%; height: 112%; object-fit: cover; }
+    .dest-copy .eyebrow { margin-bottom: 1.2rem; }
+    .dest-copy h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem, 4.6vw, 3.6rem); line-height: 1.08; }
+    .dest-copy p { margin-top: 1.6rem; color: rgba(44,36,32,0.7); max-width: 46ch; }
+    .dest-list { margin-top: 2.4rem; display: grid; gap: 0.9rem; }
+    .dest-list li {
+      list-style: none; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px dashed rgba(44,36,32,0.25); padding-bottom: 0.6rem;
+      font-size: 0.86rem; letter-spacing: 0.03em;
+    }
+    .dest-list span { color: var(--mm-accent); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    /* ---------- Booking strip ---------- */
+    .book {
+      margin: clamp(4rem, 10vw, 7rem) auto 0;
+      background: var(--ink); color: var(--sand);
+      padding: clamp(3.6rem, 8vw, 6rem) 3rem;
+      text-align: center;
+    }
+    .book h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2.2rem, 6vw, 5rem); line-height: 1.02; }
+    .book h2 .ital { color: var(--mm-accent); }
+    .book p { margin: 1.4rem auto 0; max-width: 46ch; color: rgba(243,236,227,0.65); }
+    .book-form { margin: 2.6rem auto 0; display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+    .book-form input {
+      background: transparent; border: 1px solid rgba(243,236,227,0.35);
+      color: var(--sand); padding: 0.95rem 1.2rem; font-family: 'Jost'; font-size: 0.85rem;
+      min-width: 150px;
+    }
+    .book-form input:focus { outline: none; border-color: var(--mm-accent); }
+    .book-form button {
+      background: var(--sand); color: var(--ink); border: 0;
+      padding: 0.95rem 2.2rem; border-radius: 40px;
+      font-family: 'Jost'; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: background .4s;
+    }
+    .book-form button:hover { background: var(--mm-accent); color: #fff; }
+    footer {
+      padding: 2.4rem 3rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(44,36,32,0.55);
+    }
+
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-copy { padding: 7.5rem 1.6rem 2.4rem; }
+      .navbar { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .ritual-row p { display: none; }
+      .dest-grid { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.6rem; }
+      .mm-hs__track { padding-left: 1.6rem; padding-right: 1.6rem; }
+    }
+  </style>
+  <!-- MM Motion Engine — award-style scroll & hover motion -->
+  <script>window.MM_OPTIONS = { accent: '#b0876a', brand: 'CASA SALA' };</script>
+  <link rel="stylesheet" href="enhance.css">
+  <script src="enhance.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="#" class="logo">Casa <span>Sala</span></a>
+    <ul class="nav-links">
+      <li><a href="#suites" class="mm-link">Suites</a></li>
+      <li><a href="#rituals" class="mm-link">Rituals</a></li>
+      <li><a href="#destination" class="mm-link">Destination</a></li>
+      <li><a href="#book" class="mm-link">Journal</a></li>
+    </ul>
+    <a href="#book" class="nav-cta">Book a stay</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow mm-hero-rise">Boutique heritage hotel · Est. 1926</p>
+      <h1 class="mm-hero-rise">Fourteen suites above the <span class="ital">old harbour</span></h1>
+      <p class="mm-hero-rise">A restored stone merchant house where mornings begin with courtyard espresso and evenings end on the rooftop, watching fishing boats turn gold.</p>
+      <div class="hero-facts">
+        <div><b>14</b><span>Suites</span></div>
+        <div><b>1926</b><span>Stone house</span></div>
+        <div><b>90s</b><span>To the sea</span></div>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img src="https://images.unsplash.com/photo-1564501049405-7bbd324bf842?auto=format&fit=crop&w=1600&q=85" alt="Casa Sala stone façade and courtyard">
+      <span class="hero-stamp">Slow hospitality — since 1926</span>
+    </div>
+  </header>
+
+  <!-- WELCOME -->
+  <section class="welcome wrap">
+    <p class="eyebrow" data-mm-reveal>Bienvenidos</p>
+    <h2 data-mm-reveal>An intimate hotel that behaves like a <span class="ital">private residence</span></h2>
+    <p data-mm-reveal>No lobbies of marble and hurry. A fireplace that stays lit, a host who knows your coffee, and a kitchen that cooks what the market surrendered that morning. Casa Sala is designed for stays you measure in chapters, not nights.</p>
+    <p class="sig" data-mm-reveal>— Familia Sala, keepers of the house</p>
+  </section>
+
+  <!-- BAND -->
+  <div class="band">
+    <div class="mm-strip mm-marquee" data-mm-duration="24"><span>Courtyard Espresso<i>✦</i>Rooftop Sunsets<i>✦</i>Cellar Tastings<i>✦</i>Sea-Fire Dinners<i>✦</i>Morning Swims<i>✦</i></span></div>
+  </div>
+
+  <!-- SUITES: PINNED HORIZONTAL -->
+  <section class="suites wrap" id="suites">
+    <div class="suites-head">
+      <h2>The <span class="ital">suites</span></h2>
+      <span>Drag through the house</span>
+    </div>
+    <div data-mm-hscroll>
+      <div class="mm-hs__track">
+        <article class="suite-card">
+          <div class="suite-media"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80" alt="Harbour suite"><span class="suite-tag">Harbour view</span></div>
+          <div class="suite-info"><div><h3>Mirador</h3><small>King suite · balcony over the port</small></div><div class="suite-price"><b>€ 260</b><span>/ night</span></div></div>
+        </article>
+        <article class="suite-card">
+          <div class="suite-media"><img src="https://images.unsplash.com/photo-1582719478247-2e45b913e5e3?auto=format&fit=crop&w=1000&q=80" alt="Courtyard room"><span class="suite-tag">Garden level</span></div>
+          <div class="suite-info"><div><h3>Patio</h3><small>Classic room · private courtyard nook</small></div><div class="suite-price"><b>€ 190</b><span>/ night</span></div></div>
+        </article>
+        <article class="suite-card">
+          <div class="suite-media"><img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1000&q=80" alt="Stone vault suite"><span class="suite-tag">Original vault</span></div>
+          <div class="suite-info"><div><h3>Bodega</h3><small>Vaulted suite · wine wall &amp; tub</small></div><div class="suite-price"><b>€ 310</b><span>/ night</span></div></div>
+        </article>
+        <article class="suite-card">
+          <div class="suite-media"><img src="https://images.unsplash.com/photo-1595576501825-791516283136?auto=format&fit=crop&w=1000&q=80" alt="Rooftop penthouse"><span class="suite-tag">Rooftop</span></div>
+          <div class="suite-info"><div><h3>Atalaya</h3><small>Penthouse · terrace &amp; outdoor shower</small></div><div class="suite-price"><b>€ 480</b><span>/ night</span></div></div>
+        </article>
+        <article class="suite-card">
+          <div class="suite-media"><img src="https://images.unsplash.com/photo-1566665797739-16b2dabbfa24?auto=format&fit=crop&w=1000&q=80" alt="Writer's garret"><span class="suite-tag">Quiet corner</span></div>
+          <div class="suite-info"><div><h3>Pluma</h3><small>Writer's garret · desk facing the sea</small></div><div class="suite-price"><b>€ 220</b><span>/ night</span></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- RITUALS -->
+  <section class="rituals wrap" id="rituals">
+    <h2 data-mm-reveal>Daily <span class="ital">rituals</span></h2>
+    <div class="ritual-row" data-mm-reveal>
+      <i class="far fa-mug-hot"></i>
+      <h3>Courtyard <span class="ital">coffee</span> at seven</h3>
+      <p>Espresso served under the jasmine pergola while the harbour bells still echo.</p>
+    </div>
+    <div class="ritual-row" data-mm-reveal>
+      <i class="far fa-fish"></i>
+      <h3>The <span class="ital">market</span> walk</h3>
+      <p>Join our chef at the 8am fish market — everything you point at may reach your plate.</p>
+    </div>
+    <div class="ritual-row" data-mm-reveal>
+      <i class="far fa-glass-cheers"></i>
+      <h3>Cellar <span class="ital">hour</span></h3>
+      <p>Blind tastings of coastal wines in the 18th-century vault beneath the kitchen.</p>
+    </div>
+    <div class="ritual-row" data-mm-reveal>
+      <i class="far fa-star"></i>
+      <h3>Rooftop <span class="ital">cinema</span></h3>
+      <p>Once a week, a projector, blankets, and the sea doing its own special effects.</p>
+    </div>
+  </section>
+
+  <!-- DESTINATION -->
+  <section class="destination wrap" id="destination">
+    <div class="dest-grid">
+      <div class="dest-media" data-mm-reveal="scale">
+        <img src="https://images.unsplash.com/photo-1519042635104-d315f80f3bd4?auto=format&fit=crop&w=1000&q=85" alt="Old harbour at golden hour" data-mm-speed="0.1">
+      </div>
+      <div class="dest-copy">
+        <p class="eyebrow" data-mm-reveal>The neighbourhood</p>
+        <h2 data-mm-reveal>Everything worth walking to, within <span class="ital">nine hundred seconds</span></h2>
+        <p data-mm-reveal>The old town unfolds exactly as a hotel lobby should not — crooked, loud, fragrant. Here is what guests find outside our door.</p>
+        <ul class="dest-list" data-mm-stagger>
+          <li>Playa de la Sala — sand &amp; chiringuitos <span>3 min walk</span></li>
+          <li>Mercado Viejo — market &amp; tapas bars <span>6 min walk</span></li>
+          <li>Castillo de Santa Ana — viewpoint <span>9 min walk</span></li>
+          <li>Casco Antiguo — cathedral &amp; galleries <span>4 min walk</span></li>
+          <li>Botanical promenade — sunrise laps <span>2 min walk</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="book" id="book">
+    <h2 data-mm-reveal>Your room above the <span class="ital">harbour</span> is waiting</h2>
+    <p data-mm-reveal>Direct bookings include courtyard breakfast and a late checkout we never advertise as "premium" — it is simply hospitality.</p>
+    <form class="book-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='We will write back ✓';">
+      <input type="date" aria-label="Arrival" required>
+      <input type="date" aria-label="Departure" required>
+      <input type="number" min="1" max="4" value="2" aria-label="Guests" required>
+      <button type="submit">Check availability</button>
+    </form>
+  </section>
+
+  <footer>
+    <span>© 2026 Casa Sala · Muelle Viejo 14</span>
+    <div>
+      <a href="#" class="mm-link">Instagram</a> &nbsp;·&nbsp;
+      <a href="#" class="mm-link">Journal</a> &nbsp;·&nbsp;
+      <a href="tel:+34000000000">+34 000 000 000</a>
+    </div>
+    <span>TekTrend Live Demo</span>
+  </footer>
+</body>
+</html>

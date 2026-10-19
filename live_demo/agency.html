@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FORMA · Independent Creative Studio</title>
+  <meta name="description" content="FORMA is an independent creative studio crafting brand identities, digital products and motion — award-site aesthetics with editorial typography." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --mm-accent: #d4815a; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ece7df;
+      color: #17140f;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #ece7df; }
+    ::-webkit-scrollbar-thumb { background: #d4815a; border-radius: 10px; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    .serif { font-family: 'Playfair Display', serif; font-weight: 500; }
+    .ital { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+    .container { width: min(1400px, 90vw); margin: 0 auto; }
+
+    /* ---------- Header ---------- */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 1.1rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 900;
+      background: rgba(236, 231, 223, 0.82);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(23, 20, 15, 0.07);
+    }
+    .logo { font-weight: 900; font-size: 1.35rem; letter-spacing: 0.16em; }
+    .logo i { color: var(--mm-accent); font-style: normal; }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(23,20,15,0.55);
+      transition: color .3s;
+    }
+    .nav-links a:hover { color: #17140f; }
+    .nav-cta {
+      padding: 0.75rem 1.6rem;
+      background: #17140f; color: #ece7df;
+      border-radius: 40px;
+      font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      display: inline-block;
+    }
+    .nav-cta:hover { background: var(--mm-accent); color: #fff; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 8rem 3rem 0;
+      position: relative;
+    }
+    .hero-kicker {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--mm-accent);
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8.6vw, 8.6rem);
+      line-height: 0.98;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      max-width: 14ch;
+    }
+    .hero h1 .ital { font-weight: 400; letter-spacing: 0; }
+    .hero-foot {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding: 3rem 0 2.5rem;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .hero-foot p { max-width: 34ch; font-size: 0.95rem; line-height: 1.7; color: rgba(23,20,15,0.66); }
+    .scroll-hint {
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700;
+      display: flex; align-items: center; gap: 0.7rem; color: rgba(23,20,15,0.5);
+    }
+    .scroll-hint i { animation: mm-bounce 1.6s infinite; }
+    @keyframes mm-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+    /* ---------- Statement (obys-style big type section) ---------- */
+    .statement {
+      padding: clamp(6rem, 14vw, 12rem) 0;
+      border-top: 1px solid rgba(23,20,15,0.1);
+    }
+    .statement p {
+      font-size: clamp(1.8rem, 4.6vw, 4.4rem);
+      line-height: 1.14;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      max-width: 22ch;
+    }
+    .statement .serif { color: var(--mm-accent); font-weight: 600; }
+    .statement-meta {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem; margin-top: 4rem;
+    }
+    .statement-meta div { border-top: 1px solid rgba(23,20,15,0.14); padding-top: 1.2rem; }
+    .statement-meta h4 { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.6rem; color: var(--mm-accent); }
+    .statement-meta p { font-size: 0.92rem; color: rgba(23,20,15,0.66); line-height: 1.65; }
+
+    /* ---------- Pinned horizontal work gallery ---------- */
+    .works { border-top: 1px solid rgba(23,20,15,0.1); }
+    .works-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 2.4rem 3rem 1rem;
+    }
+    .works-head h2 { font-size: clamp(1.6rem, 3.4vw, 3rem); font-weight: 800; letter-spacing: -0.02em; }
+    .works-head span { font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(23,20,15,0.5); }
+    .mm-hs__track { gap: 2.4rem; padding: 2rem 3rem; }
+    .work-card { width: min(78vw, 640px); }
+    .work-media {
+      aspect-ratio: 4/3.1;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #ddd6ca;
+    }
+    .work-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.23,1,.32,1); }
+    .work-card:hover .work-media img { transform: scale(1.05); }
+    .work-info { display: flex; justify-content: space-between; align-items: baseline; margin-top: 1.1rem; gap: 1rem; }
+    .work-info h3 { font-size: clamp(1.2rem, 2vw, 1.7rem); font-weight: 700; letter-spacing: -0.01em; }
+    .work-info small { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(23,20,15,0.5); }
+
+    /* ---------- Capabilities marquee ---------- */
+    .caps { border-block: 1px solid rgba(23,20,15,0.1); background: #e4ddd2; }
+    .caps .mm-strip { border: 0; color: rgba(23,20,15,0.78); }
+
+    /* ---------- Case study index list (hover image reveal) ---------- */
+    .index { padding: clamp(5rem, 10vw, 9rem) 0; }
+    .index h2 { font-size: clamp(1.6rem, 3.4vw, 3rem); font-weight: 800; margin-bottom: 3rem; letter-spacing: -0.02em; }
+    .case-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr auto auto;
+      gap: 1.6rem; align-items: center;
+      padding: 1.7rem 0.5rem;
+      border-top: 1px solid rgba(23,20,15,0.14);
+      transition: padding .5s cubic-bezier(.23,1,.32,1), color .4s;
+    }
+    .case-row:last-child { border-bottom: 1px solid rgba(23,20,15,0.14); }
+    .case-row:hover { padding-left: 1.8rem; color: var(--mm-accent); }
+    .case-num { font-size: 0.78rem; color: rgba(23,20,15,0.4); font-variant-numeric: tabular-nums; }
+    .case-title { font-size: clamp(1.2rem, 2.6vw, 2.2rem); font-weight: 700; letter-spacing: -0.015em; }
+    .case-tag { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(23,20,15,0.5); }
+    .case-year { font-size: 0.82rem; color: rgba(23,20,15,0.45); font-variant-numeric: tabular-nums; }
+    .case-thumb {
+      position: fixed;
+      width: min(300px, 32vw); aspect-ratio: 4/3;
+      pointer-events: none;
+      z-index: 800;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.85) rotate(-4deg);
+      transition: opacity .35s, transform .55s cubic-bezier(.23,1,.32,1);
+      overflow: hidden; border-radius: 4px;
+    }
+    .case-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    body.mm-hover-case .case-thumb { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-2deg); }
+
+    /* ---------- Studio / about ---------- */
+    .studio {
+      border-top: 1px solid rgba(23,20,15,0.1);
+      padding: clamp(5rem, 10vw, 9rem) 0;
+    }
+    .studio-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+    .studio-grid h2 { font-size: clamp(2rem, 4.4vw, 4rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.6rem; }
+    .studio-grid h2 .ital { color: var(--mm-accent); }
+    .studio-grid p { color: rgba(23,20,15,0.66); line-height: 1.75; max-width: 46ch; }
+    .studio-stats { display: flex; gap: 3rem; margin-top: 2.6rem; }
+    .studio-stats b { font-size: clamp(1.8rem, 3.4vw, 3rem); font-weight: 800; display: block; font-variant-numeric: tabular-nums; }
+    .studio-stats span { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(23,20,15,0.5); }
+    .studio-media { aspect-ratio: 3/3.6; overflow: hidden; border-radius: 4px; }
+    .studio-media img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ---------- Manifesto big-type rows ---------- */
+    .manifesto { padding: 3rem 0 0; }
+    .manifesto .m-row {
+      display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.5rem);
+      padding: 1.2rem 0;
+      border-top: 1px solid rgba(23,20,15,0.12);
+      font-size: clamp(1.4rem, 3.2vw, 2.8rem); font-weight: 700; letter-spacing: -0.015em;
+      overflow: hidden;
+    }
+    .manifesto .m-row:last-child { border-bottom: 1px solid rgba(23,20,15,0.12); }
+    .manifesto .m-row .ital { font-weight: 400; color: var(--mm-accent); }
+    .manifesto .m-row em { font-style: normal; margin-left: auto; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(23,20,15,0.45); }
+
+    /* ---------- Contact ---------- */
+    .contact { padding: clamp(6rem, 14vw, 11rem) 0 4rem; text-align: center; }
+    .contact .eyebrow { font-size: 0.76rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mm-accent); margin-bottom: 1.8rem; }
+    .contact h2 { font-size: clamp(2.6rem, 8vw, 7.5rem); font-weight: 800; letter-spacing: -0.035em; line-height: 0.95; }
+    .contact h2 .ital { font-weight: 400; }
+    .contact .mail {
+      display: inline-block; margin-top: 2.6rem;
+      padding: 1.1rem 2.6rem; border-radius: 60px;
+      border: 1px solid rgba(23,20,15,0.35);
+      font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700;
+      transition: background .4s, color .4s, border-color .4s;
+    }
+    .contact .mail:hover { background: #17140f; color: #ece7df; border-color: #17140f; }
+    footer {
+      border-top: 1px solid rgba(23,20,15,0.12);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(23,20,15,0.5);
+    }
+    footer .socials { display: flex; gap: 1.6rem; }
+    footer .socials a:hover { color: var(--mm-accent); }
+
+    @media (max-width: 900px) {
+      .navbar { padding: 1rem 1.4rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.4rem 0; }
+      .works-head { padding: 2rem 1.4rem 0.6rem; }
+      .mm-hs__track { padding: 1.6rem 1.4rem; }
+      .studio-grid { grid-template-columns: 1fr; }
+      .case-row { grid-template-columns: 1fr auto; }
+      .case-num, .case-tag { display: none; }
+      .container { width: 90vw; }
+    }
+  </style>
+  <!-- MM Motion Engine — award-style scroll & hover motion -->
+  <script>window.MM_OPTIONS = { accent: '#d4815a', brand: 'FORMA' };</script>
+  <link rel="stylesheet" href="enhance.css">
+  <script src="enhance.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="#" class="logo">FORM<i>A</i></a>
+    <ul class="nav-links">
+      <li><a href="#works" class="mm-link">Work</a></li>
+      <li><a href="#studio" class="mm-link">Studio</a></li>
+      <li><a href="#index" class="mm-link">Index</a></li>
+      <li><a href="#contact" class="mm-link">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Start a project</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-kicker mm-hero-rise">Independent creative studio — est. 2017</p>
+    <h1 class="mm-hero-rise">We shape brands with <span class="ital">intent</span>, craft &amp; motion</h1>
+    <div class="hero-foot">
+      <p data-mm-reveal>Strategy, identity and digital craftsmanship for founders who refuse to blend in. Every pixel placed with purpose.</p>
+      <span class="scroll-hint">Scroll to explore <i class="fas fa-arrow-down"></i></span>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement">
+    <div class="container">
+      <p data-mm-reveal>Design is not decoration — it is <span class="serif">decision</span>. We build visual systems that move people and markets.</p>
+      <div class="statement-meta" data-mm-stagger>
+        <div><h4>Discipline</h4><p>Brand strategy, identity systems, art direction and editorial design.</p></div>
+        <div><h4>Digital</h4><p>Immersive websites, product interfaces and motion-rich storytelling.</p></div>
+        <div><h4>Direction</h4><p>Creative campaigns, film supervision and photography direction.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PINNED HORIZONTAL WORKS -->
+  <section class="works" id="works" data-mm-hscroll>
+    <div class="works-head">
+      <h2>Selected works</h2>
+      <span>2021 — 2026</span>
+    </div>
+    <div class="mm-hs__track">
+      <article class="work-card">
+        <div class="work-media"><img src="https://images.unsplash.com/photo-1618005182384-a81a0e104d95?auto=format&fit=crop&w=1100&q=80" alt="Nocturne perfume identity" data-mm-speed="0.05"></div>
+        <div class="work-info"><h3>Nocturne · Fragrance House</h3><small>Identity / Packaging</small></div>
+      </article>
+      <article class="work-card">
+        <div class="work-media"><img src="https://images.unsplash.com/photo-1558591922-97e0771353bf?auto=format&fit=crop&w=1100&q=80" alt="Meridian architecture platform" data-mm-speed="0.05"></div>
+        <div class="work-info"><h3>Meridian · Architecture</h3><small>Web / Motion</small></div>
+      </article>
+      <article class="work-card">
+        <div class="work-media"><img src="https://images.unsplash.com/photo-1524748431980-63a903b3de68?auto=format&fit=crop&w=1100&q=80" alt="Kōgen ceramics editorial" data-mm-speed="0.05"></div>
+        <div class="work-info"><h3>Kōgen · Ceramics</h3><small>Editorial / Art Direction</small></div>
+      </article>
+      <article class="work-card">
+        <div class="work-media"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1100&q=80" alt="Volt electronics launch" data-mm-speed="0.05"></div>
+        <div class="work-info"><h3>Volt · Consumer Tech</h3><small>Launch Campaign</small></div>
+      </article>
+      <article class="work-card">
+        <div class="work-media"><img src="https://images.unsplash.com/photo-1493421070224-0070c48cfa70?auto=format&fit=crop&w=1100&q=80" alt="Atlas journal branding" data-mm-speed="0.05"></div>
+        <div class="work-info"><h3>Atlas · Publishing</h3><small>Brand System</small></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES MARQUEE -->
+  <div class="caps">
+    <div class="mm-strip mm-marquee" data-mm-duration="20"><span>Brand Identity<i>✦</i>Digital Products<i>✦</i>Motion Design<i>✦</i>Art Direction<i>✦</i>Editorial<i>✦</i>Packaging<i>✦</i></span></div>
+  </div>
+
+  <!-- CASE INDEX WITH HOVER REVEAL -->
+  <section class="index container" id="index">
+    <h2 data-mm-reveal>Case <span class="ital serif">index</span></h2>
+    <a class="case-row" href="#contact" data-case="1">
+      <span class="case-num">01</span><span class="case-title">Nocturne</span><span class="case-tag">Fragrance · Full Rebrand</span><span class="case-year">2026</span>
+    </a>
+    <a class="case-row" href="#contact" data-case="2">
+      <span class="case-num">02</span><span class="case-title">Meridian</span><span class="case-tag">Architecture · Web &amp; Motion</span><span class="case-year">2025</span>
+    </a>
+    <a class="case-row" href="#contact" data-case="3">
+      <span class="case-num">03</span><span class="case-title">Kōgen</span><span class="case-tag">Ceramics · Editorial</span><span class="case-year">2025</span>
+    </a>
+    <a class="case-row" href="#contact" data-case="4">
+      <span class="case-num">04</span><span class="case-title">Volt</span><span class="case-tag">Tech · Launch Campaign</span><span class="case-year">2024</span>
+    </a>
+    <a class="case-row" href="#contact" data-case="5">
+      <span class="case-num">05</span><span class="case-title">Atlas</span><span class="case-tag">Publishing · Brand System</span><span class="case-year">2023</span>
+    </a>
+    <div class="case-thumb" id="caseThumb"><img alt="" id="caseThumbImg" src="" /></div>
+  </section>
+
+  <!-- STUDIO -->
+  <section class="studio" id="studio">
+    <div class="container studio-grid">
+      <div>
+        <h2 data-mm-reveal>A studio built like a <span class="ital">workshop</span>, not an agency</h2>
+        <p data-mm-reveal>Small senior team, zero hand-offs. Strategists, designers and engineers sit at the same table and ship together. We take four engagements a season so every project gets the obsession it deserves.</p>
+        <div class="studio-stats" data-mm-stagger>
+          <div><b data-mm-count="128">0</b><span>Projects shipped</span></div>
+          <div><b data-mm-count="24" data-mm-suffix="">0</b><span>Awards &amp; features</span></div>
+          <div><b data-mm-count="9">0</b><span>Years running</span></div>
+        </div>
+      </div>
+      <div class="studio-media" data-mm-reveal="scale">
+        <img src="https://images.unsplash.com/photo-1497366216548-044661fc14f3?auto=format&fit=crop&w=900&q=80" alt="FORMA studio interior" data-mm-speed="0.08">
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto container">
+    <div class="m-row" data-mm-reveal>Restraint <span class="ital">over noise</span><em>Philosophy</em></div>
+    <div class="m-row" data-mm-reveal>Craft <span class="ital">over templates</span><em>Process</em></div>
+    <div class="m-row" data-mm-reveal>Motion <span class="ital">with meaning</span><em>Interface</em></div>
+    <div class="m-row" data-mm-reveal>Partnership <span class="ital">over pitching</span><em>Relations</em></div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <p class="eyebrow" data-mm-reveal>New enquiries — Q3 2026 open</p>
+    <h2 data-mm-reveal>Let's make something <span class="ital">unmistakable</span></h2>
+    <a class="mail nav-cta-like" href="mailto:studio@forma.agency" data-mm-magnetic>studio@forma.agency</a>
+  </section>
+
+  <footer>
+    <span>© 2026 FORMA Studio · Nairobi / Berlin</span>
+    <div class="socials">
+      <a href="#" class="mm-link">Instagram</a>
+      <a href="#" class="mm-link">Behance</a>
+      <a href="#" class="mm-link">Dribbble</a>
+    </div>
+    <span>TekTrend Live Demo</span>
+  </footer>
+
+  <script>
+    /* Case-index floating thumbnail follows cursor */
+    (function () {
+      var thumb = document.getElementById('caseThumb');
+      var img = document.getElementById('caseThumbImg');
+      var urls = {
+        1: 'https://images.unsplash.com/photo-1618005182384-a81a0e104d95?auto=format&fit=crop&w=700&q=70',
+        2: 'https://images.unsplash.com/photo-1558591922-97e0771353bf?auto=format&fit=crop&w=700&q=70',
+        3: 'https://images.unsplash.com/photo-1524748431980-63a903b3de68?auto=format&fit=crop&w=700&q=70',
+        4: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=70',
+        5: 'https://images.unsplash.com/photo-1493421070224-0070c48cfa70?auto=format&fit=crop&w=700&q=70'
+      };
+      document.querySelectorAll('.case-row').forEach(function (row) {
+        row.addEventListener('mouseenter', function () {
+          img.src = urls[row.getAttribute('data-case')] || '';
+          document.body.classList.add('mm-hover-case');
+        });
+        row.addEventListener('mouseleave', function () {
+          document.body.classList.remove('mm-hover-case');
+        });
+        row.addEventListener('mousemove', function (e) {
+          thumb.style.left = e.clientX + 'px';
+          thumb.style.top = e.clientY + 'px';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
