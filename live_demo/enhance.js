@@ -30,6 +30,48 @@
   var useMagnetic = opt('magnetic', !touch);
   var useProgress = opt('progress', true);
 
+  /* ---------- global image fallback: if a photo fails / is network-
+     blocked (e.g. ERR_BLOCKED_BY_ORB on restricted networks), swap it
+     for a self-contained gradient tile instead of a browser "blocked"
+     placeholder. Keeps demos looking intentional with zero deps. ---------- */
+  (function imageErrorFallback() {
+    var accent = (OPT.accent && /^[#a-zA-Z0-9]+$/.test(OPT.accent)) ? OPT.accent : '#c9a87c';
+    var brand = String(OPT.brand || 'TekTrend').replace(/[^a-zA-Z0-9 &._-]/g, '').slice(0, 22) || 'TekTrend';
+    var tile = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+      "<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'>" +
+      "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+      "<stop offset='0' stop-color='" + accent + "'/>" +
+      "<stop offset='1' stop-color='#141414'/></linearGradient></defs>" +
+      "<rect width='1200' height='800' fill='url(#g)'/>" +
+      "<circle cx='870' cy='250' r='210' fill='rgba(255,255,255,0.08)'/>" +
+      "<text x='60' y='720' font-family='Georgia,serif' font-size='44' fill='rgba(255,255,255,0.9)'>" + brand + "</text>" +
+      "</svg>"
+    );
+    function swap(img) {
+      if (!img || img.getAttribute('data-mm-fb') === '1') return;
+      img.setAttribute('data-mm-fb', '1');
+      img.src = tile;
+    }
+    // capture-phase error listener catches <img> load failures
+    window.addEventListener('error', function (e) {
+      var t = e && e.target;
+      if (t && t.tagName === 'IMG') swap(t);
+    }, true);
+    // sweep images that finished already-failed before listener attached
+    function sweep() {
+      var imgs = document.images;
+      for (var i = 0; i < imgs.length; i++) {
+        var im = imgs[i];
+        if (im.complete && im.naturalWidth === 0 && im.getAttribute('data-mm-fb') !== '1') {
+          if (im.currentSrc && im.currentSrc.indexOf('data:') === 0) continue;
+          swap(im);
+        }
+      }
+    }
+    if (document.readyState === 'complete') sweep();
+    else window.addEventListener('load', sweep);
+  })();
+
   /* ---------- detect light/dark page for overlay colors ---------- */
   function bodyIsDark() {
     try {
