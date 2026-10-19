@@ -334,54 +334,7 @@ class PortfolioController extends Controller {
 
     public static function getDefaultPrototypes() {
         return [
-            [
-                'id' => 101,
-                'title' => 'Apex Logistics & Fleet Cloud · Real-Time Freight',
-                'category' => 'Logistics & Supply Chain',
-                'short_description' => 'Custom engineered enterprise freight platform with live GPS telemetry, automated cargo manifest generation, customs clearance vaults, and driver dispatch mobile API.',
-                'icon' => 'fas fa-truck-fast',
-                'demo_type' => 'external',
-                'demo_url' => 'https://apexlogistics.co.ke',
-                'hosting_domain' => 'apexlogistics.co.ke',
-                'tech_stack' => 'PHP 8.2, MySQL 8, Leaflet GIS, WebSockets, REST API',
-                'preview_image' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
-                'award_badge' => 'Client Production System',
-                'price' => 0.00,
-                'is_featured' => 1,
-                'is_for_sale' => 0
-            ],
-            [
-                'id' => 102,
-                'title' => 'Eldoret Tech Innovation Hub · Community Portal',
-                'category' => 'Technology & Incubation',
-                'short_description' => 'Regional innovation ecosystem platform featuring co-working desk reservations, developer fellowship application funnel, tech mentor registry, and event streaming.',
-                'icon' => 'fas fa-microchip',
-                'demo_type' => 'external',
-                'demo_url' => 'https://eldorettechhub.org',
-                'hosting_domain' => 'eldorettechhub.org',
-                'tech_stack' => 'PHP MVC, MySQL, Calendar Sync, Inter Font, Tailored CSS',
-                'preview_image' => 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
-                'award_badge' => 'Client Production System',
-                'price' => 0.00,
-                'is_featured' => 1,
-                'is_for_sale' => 0
-            ],
-            [
-                'id' => 103,
-                'title' => 'Rift Valley Specialty Agribusiness & Commodity Auction',
-                'category' => 'AgriTech & Export',
-                'short_description' => 'High-volume direct trade commodity exchange platform with digital lot bidding, moisture analytics reporting, exporter KYC verification, and M-Pesa B2B escrow.',
-                'icon' => 'fas fa-seedling',
-                'demo_type' => 'external',
-                'demo_url' => 'https://riftvalleycoffee.co.ke',
-                'hosting_domain' => 'riftvalleycoffee.co.ke',
-                'tech_stack' => 'PHP 8, Real-time Bidding Engine, Chart.js, M-Pesa API',
-                'preview_image' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
-                'award_badge' => 'Client Production System',
-                'price' => 0.00,
-                'is_featured' => 1,
-                'is_for_sale' => 0
-            ],
+            // Curated from your real /live_demo/*.html templates (invented external placeholder projects removed)
             [
                 'id' => 1,
                 'title' => 'Studio Maven · Creative Studio',

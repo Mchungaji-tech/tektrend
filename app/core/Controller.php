@@ -220,12 +220,7 @@ class Controller {
             } catch (\Throwable $ex) {}
 
             $seedDemos = [
-                // Real Live Client Deployments (External Real Domains — Completed Projects NOT FOR SALE)
-                ['Apex Logistics & Fleet Cloud · Real-Time Freight', 'Logistics & Supply Chain', 'Custom engineered enterprise freight platform with live GPS telemetry, automated cargo manifest generation, customs clearance vaults, and driver dispatch mobile API.', 'fas fa-truck-fast', 'external', 'https://apexlogistics.co.ke', 'apexlogistics.co.ke', 'PHP 8.2, MySQL 8, Leaflet GIS, WebSockets, REST API', 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80', 'Client Production System', 0.00, 1, 0, 1],
-                ['Eldoret Tech Innovation Hub · Community Portal', 'Technology & Incubation', 'Regional innovation ecosystem platform featuring co-working desk reservations, developer fellowship application funnel, tech mentor registry, and event streaming.', 'fas fa-microchip', 'external', 'https://eldorettechhub.org', 'eldorettechhub.org', 'PHP MVC, MySQL, Calendar Sync, Inter Font, Tailored CSS', 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80', 'Client Production System', 0.00, 1, 0, 2],
-                ['Rift Valley Specialty Agribusiness & Commodity Auction', 'AgriTech & Export', 'High-volume direct trade commodity exchange platform with digital lot bidding, moisture analytics reporting, exporter KYC verification, and M-Pesa B2B escrow.', 'fas fa-seedling', 'external', 'https://riftvalleycoffee.co.ke', 'riftvalleycoffee.co.ke', 'PHP 8, Real-time Bidding Engine, Chart.js, M-Pesa API', 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80', 'Client Production System', 0.00, 1, 0, 3],
-
-                // Turnkey Prototypes & Templates (FOR SALE on tektrend server)
+                // Your real live HTML demos (Turnkey Templates served from /live_demo/*.html on tektrend)
                 ['Studio Maven · Creative Studio', 'Creative & Design', 'Minimalist luxury branding portfolio with case studies, smooth motion reels, interactive typography, and instant project booking.', 'fas fa-palette', 'local', '/live_demo/graphic.html', 'Turnkey Template', 'HTML5, CSS3, GSAP, Responsive', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80', 'Site of the Day', 49.00, 1, 1, 4],
                 ['GrowthPulse · Marketing Agency', 'Marketing & SEO', 'Growth-driven marketing agency portal featuring live campaign tracking, analytics metrics, interactive ROI calculator, and lead generation.', 'fas fa-chart-line', 'local', '/live_demo/digital_markting.html', 'Turnkey Template', 'HTML5, Bootstrap, CSS3, Chart.js', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80', 'Top Conversion', 59.00, 1, 1, 5],
                 ['LuxeCart · Modern E-Commerce', 'E-Commerce & Retail', 'High-speed storefront with dynamic category filtering, cart management, instant checkout flow, customer wishlist, and payment readiness.', 'fas fa-store', 'local', '/live_demo/e-commerce.html', 'Turnkey Template', 'HTML5, CSS3, JavaScript, eCommerce UI', 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80', 'Best Architecture', 79.00, 1, 1, 6],
@@ -239,6 +234,16 @@ class Controller {
                 ['Arbor Living · Signature Residences', 'Real Estate & Architecture', 'Cinematic property experience with Ken Burns hero, sticky philosophy section, full-bleed parallax image breaks and horizontal typology collection.', 'fas fa-building', 'local', '/live_demo/residence.html', 'Turnkey Template', 'HTML5, MM Motion Engine, Parallax Layers, Scroll Counters', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 'Design Award Nominee', 79.00, 1, 1, 14],
                 ['Casa Sala · Boutique Heritage Hotel', 'Hospitality & Travel', 'Editorial hotel storysite with wipe-in ritual rows, pinned suite carousel, destination walk-times, marquee bands and direct booking strip.', 'fas fa-hotel', 'local', '/live_demo/hotel.html', 'Turnkey Template', 'HTML5, MM Motion Engine, Scroll-Pin, Warm Editorial CSS', 'https://images.unsplash.com/photo-1564501049405-7bbd324bf842?auto=format&fit=crop&w=800&q=80', 'Travel Aesthetic Award', 59.00, 1, 1, 15]
             ];
+
+            // Self-heal: remove placeholder "client" projects that are not your real work
+            // (they were previously auto-seeded; this runs on every showcase page load, so a
+            // GitHub -> cPanel deploy cleans the live DB without any manual SQL).
+            try {
+                $this->db->execute(
+                    "DELETE FROM `portfolio_demos` WHERE `demo_url` IN (?, ?, ?)",
+                    ['https://apexlogistics.co.ke', 'https://eldorettechhub.org', 'https://riftvalleycoffee.co.ke']
+                );
+            } catch (\Throwable $ex) {}
 
             try {
                 $existing = $this->db->fetchAll("SELECT demo_url FROM portfolio_demos");
