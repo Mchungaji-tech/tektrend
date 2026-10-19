@@ -416,6 +416,25 @@
   const closeDrawerBtn = document.getElementById('akarCloseDrawer');
   const backDrawerBtn = document.getElementById('akarBackDrawer');
 
+  // Shows a friendly "open in new tab" notice when a URL cannot be framed
+  function showFrameNotice(url) {
+    if (!frameWrapper) return;
+    frameWrapper.style.position = 'relative';
+    let notice = frameWrapper.querySelector('.akar-frame-notice');
+    if (!notice) {
+      notice = document.createElement('div');
+      notice.className = 'akar-frame-notice';
+      notice.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(14,14,14,.94);color:#f5f0e8;text-align:center;padding:24px;font-size:.95rem;z-index:5;';
+      frameWrapper.appendChild(notice);
+    }
+    notice.innerHTML = '<i class="fas fa-arrow-up-right-from-square" style="font-size:1.6rem;color:#c9a87c"></i><p>This site is protected and cannot be embedded here.</p>';
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.textContent = 'Open in new tab';
+    a.style.cssText = 'padding:10px 22px;border:1px solid rgba(245,240,232,.4);border-radius:40px;color:#f5f0e8;text-decoration:none;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;';
+    notice.appendChild(a);
+  }
+
   window.openAkaruCaseStudy = function (projectData) {
     if (!caseDrawer) return;
 
@@ -443,13 +462,32 @@
       }
     }
 
-    const targetUrl = projectData.demo_url || projectData.url || '';
-    if (drawerExternalLink && targetUrl) {
-      drawerExternalLink.href = targetUrl;
+    const rawUrl = projectData.demo_url || projectData.url || '';
+    // Local /live_demo templates must ALWAYS be framed as relative same-origin URLs:
+    // an absolute URL built from APP_URL can mismatch the browsed host/scheme (www vs bare,
+    // http vs https, localhost), which Chrome then blocks with "This content is blocked".
+    let targetUrl = rawUrl;
+    try {
+      const u = new URL(rawUrl, location.origin);
+      if (/^\/live_demo\//.test(u.pathname)) targetUrl = u.pathname + u.search;
+    } catch (e) { /* keep raw */ }
+    if (drawerExternalLink && rawUrl) {
+      drawerExternalLink.href = rawUrl;
     }
 
-    if (drawerIframe && targetUrl) {
-      drawerIframe.src = targetUrl;
+    if (drawerIframe) {
+      let sameOrigin = true;
+      try { sameOrigin = new URL(targetUrl, location.origin).origin === location.origin; } catch (e) {}
+      const staleNotice = frameWrapper && frameWrapper.querySelector('.akar-frame-notice');
+      if (targetUrl && sameOrigin) {
+        drawerIframe.src = targetUrl;
+        if (staleNotice) staleNotice.remove();
+      } else if (targetUrl) {
+        drawerIframe.src = 'about:blank';
+        showFrameNotice(targetUrl);
+      } else if (staleNotice) {
+        staleNotice.remove();
+      }
     }
 
     if (frameWrapper) {
@@ -469,6 +507,8 @@
     if (drawerIframe) {
       drawerIframe.src = 'about:blank';
     }
+    const notice = frameWrapper && frameWrapper.querySelector('.akar-frame-notice');
+    if (notice) notice.remove();
   }
 
   if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeCaseDrawer);
