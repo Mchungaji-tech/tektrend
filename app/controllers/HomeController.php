@@ -55,17 +55,18 @@ class HomeController extends Controller {
             $cms = [];
         }
 
-        // Fetch portfolio demos safely with auto-creation fallback
+        // Fetch portfolio demos safely with auto-creation & sync fallback
+        $this->ensurePortfolioDemosTable();
         $portfolioDemos = [];
         try {
             $portfolioDemos = $this->db->fetchAll(
-                "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 12"
+                "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 15"
             );
         } catch (\Throwable $e) {
             if ($this->ensurePortfolioDemosTable()) {
                 try {
                     $portfolioDemos = $this->db->fetchAll(
-                        "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 12"
+                        "SELECT * FROM portfolio_demos WHERE is_featured = 1 ORDER BY sort_order ASC, id DESC LIMIT 15"
                     );
                 } catch (\Throwable $ex) {
                     $portfolioDemos = [];
