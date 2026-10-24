@@ -111,6 +111,19 @@ class ClientController extends Controller {
             }
         }
 
+        // Purchased Turnkey Software Packages & Downloads
+        $purchases = [];
+        try {
+            $purchases = $this->db->fetchAll(
+                "SELECT * FROM software_purchases 
+                 WHERE (user_id = ? OR customer_email = ?) AND paystack_status = 'success' 
+                 ORDER BY created_at DESC",
+                [$this->auth->id(), $email]
+            );
+        } catch (\Throwable $e) {
+            error_log('ClientController::dashboard purchases - ' . $e->getMessage());
+        }
+
         $this->view->setLayout('layouts/portal');
         $this->render('portal/dashboard', [
             'pageTitle'              => 'Client Dashboard',
@@ -119,6 +132,7 @@ class ClientController extends Controller {
             'recentInvoices'         => $recentInvoices,
             'upcomingConsultations'  => $upcomingConsultations,
             'projects'               => $projects,
+            'purchases'              => $purchases,
             'hasCustomer'            => $customerId !== null,
         ]);
     }

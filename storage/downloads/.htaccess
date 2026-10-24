@@ -1,0 +1,7 @@
+# Deny direct browser access to source code ZIP packages
+# Downloads must be routed through the authenticated token controller (/checkout/download/{token})
+Require all denied
+<FilesMatch ".*">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

@@ -307,7 +307,7 @@ $commissionRate = $partner['commission_rate'] ?? 10.0;
 
           <!-- Actions -->
           <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button type="button" class="btn-buy-now" onclick="openShopBuyModal('<?= htmlspecialchars(addslashes($item['title']), ENT_QUOTES) ?>', '<?= $price ?>')">
+            <button type="button" class="btn-buy-now" onclick="openShopBuyModal('<?= htmlspecialchars(addslashes($item['title']), ENT_QUOTES) ?>', '<?= $price ?>', '<?= $item['id'] ?>')">
               <i class="fas fa-shopping-cart"></i> Buy License
             </button>
             <a href="<?= htmlspecialchars($targetDemoUrl) ?>" target="_blank" class="btn-view-demo">
@@ -319,51 +319,60 @@ $commissionRate = $partner['commission_rate'] ?? 10.0;
     <?php endforeach; ?>
   </section>
 
-  <!-- BUY LICENSE MODAL -->
+  <!-- BUY LICENSE MODAL (PAYSTACK CHECKOUT) -->
   <div class="akar-modal-overlay" id="shopBuyModal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 100005; align-items: center; justify-content: center; padding: 2rem;">
-    <div style="background: #161616; border: 1px solid rgba(255,255,255,0.12); border-radius: 2.4rem; padding: 3.5rem; max-width: 60rem; width: 100%; position: relative; color: #ffffff;">
+    <div style="background: #161616; border: 1px solid rgba(255,255,255,0.12); border-radius: 2.4rem; padding: 3.5rem; max-width: 60rem; width: 100%; position: relative; color: #ffffff; box-shadow: 0 30px 80px rgba(0,0,0,0.7);">
       <button onclick="document.getElementById('shopBuyModal').style.display='none'" style="position: absolute; top: 2rem; right: 2rem; font-size: 2.4rem; color: #ffffff; background: none; border: none; cursor: pointer;">&times;</button>
-      <h3 style="font-family: 'Syne', sans-serif; font-size: 2.8rem; margin-bottom: 0.8rem;">Acquire Turnkey Software License</h3>
-      <p style="color: rgba(255,255,255,0.65); font-size: 1.4rem; margin-bottom: 2.5rem;">Receive the turnkey source code package, clean MVC assets, and commercial deployment bundle.</p>
+      <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem;">
+        <span style="font-size: 1.15rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 0.3rem 0.8rem; border-radius: 20rem;">
+          <i class="fas fa-shield-halved"></i> Verified Source Package
+        </span>
+      </div>
+      <h3 style="font-family: 'Syne', sans-serif; font-size: 2.6rem; margin-bottom: 0.6rem;">Acquire Turnkey Software License</h3>
+      <p style="color: rgba(255,255,255,0.65); font-size: 1.35rem; margin-bottom: 2rem;">Checkout with Paystack to unlock instant, authenticated download of the full source code archive (.ZIP) and commercial lifetime license.</p>
 
-      <form action="<?= eurl('/live-demos/request') ?>" method="POST">
+      <form action="<?= eurl('/checkout/initiate') ?>" method="POST" id="shopPaystackForm">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
-        <input type="hidden" name="action_type" value="buy_template">
+        <input type="hidden" name="item_type" value="portfolio_demo">
+        <input type="hidden" name="item_id" id="shopModalItemIdInput" value="">
+        <input type="hidden" name="item_title" id="shopModalItemTitleInput" value="">
 
         <div style="margin-bottom: 1.5rem;">
-          <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Selected Software Package</label>
-          <input type="text" name="template_title" id="shopModalTemplateInput" readonly style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: var(--terra); font-weight: 700; font-size: 1.4rem;">
+          <label style="font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Selected Software Package &amp; Price</label>
+          <input type="text" id="shopModalTemplateInput" readonly style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: var(--terra); font-weight: 700; font-size: 1.4rem;">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
           <div>
-            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Full Name *</label>
+            <label style="font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Full Name *</label>
             <input type="text" name="name" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" value="<?= sanitize($user['first_name'] ?? '') ?> <?= sanitize($user['last_name'] ?? '') ?>" placeholder="e.g. Kelvin Mutua">
           </div>
           <div>
-            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Email Address *</label>
+            <label style="font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Email Address (for code handover) *</label>
             <input type="email" name="email" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" value="<?= sanitize($user['email'] ?? '') ?>" placeholder="kelvin@company.com">
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-          <div>
-            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Phone / M-Pesa</label>
-            <input type="text" name="phone" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" value="<?= sanitize($user['phone'] ?? '') ?>" placeholder="+254 700 000000">
-          </div>
-          <div>
-            <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Company (Optional)</label>
-            <input type="text" name="company" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="Acme Ltd">
-          </div>
-        </div>
-
         <div style="margin-bottom: 2rem;">
-          <label style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Deployment Instructions / Custom Domain</label>
-          <textarea name="notes" rows="2" style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" placeholder="Mention your target server (e.g. cPanel, AWS, Ubuntu) or custom features needed..."></textarea>
+          <label style="font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); display: block; margin-bottom: 0.6rem;">Phone / M-Pesa Number *</label>
+          <input type="text" name="phone" required style="width: 100%; padding: 1.2rem; border-radius: 1rem; background: #222; border: 1px solid #333; color: #fff; font-size: 1.4rem;" value="<?= sanitize($user['phone'] ?? '') ?>" placeholder="+254 700 000000">
         </div>
 
-        <button type="submit" style="width: 100%; padding: 1.5rem; border-radius: 10rem; background: var(--terra); color: #0e0e0e; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; border: none;">
-          Confirm Order &amp; Access Source Code Pack <i class="fas fa-download" style="margin-left: 0.6rem;"></i>
+        <!-- Paystack Trust Badges -->
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 1.2rem 1.6rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.8rem; font-size: 1.2rem; color: #94a3b8;">
+            <i class="fas fa-lock" style="color: #10b981;"></i>
+            <span>Paystack 256-bit Secure Checkout</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.8rem; font-size: 1.2rem; color: #cbd5e1; font-weight: 600;">
+            <span><i class="fas fa-mobile-screen-button" style="color:#22c55e;"></i> M-Pesa</span> ·
+            <span><i class="fab fa-cc-visa" style="color:#60a5fa;"></i> Visa</span> ·
+            <span><i class="fab fa-cc-mastercard" style="color:#f59e0b;"></i> Mastercard</span>
+          </div>
+        </div>
+
+        <button type="submit" id="btnPaystackSubmit" style="width: 100%; padding: 1.6rem; border-radius: 1.2rem; background: linear-gradient(135deg, var(--terra) 0%, #d47a4a 100%); color: #000; font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 1rem; box-shadow: 0 10px 25px rgba(228, 147, 102, 0.35); transition: transform 0.2s ease;">
+          <i class="fas fa-lock"></i> Pay &amp; Download Code with Paystack <i class="fas fa-arrow-right"></i>
         </button>
       </form>
     </div>
@@ -415,8 +424,12 @@ $commissionRate = $partner['commission_rate'] ?? 10.0;
   </footer>
 
   <script>
-    function openShopBuyModal(title, price) {
+    function openShopBuyModal(title, price, itemId) {
       document.getElementById('shopModalTemplateInput').value = title + ' ($' + price + ')';
+      document.getElementById('shopModalItemTitleInput').value = title;
+      if (document.getElementById('shopModalItemIdInput')) {
+        document.getElementById('shopModalItemIdInput').value = itemId || '';
+      }
       document.getElementById('shopBuyModal').style.display = 'flex';
     }
 

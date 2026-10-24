@@ -37,6 +37,51 @@
     </div>
 </div>
 
+<?php if (!empty($purchases)): ?>
+    <div class="card" style="border: 1px solid rgba(228, 147, 102, 0.35); background: linear-gradient(180deg, rgba(228, 147, 102, 0.04) 0%, rgba(22, 22, 22, 0.8) 100%);">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title" style="color: #fff;"><i class="fas fa-file-zipper" style="color: var(--primary); margin-right: 0.5rem;"></i> My Purchased Software &amp; Source Code Packages</h3>
+                <p class="card-subtitle">Download your verified source code packages, documentation, and lifetime commercial licenses</p>
+            </div>
+            <a href="<?= eurl('/shop') ?>" class="btn btn-outline"><i class="fas fa-store"></i> Browse Software Store</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Package Title</th>
+                        <th>Paystack Ref</th>
+                        <th>Amount Paid</th>
+                        <th>Purchased On</th>
+                        <th>Downloads</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($purchases as $p): ?>
+                    <tr>
+                        <td>
+                            <strong style="font-size: 1rem; color: #fff;"><?= sanitize($p['item_title']) ?></strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);"><i class="fas fa-certificate" style="color:#10b981;"></i> Commercial License Active</div>
+                        </td>
+                        <td><code style="font-size: 0.85rem;"><?= sanitize($p['paystack_reference']) ?></code></td>
+                        <td><?= sanitize($p['currency']) ?> <?= number_format($p['amount'], 2) ?></td>
+                        <td><?= formatDate($p['paid_at'] ?? $p['created_at']) ?></td>
+                        <td><span class="badge active"><?= (int)$p['download_count'] ?> downloads</span></td>
+                        <td style="text-align: right;">
+                            <a href="<?= eurl('/checkout/download/' . $p['download_token']) ?>" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                                <i class="fas fa-download"></i> Download ZIP
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif; ?>
+
 <div class="card">
     <div class="card-header">
         <div>

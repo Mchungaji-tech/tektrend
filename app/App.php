@@ -89,6 +89,11 @@ class App {
 
         // Public Turnkey Software Shop & Legal / FAQ
         $this->router->get('/shop', 'PortfolioController@shop');
+        $this->router->post('/checkout/initiate', 'CheckoutController@initiate');
+        $this->router->get('/checkout/callback', 'CheckoutController@callback');
+        $this->router->get('/checkout/success', 'CheckoutController@success');
+        $this->router->get('/checkout/download/{token}', 'CheckoutController@download');
+        $this->router->post('/webhook/paystack', 'CheckoutController@webhook');
         $this->router->get('/privacy', 'HomeController@privacy');
         $this->router->get('/privacy-policy', 'HomeController@privacy');
         $this->router->get('/faq', 'HomeController@faq');

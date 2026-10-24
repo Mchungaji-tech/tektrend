@@ -763,7 +763,7 @@ $canonicalUrl = url('/live-demos');
               <button type="button" class="btn-card-sub" onclick="openRequestCustomModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>')">
                 <i class="fas fa-cogs"></i> Custom Build
               </button>
-              <button type="button" class="btn-card-sub" onclick="openBuyTurnkeyModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>', '<?= $priceVal ?>')">
+              <button type="button" class="btn-card-sub" onclick="openBuyTurnkeyModal('<?= htmlspecialchars(addslashes($demo['title']), ENT_QUOTES) ?>', '<?= $priceVal ?>', '<?= $demo['id'] ?>')">
                 <i class="fas fa-shopping-cart"></i> Buy Code ($<?= number_format($priceVal, 0) ?>)
               </button>
             </div>
@@ -901,45 +901,56 @@ $canonicalUrl = url('/live-demos');
   <div class="akar-modal-overlay" id="buyTurnkeyModal">
     <div class="akar-modal-box">
       <button class="akar-modal-close" onclick="closeAllModals()">&times;</button>
+      <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem;">
+        <span style="font-size: 1.15rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 0.3rem 0.8rem; border-radius: 20rem;">
+          <i class="fas fa-shield-halved"></i> Turnkey Source Code Handover
+        </span>
+      </div>
       <h3 style="font-family: 'Syne', sans-serif; font-size: 2.8rem; margin-bottom: 0.8rem;">Buy Turnkey Source Code</h3>
-      <p style="color: var(--text-secondary); font-size: 1.4rem; margin-bottom: 2.5rem;">Receive the clean source code package with commercial rights.</p>
+      <p style="color: var(--text-secondary); font-size: 1.4rem; margin-bottom: 2.2rem;">Complete secure checkout via Paystack to receive an authenticated commercial license and instant source code ZIP package.</p>
 
-      <form action="<?= eurl('/live-demos/request') ?>" method="POST">
+      <form action="<?= eurl('/checkout/initiate') ?>" method="POST" id="demoPaystackForm">
         <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
-        <input type="hidden" name="action_type" value="buy_template">
+        <input type="hidden" name="item_type" value="portfolio_demo">
+        <input type="hidden" name="item_id" id="buyModalItemIdInput" value="">
+        <input type="hidden" name="item_title" id="buyModalItemTitleInput" value="">
 
         <div class="akar-form-group">
-          <label>Selected Template</label>
-          <input type="text" name="template_title" id="buyTemplateInput" class="akar-form-input" readonly style="font-weight: 700; color: var(--terra);">
-        </div>
-
-        <div class="akar-form-group">
-          <label>Package Tier</label>
-          <select name="license" class="akar-form-input">
-            <option value="Standard Turnkey Source Code">Turnkey Codebase Package</option>
-            <option value="Source Code + Domain & Hosting Deployment">Turnkey Code + Cloud / Domain Setup (+$99)</option>
-            <option value="Turnkey Code + 1-Month Engineering Support">Turnkey Code + Engineering Retainer</option>
-          </select>
+          <label>Selected Software Package &amp; Price</label>
+          <input type="text" id="buyTemplateInput" class="akar-form-input" readonly style="font-weight: 700; color: var(--terra);">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
           <div class="akar-form-group">
-            <label>Your Name *</label>
+            <label>Your Full Name *</label>
             <input type="text" name="name" required class="akar-form-input" placeholder="David Otieno">
           </div>
           <div class="akar-form-group">
-            <label>Email Address *</label>
+            <label>Email Address (for code handover) *</label>
             <input type="email" name="email" required class="akar-form-input" placeholder="david@company.com">
           </div>
         </div>
 
         <div class="akar-form-group">
-          <label>Phone / WhatsApp Number</label>
-          <input type="text" name="phone" class="akar-form-input" placeholder="+254 700 000000">
+          <label>Phone / M-Pesa Number *</label>
+          <input type="text" name="phone" required class="akar-form-input" placeholder="+254 700 000000">
         </div>
 
-        <button type="submit" style="width: 100%; padding: 1.5rem; border-radius: 10rem; background: var(--terra); color: #0e0e0e; font-size: 1.35rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;">
-          Confirm Order & Receive Handover Pack <i class="fas fa-shopping-cart" style="margin-left: 0.6rem;"></i>
+        <!-- Paystack Trust Badges -->
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.2rem; padding: 1.2rem 1.6rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.8rem; font-size: 1.2rem; color: #94a3b8;">
+            <i class="fas fa-lock" style="color: #10b981;"></i>
+            <span>Paystack 256-bit Secure Checkout</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.8rem; font-size: 1.2rem; color: #cbd5e1; font-weight: 600;">
+            <span><i class="fas fa-mobile-screen-button" style="color:#22c55e;"></i> M-Pesa</span> ·
+            <span><i class="fab fa-cc-visa" style="color:#60a5fa;"></i> Visa</span> ·
+            <span><i class="fab fa-cc-mastercard" style="color:#f59e0b;"></i> Mastercard</span>
+          </div>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 1.6rem; border-radius: 1.2rem; background: linear-gradient(135deg, var(--terra) 0%, #d47a4a 100%); color: #0e0e0e; font-family: 'Syne', sans-serif; font-size: 1.55rem; font-weight: 800; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 1rem; box-shadow: 0 10px 25px rgba(228, 147, 102, 0.35);">
+          <i class="fas fa-lock"></i> Pay &amp; Download Code with Paystack <i class="fas fa-arrow-right"></i>
         </button>
       </form>
     </div>
@@ -1004,8 +1015,12 @@ $canonicalUrl = url('/live-demos');
       document.getElementById('requestTemplateInput').value = title;
       document.getElementById('requestCustomModal').style.display = 'flex';
     }
-    function openBuyTurnkeyModal(title, price) {
+    function openBuyTurnkeyModal(title, price, itemId) {
       document.getElementById('buyTemplateInput').value = title + ' ($' + price + ')';
+      document.getElementById('buyModalItemTitleInput').value = title;
+      if (document.getElementById('buyModalItemIdInput')) {
+        document.getElementById('buyModalItemIdInput').value = itemId || '';
+      }
       document.getElementById('buyTurnkeyModal').style.display = 'flex';
     }
     function openRequestFromDrawer() {

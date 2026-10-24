@@ -3,7 +3,7 @@
         <div class="logo"><i class="fas fa-layer-group"></i> Tektrend<span style="color: #e49366;"></span></div>
         <?php $area = $area ?? ''; ?>
         <p>
-            <?php if ($area === 'client'): ?>Client Portal · Sign in to your Tek Trend account<?php elseif ($area === 'partner'): ?>Partner Portal · Sign in to your Tek Trend partner account<?php else: ?>Tektrend Softwares · Enterprise Management & Operations Portal<?php endif; ?>
+            <?php if ($area === 'client'): ?>Client &amp; Buyer Portal · Sign in to access your source downloads and projects<?php elseif ($area === 'partner'): ?>Partner Portal · Sign in to your Tek Trend partner account<?php else: ?>Sign in to your Tektrend account (Buyers, Clients &amp; Team)<?php endif; ?>
         </p>
     </div>
 
@@ -59,7 +59,7 @@
     <?php
         $googleOn = defined('GOOGLE_CLIENT_ID') && GOOGLE_CLIENT_ID !== '' && defined('GOOGLE_CLIENT_SECRET') && GOOGLE_CLIENT_SECRET !== '';
         $githubOn = defined('GITHUB_CLIENT_ID') && GITHUB_CLIENT_ID !== '' && defined('GITHUB_CLIENT_SECRET') && GITHUB_CLIENT_SECRET !== '';
-        $oauthIntent = ($area === 'client') ? 'client' : (($area === 'partner') ? 'partner' : 'staff');
+        $oauthIntent = ($area === 'partner') ? 'partner' : 'client';
         include VIEW_PATH . '/partials/social_buttons.php';
     ?>
 
