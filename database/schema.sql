@@ -32,6 +32,7 @@ CREATE TABLE `users` (
     `first_name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
+    `google_id` VARCHAR(64) DEFAULT NULL,
     `phone` VARCHAR(20) DEFAULT NULL,
     `password` VARCHAR(255) NOT NULL,
     `role` ENUM('admin','manager','employee','accountant','sales','support','client','partner') DEFAULT 'employee',
@@ -47,6 +48,7 @@ CREATE TABLE `users` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`),
     UNIQUE KEY `employee_id` (`employee_id`),
+    UNIQUE KEY `google_id` (`google_id`),
     KEY `department_id` (`department_id`),
     KEY `is_online` (`is_online`),
     KEY `work_status` (`work_status`)

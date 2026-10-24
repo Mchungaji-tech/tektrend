@@ -18,7 +18,7 @@ class GoogleAuthController extends Controller {
      */
     public function redirect() {
         if (!$this->isConfigured()) {
-            $this->session->flash('error', 'Google Sign-In is not configured on this server yet.');
+            $this->session->flash('error', 'Google Sign-In is not configured on this server yet. Please specify GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file.');
             redirect('/login');
             return;
         }
@@ -57,7 +57,8 @@ class GoogleAuthController extends Controller {
     public function callback() {
         // A Google error (e.g. user cancelled) comes back in the query string.
         if (!empty($_GET['error'])) {
-            $this->session->flash('error', 'Google sign-in was cancelled or returned an error: ' . sanitize($_GET['error']));
+            $errDetail = $_GET['error_description'] ?? $_GET['error'];
+            $this->session->flash('error', 'Google sign-in was cancelled or returned an error: ' . sanitize($errDetail));
             redirect('/login');
             return;
         }
@@ -69,7 +70,7 @@ class GoogleAuthController extends Controller {
         $expected = $this->session->get('google_oauth_state');
         $this->session->remove('google_oauth_state');
         if (!$expected || !$state || !hash_equals((string)$expected, (string)$state)) {
-            $this->session->flash('error', 'Security check failed during Google sign-in. Please try again.');
+            $this->session->flash('error', 'Security check failed or session expired during Google sign-in. Please try again.');
             redirect('/login');
             return;
         }
@@ -80,7 +81,13 @@ class GoogleAuthController extends Controller {
             return;
         }
 
-        $redirectUri = $this->session->get('google_redirect_uri') ?: $this->redirectUri();
+        $redirectUri = $this->session->get('google_redirect_uri');
+        if (!$redirectUri) {
+            $reqUri = $_SERVER['REQUEST_URI'] ?? '';
+            $redirectUri = (strpos($reqUri, 'auth/google/callback') !== false)
+                ? url('/auth/google/callback')
+                : $this->redirectUri();
+        }
         $this->session->remove('google_redirect_uri');
 
         // Exchange the authorization code for tokens.
@@ -95,7 +102,9 @@ class GoogleAuthController extends Controller {
         $accessToken = $tokenRes['access_token'] ?? null;
         if (!$accessToken) {
             error_log('Google OAuth token exchange failed: ' . json_encode($tokenRes));
-            $this->session->flash('error', 'Could not complete Google sign-in. Please try again.');
+            $detail = $tokenRes['error_description'] ?? ($tokenRes['error'] ?? null);
+            $msg = 'Could not complete Google sign-in.' . (APP_DEBUG && $detail ? ' Reason: ' . sanitize($detail) : ' Please try again.');
+            $this->session->flash('error', $msg);
             redirect('/login');
             return;
         }
@@ -134,7 +143,8 @@ class GoogleAuthController extends Controller {
             $user = $this->findOrCreateUser($googleId, $email, $profile, $intent);
         } catch (\Throwable $e) {
             error_log('Google OAuth user provisioning error: ' . $e->getMessage());
-            $this->session->flash('error', 'Something went wrong preparing your account. Please try again.');
+            $msg = 'Something went wrong preparing your account.' . (APP_DEBUG ? ' (' . sanitize($e->getMessage()) . ')' : ' Please contact support.');
+            $this->session->flash('error', $msg);
             redirect('/login');
             return;
         }

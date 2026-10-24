@@ -7,15 +7,24 @@
 class Session {
     private static $instance = null;
 
+    private $retrievedFlash = [];
+
     private function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
+            $isSecure = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1))
+                || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+                || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+                || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+
             session_name('tektrend_session');
             session_start([
-                'cookie_lifetime'   => SESSION_LIFETIME,
+                'cookie_lifetime'   => defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 1440,
+                'cookie_path'       => '/',
                 'cookie_httponly'   => true,
                 'cookie_samesite'   => 'Lax',
-                'use_strict_mode'   => true,
-                'gc_maxlifetime'    => SESSION_LIFETIME
+                'cookie_secure'     => $isSecure,
+                'use_strict_mode'   => false,
+                'gc_maxlifetime'    => defined('SESSION_LIFETIME') ? SESSION_LIFETIME : 1440
             ]);
         }
     }
@@ -78,15 +87,19 @@ class Session {
     }
 
     /**
-     * Set flash message
+     * Set/get flash message
      */
     public function flash($key, $message = null) {
         if ($message === null) {
-            $message = $_SESSION['flash'][$key] ?? null;
-            unset($_SESSION['flash'][$key]);
-            return $message;
+            if (isset($_SESSION['flash'][$key])) {
+                $this->retrievedFlash[$key] = $_SESSION['flash'][$key];
+                unset($_SESSION['flash'][$key]);
+                return $this->retrievedFlash[$key];
+            }
+            return $this->retrievedFlash[$key] ?? null;
         }
         $_SESSION['flash'][$key] = $message;
+        unset($this->retrievedFlash[$key]);
     }
 
     /**

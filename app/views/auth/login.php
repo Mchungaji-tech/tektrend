@@ -7,14 +7,29 @@
         </p>
     </div>
 
-    <?php if (flash('error')): ?>
-        <div class="flash-message"><?= sanitize(flash('error')) ?></div>
+    <?php 
+        $flashError   = flash('error');
+        $flashSuccess = flash('success');
+        $flashDebug   = flash('debug_token');
+    ?>
+
+    <?php if (!empty($flashError)): ?>
+        <div class="flash-message" style="display:flex;align-items:center;gap:.75rem;text-align:left;background:rgba(239,83,80,0.15);border-color:rgba(239,83,80,0.35);">
+            <i class="fas fa-circle-exclamation" style="color:#ef4444;font-size:1.15rem;flex-shrink:0;"></i>
+            <span style="font-size:0.9rem;line-height:1.4;color:#fee2e2;"><?= sanitize($flashError) ?></span>
+        </div>
     <?php endif; ?>
-    <?php if (flash('success')): ?>
-        <div class="flash-message success"><?= sanitize(flash('success')) ?></div>
+    <?php if (!empty($flashSuccess)): ?>
+        <div class="flash-message success" style="display:flex;align-items:center;gap:.75rem;text-align:left;background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.35);">
+            <i class="fas fa-circle-check" style="color:#10b981;font-size:1.15rem;flex-shrink:0;"></i>
+            <span style="font-size:0.9rem;line-height:1.4;color:#d1fae5;"><?= sanitize($flashSuccess) ?></span>
+        </div>
     <?php endif; ?>
-    <?php if (flash('debug_token')): ?>
-        <div class="flash-message" style="background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2);"><?= sanitize(flash('debug_token')) ?></div>
+    <?php if (!empty($flashDebug)): ?>
+        <div class="flash-message" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3);display:flex;align-items:center;gap:.75rem;text-align:left;">
+            <i class="fas fa-circle-info" style="color:#3b82f6;font-size:1.15rem;flex-shrink:0;"></i>
+            <span style="font-size:0.9rem;line-height:1.4;"><?= sanitize($flashDebug) ?></span>
+        </div>
     <?php endif; ?>
 
     <form method="POST" action="<?= eurl('/login') ?>" autocomplete="off">
@@ -47,15 +62,6 @@
         $oauthIntent = ($area === 'client') ? 'client' : (($area === 'partner') ? 'partner' : 'staff');
         include VIEW_PATH . '/partials/social_buttons.php';
     ?>
-
-    <?php if (APP_DEBUG): ?>
-        <p style="margin:.85rem 0 0;font-size:.72rem;color:rgba(255,255,255,0.45);line-height:1.6;">
-            <strong>Google OAuth &rarr; Authorized redirect URI in Google Console:</strong><br>
-            <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/callback.php'), ENT_QUOTES, 'UTF-8') ?></code><br>
-            <em>or:</em> <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/auth/google/callback'), ENT_QUOTES, 'UTF-8') ?></code>
-            <?php if ($githubOn): ?><br>GitHub: <code style="color:#e49366;word-break:break-all;"><?= htmlspecialchars(url('/auth/github/callback'), ENT_QUOTES, 'UTF-8') ?></code><?php endif; ?>
-        </p>
-    <?php endif; ?>
 
 
     <div class="auth-footer" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); line-height: 1.9;">

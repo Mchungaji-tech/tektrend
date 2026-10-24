@@ -45,13 +45,172 @@
         .checkbox-group { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
         .checkbox-group input { width: 16px; height: 16px; cursor: pointer; }
         @media (max-width: 480px) { .auth-card { padding: 2rem; } .form-row { flex-direction: column; gap: 0; } }
+
+        /* Toast Notification System */
+        #toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 420px;
+            width: calc(100vw - 48px);
+            pointer-events: none;
+        }
+        .toast-notify {
+            pointer-events: auto;
+            background: rgba(18, 22, 28, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 1rem 1.15rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            color: #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+            transform: translateX(30px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toast-notify.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .toast-notify.hide {
+            transform: translateX(30px);
+            opacity: 0;
+        }
+        .toast-notify.error {
+            border-left: 4px solid #ef4444;
+        }
+        .toast-notify.success {
+            border-left: 4px solid #10b981;
+        }
+        .toast-notify.info {
+            border-left: 4px solid #3b82f6;
+        }
+        .toast-icon {
+            font-size: 1.25rem;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+        .toast-notify.error .toast-icon { color: #ef4444; }
+        .toast-notify.success .toast-icon { color: #10b981; }
+        .toast-notify.info .toast-icon { color: #3b82f6; }
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .toast-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            color: #f5f0eb;
+        }
+        .toast-msg {
+            font-size: 0.84rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.45;
+            word-break: break-word;
+        }
+        .toast-close-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+            padding: 0;
+            margin-left: 0.5rem;
+            transition: color 0.2s;
+        }
+        .toast-close-btn:hover {
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <div class="auth-bg"></div>
     <div class="auth-overlay"></div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
     <div class="auth-container">
         <?= $content ?? '' ?>
     </div>
+
+    <script>
+    (function() {
+        window.showToast = function(message, type, title) {
+            if (!message) return;
+            type = type || 'error';
+            title = title || (type === 'error' ? 'Authentication Notice' : (type === 'success' ? 'Success' : 'Notice'));
+
+            var container = document.getElementById('toast-container');
+            if (!container) return;
+
+            var toast = document.createElement('div');
+            toast.className = 'toast-notify ' + type;
+
+            var iconClass = 'fa-circle-exclamation';
+            if (type === 'success') iconClass = 'fa-circle-check';
+            else if (type === 'info') iconClass = 'fa-circle-info';
+
+            toast.innerHTML = 
+                '<i class="fas ' + iconClass + ' toast-icon"></i>' +
+                '<div class="toast-content">' +
+                    '<div class="toast-title">' + title + '</div>' +
+                    '<div class="toast-msg">' + message + '</div>' +
+                '</div>' +
+                '<button type="button" class="toast-close-btn" aria-label="Close">&times;</button>';
+
+            var closeBtn = toast.querySelector('.toast-close-btn');
+            function dismiss() {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(function() {
+                    if (toast.parentNode) toast.parentNode.removeChild(toast);
+                }, 400);
+            }
+            closeBtn.addEventListener('click', dismiss);
+
+            container.appendChild(toast);
+            // Trigger animation
+            requestAnimationFrame(function() {
+                toast.classList.add('show');
+            });
+
+            // Auto dismiss after 6 seconds
+            setTimeout(dismiss, 6000);
+        };
+
+        // Render any server-side flash messages as toast on page load
+        <?php
+            $flashErr = flash('error');
+            $flashSuc = flash('success');
+            $flashInf = flash('info');
+        ?>
+        <?php if (!empty($flashErr)): ?>
+            window.addEventListener('DOMContentLoaded', function() {
+                window.showToast(<?= json_encode($flashErr) ?>, 'error', 'Error');
+            });
+        <?php endif; ?>
+        <?php if (!empty($flashSuc)): ?>
+            window.addEventListener('DOMContentLoaded', function() {
+                window.showToast(<?= json_encode($flashSuc) ?>, 'success', 'Success');
+            });
+        <?php endif; ?>
+        <?php if (!empty($flashInf)): ?>
+            window.addEventListener('DOMContentLoaded', function() {
+                window.showToast(<?= json_encode($flashInf) ?>, 'info', 'Notice');
+            });
+        <?php endif; ?>
+    })();
+    </script>
 </body>
 </html>

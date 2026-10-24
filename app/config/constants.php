@@ -261,18 +261,20 @@ function uploadFile($file, $directory = 'uploads', $allowedTypes = null) {
 }
 
 /**
- * Flash message
+ * Flash message helper with per-request retention
  */
 function flash($key, $message = null) {
+    static $retrieved = [];
     if ($message === null) {
         if (isset($_SESSION['flash'][$key])) {
-            $msg = $_SESSION['flash'][$key];
+            $retrieved[$key] = $_SESSION['flash'][$key];
             unset($_SESSION['flash'][$key]);
-            return $msg;
+            return $retrieved[$key];
         }
-        return null;
+        return $retrieved[$key] ?? null;
     }
     $_SESSION['flash'][$key] = $message;
+    unset($retrieved[$key]);
 }
 
 /**
