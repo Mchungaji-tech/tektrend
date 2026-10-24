@@ -29,7 +29,7 @@ class GoogleAuthController extends Controller {
         // Capture the intended area (client / partner / staff) so a brand-new
         // Google account is provisioned with the right role.
         $intent = $_GET['to'] ?? '';
-        $this->session->set('oauth_intent', in_array($intent, ['client', 'partner', 'staff'], true) ? $intent : 'staff');
+        $this->session->set('oauth_intent', in_array($intent, ['client', 'partner', 'staff'], true) ? $intent : 'client');
 
         $state = bin2hex(random_bytes(16));
         $this->session->set('google_oauth_state', $state);
@@ -127,19 +127,36 @@ class GoogleAuthController extends Controller {
             return;
         }
 
-        // Optional single-domain lock (recommended for internal portals).
+        // Check if an account already exists for this email
+        $existingUser = $this->db->fetch("SELECT * FROM users WHERE email = ? OR google_id = ? LIMIT 1", [$email, (string)$googleId]);
+        $intent = $this->session->get('oauth_intent', 'client');
+        $this->session->remove('oauth_intent');
+
+        // Optional single-domain lock for internal staff accounts.
+        // Buyers/clients and partners are NEVER restricted to corporate domains.
         if (GOOGLE_ALLOWED_DOMAIN !== '') {
             $domain = strtolower(substr(strrchr((string)$email, '@'), 1));
-            if ($domain !== strtolower(GOOGLE_ALLOWED_DOMAIN)) {
-                $this->session->flash('error', 'Only accounts ending in @' . GOOGLE_ALLOWED_DOMAIN . ' may sign in here.');
+            $isStaffDomain = ($domain === strtolower(GOOGLE_ALLOWED_DOMAIN));
+
+            // If existing user is staff or requested staff intent, verify corporate domain
+            if ($existingUser && in_array($existingUser['role'], STAFF_ROLES, true) && !$isStaffDomain) {
+                $this->session->flash('error', 'Staff login is restricted to accounts ending in @' . GOOGLE_ALLOWED_DOMAIN . '.');
                 redirect('/login');
                 return;
+            }
+
+            // If a new user does not match the staff domain, safely provision them as a client/buyer
+            if (!$isStaffDomain) {
+                $intent = ($intent === 'partner') ? 'partner' : 'client';
+            }
+        } else {
+            // No domain restriction set: default public sign-ins to client/buyer unless explicitly staff
+            if (!$existingUser && $intent === 'staff') {
+                $intent = 'client';
             }
         }
 
         try {
-            $intent = $this->session->get('oauth_intent', 'staff');
-            $this->session->remove('oauth_intent');
             $user = $this->findOrCreateUser($googleId, $email, $profile, $intent);
         } catch (\Throwable $e) {
             error_log('Google OAuth user provisioning error: ' . $e->getMessage());

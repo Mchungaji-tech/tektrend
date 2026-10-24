@@ -104,20 +104,33 @@ class GithubAuthController extends Controller {
         }
         $email = strtolower(trim($email));
 
-        // Optional domain allowlist (comma-separated).
+        // Check if an account already exists
+        $existingUser = $this->db->fetch("SELECT * FROM users WHERE email = ? OR github_id = ? LIMIT 1", [$email, (string)$githubId]);
+        $intent = $this->session->get('oauth_intent', 'client');
+        $this->session->remove('oauth_intent');
+
+        // Optional domain allowlist (comma-separated) for staff accounts only.
         if (GITHUB_ALLOWED_DOMAIN !== '') {
             $allowed = array_map('strtolower', array_map('trim', explode(',', GITHUB_ALLOWED_DOMAIN)));
             $domain = strtolower(substr(strrchr($email, '@'), 1));
-            if (!in_array($domain, $allowed, true)) {
-                $this->session->flash('error', 'Sign-in is restricted to the following domains: ' . GITHUB_ALLOWED_DOMAIN . '.');
+            $isAllowedDomain = in_array($domain, $allowed, true);
+
+            if ($existingUser && in_array($existingUser['role'], STAFF_ROLES, true) && !$isAllowedDomain) {
+                $this->session->flash('error', 'Staff sign-in is restricted to the following domains: ' . GITHUB_ALLOWED_DOMAIN . '.');
                 redirect('/login');
                 return;
+            }
+
+            if (!$isAllowedDomain) {
+                $intent = ($intent === 'partner') ? 'partner' : 'client';
+            }
+        } else {
+            if (!$existingUser && $intent === 'staff') {
+                $intent = 'client';
             }
         }
 
         try {
-            $intent = $this->session->get('oauth_intent', 'staff');
-            $this->session->remove('oauth_intent');
             $user = $this->findOrCreateUser((string)$githubId, $email, $profile, $intent);
         } catch (\Throwable $e) {
             error_log('GitHub OAuth user provisioning error: ' . $e->getMessage());

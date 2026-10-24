@@ -97,6 +97,11 @@ define('GOOGLE_MEET_PRIVATE_KEY', getenv('GOOGLE_MEET_PRIVATE_KEY') ?: '');
 define('GOOGLE_MEET_CALENDAR_ID', getenv('GOOGLE_MEET_CALENDAR_ID') ?: 'primary');
 define('GOOGLE_MEET_TIMEZONE', getenv('GOOGLE_MEET_TIMEZONE') ?: 'Africa/Nairobi');
 
+// Paystack Payment Gateway (Cards, M-Pesa, Bank Transfer, USSD)
+define('PAYSTACK_PUBLIC_KEY', getenv('PAYSTACK_PUBLIC_KEY') ?: '');
+define('PAYSTACK_SECRET_KEY', getenv('PAYSTACK_SECRET_KEY') ?: '');
+define('PAYSTACK_CURRENCY', getenv('PAYSTACK_CURRENCY') ?: 'KES');
+
 // Database Settings
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('DB_NAME') ?: 'tektrend');

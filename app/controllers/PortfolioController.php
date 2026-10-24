@@ -336,6 +336,22 @@ class PortfolioController extends Controller {
         return [
             // Curated from your real /live_demo/*.html templates (invented external placeholder projects removed)
             [
+                'id' => 101,
+                'title' => 'Panda Realty · Bespoke Property Platform',
+                'category' => 'Real Estate & Architecture',
+                'short_description' => 'Comprehensive bespoke real estate platform featuring dynamic property listings, geospatial map search, virtual tours, and automated valuation models. Built and delivered for client production — featured showcase only.',
+                'icon' => 'fas fa-building-user',
+                'demo_type' => 'external',
+                'demo_url' => 'https://pandarealty.co.ke',
+                'hosting_domain' => 'Completed Client Project',
+                'tech_stack' => 'PHP, MySQL, Modern CSS, Leaflet Maps, Property CRM',
+                'preview_image' => 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80',
+                'award_badge' => 'Client Production',
+                'price' => 0.00,
+                'is_featured' => 1,
+                'is_for_sale' => 0
+            ],
+            [
                 'id' => 1,
                 'title' => 'Studio Maven · Creative Studio',
                 'category' => 'Creative & Design',

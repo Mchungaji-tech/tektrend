@@ -220,7 +220,10 @@ class Controller {
             } catch (\Throwable $ex) {}
 
             $seedDemos = [
-                // Your real live HTML demos (Turnkey Templates served from /live_demo/*.html on tektrend)
+                // Completed Client Projects (Showcased Work — Already Sold & NOT for Sale)
+                ['Panda Realty · Bespoke Property Platform', 'Real Estate & Architecture', 'Comprehensive bespoke real estate platform featuring dynamic property listings, geospatial map search, virtual tours, and automated valuation models. Built and delivered for client production — featured showcase only.', 'fas fa-building-user', 'external', 'https://pandarealty.co.ke', 'Completed Client Project', 'PHP, MySQL, Modern CSS, Leaflet Maps, Property CRM', 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80', 'Client Production', 0.00, 1, 0, 1],
+
+                // Real live HTML demos (Turnkey Templates served from /live_demo/*.html on tektrend)
                 ['Studio Maven · Creative Studio', 'Creative & Design', 'Minimalist luxury branding portfolio with case studies, smooth motion reels, interactive typography, and instant project booking.', 'fas fa-palette', 'local', '/live_demo/graphic.html', 'Turnkey Template', 'HTML5, CSS3, GSAP, Responsive', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80', 'Site of the Day', 49.00, 1, 1, 4],
                 ['GrowthPulse · Marketing Agency', 'Marketing & SEO', 'Growth-driven marketing agency portal featuring live campaign tracking, analytics metrics, interactive ROI calculator, and lead generation.', 'fas fa-chart-line', 'local', '/live_demo/digital_markting.html', 'Turnkey Template', 'HTML5, Bootstrap, CSS3, Chart.js', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80', 'Top Conversion', 59.00, 1, 1, 5],
                 ['LuxeCart · Modern E-Commerce', 'E-Commerce & Retail', 'High-speed storefront with dynamic category filtering, cart management, instant checkout flow, customer wishlist, and payment readiness.', 'fas fa-store', 'local', '/live_demo/e-commerce.html', 'Turnkey Template', 'HTML5, CSS3, JavaScript, eCommerce UI', 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80', 'Best Architecture', 79.00, 1, 1, 6],
