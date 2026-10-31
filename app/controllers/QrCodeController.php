@@ -212,63 +212,105 @@ class QrCodeController extends Controller {
     private function renderCardImage($card) {
         $W = 1050; $H = 620; // ~300dpi 3.5in x 2.07in
         $img = imagecreatetruecolor($W, $H);
-        $white = imagecolorallocate($img, 255, 255, 255);
-        $ink = imagecolorallocate($img, 20, 24, 34);
-        $muted = imagecolorallocate($img, 110, 118, 132);
-        $accent = imagecolorallocate($img, 37, 99, 235);
-        $accent2 = imagecolorallocate($img, 214, 194, 157);
+        imageantialias($img, true);
+
+        // ---- Palette: deep slate ink + brand blue + champagne ----
+        $white  = imagecolorallocate($img, 255, 255, 255);
+        $ink    = $this->hexColor($img, '#0F172A');
+        $slate  = $this->hexColor($img, '#334155');
+        $muted  = $this->hexColor($img, '#8A94A6');
+        $accent = $this->hexColor($img, '#2563EB');
+        $gold   = $this->hexColor($img, '#C7A65B');
+        $shadow = $this->hexColor($img, '#0B1220', 70);
 
         imagefilledrectangle($img, 0, 0, $W, $H, $white);
-        // Left accent bar + top hairline
-        imagefilledrectangle($img, 0, 0, 22, $H, $accent);
-        imagefilledrectangle($img, 22, 0, 26, $H, $accent2);
 
-        $font = $this->findFont();
-        $bigFont = $this->findFont(40);
-        $smallFont = $this->findFont(18);
+        // ---- Right brand panel with a vertical blue gradient + champagne edge ----
+        $panelX = 742;
+        $this->vGradient($img, $panelX, 0, $W, $H, '#1E3A8A', '#2563EB');
+        imagefilledrectangle($img, $panelX - 4, 0, $panelX, $H, $gold);
 
-        // Logo (top area) or company name fallback
-        $logoBox = ['x' => 70, 'y' => 60, 'w' => 360, 'h' => 120];
+        // ---- Fonts (multiple weights when available) ----
+        $fRegular = $this->findFont('regular');
+        $fBold    = $this->findFont('bold');
+        $fSemi    = $this->findFont('semibold') ?: $fBold;
+        $fItalic  = $this->findFont('italic');
+
+        $left  = 62;
+        $maxW  = ($panelX - 40) - $left; // right limit of the content column
+
+        // ---- Brand mark: logo, else accent dot + spaced uppercase name ----
         $logoDrawn = false;
         if (!empty($card['logo'])) {
             $logoPath = $this->resolveLogoPath($card['logo']);
             if ($logoPath) {
                 $li = $this->loadImage($logoPath);
-                if ($li) {
-                    $this->fitImage($img, $li, $logoBox['x'], $logoBox['y'], $logoBox['w'], $logoBox['h']);
-                    $logoDrawn = true;
-                }
+                if ($li) { $this->fitImage($img, $li, $left, 52, 260, 80); $logoDrawn = true; }
             }
         }
-        if (!$logoDrawn && $card['company'] !== '') {
-            $this->drawText($img, $logoBox['x'], $logoBox['y'] + 60, $card['company'], $accent, $bigFont ?: 5, $font);
+        if (!$logoDrawn) {
+            $brand = strtoupper($card['company'] !== '' ? $card['company'] : 'YOUR COMPANY');
+            $this->roundRect($img, $left, 64, 16, 16, 4, $accent);
+            list($bs, $brand) = $this->fitSpaced($fSemi, 20, $brand, $maxW - 30, 9, 2.2);
+            $this->spacedText($img, $left + 28, 79, $bs, $fSemi, $slate, $brand, 2.2);
         }
 
-        // Name + title
-        $this->drawText($img, 70, 300, $card['name'] !== '' ? $card['name'] : 'Your Name', $ink, ($font ? 44 : 5), $font, true);
+        // ---- Name (dark ink, large) ----
+        $name = $card['name'] !== '' ? $card['name'] : 'Your Name';
+        list($ns, $name) = $this->fitText($fSemi, 47, $name, $maxW, 18);
+        $this->text($img, $left, 252, $ns, $fSemi, $ink, $name);
+
+        // ---- Title (accent) ----
         if ($card['title'] !== '') {
-            $this->drawText($img, 70, 356, $card['title'], $muted, ($font ? 22 : 3), $font);
+            list($ts, $ttl) = $this->fitText($fRegular, 21, $card['title'], $maxW, 12);
+            $this->text($img, $left, 290, $ts, $fRegular, $accent, $ttl);
         }
 
-        // Contact block
-        $lines = [];
-        if ($card['email'])    $lines[] = 'Email: ' . $card['email'];
-        if ($card['phone'])    $lines[] = 'Phone: ' . $card['phone'];
-        if ($card['whatsapp']) $lines[] = 'WhatsApp: +' . ltrim($card['whatsapp'], '+');
-        if ($card['address'])  $lines[] = $card['address'];
-        if ($card['website'])  $lines[] = $card['website'];
-        $y = 410;
-        foreach (array_slice($lines, 0, 5) as $ln) {
-            $this->drawText($img, 70, $y, $ln, $ink, ($font ? 19 : 3), $font);
-            $y += 34;
+        // ---- Champagne rule ----
+        imagefilledrectangle($img, $left, 314, $left + (int)min($maxW, 128), 315, $gold);
+
+        // ---- Optional tagline ----
+        $y = 314;
+        if ($card['tagline'] !== '') {
+            $y += 32;
+            list($gs, $tag) = $this->fitText($fItalic ?: $fRegular, 15, $card['tagline'], $maxW, 10);
+            $this->text($img, $left, $y, $gs, $fItalic ?: $fRegular, $muted, $tag);
         }
 
-        // QR (right side)
+        // ---- Contact rows with accent bullets ----
+        $rows = [];
+        if ($card['email'])    $rows[] = $card['email'];
+        if ($card['phone'])    $rows[] = $card['phone'];
+        if ($card['whatsapp']) $rows[] = '+' . ltrim($card['whatsapp'], '+');
+        if ($card['website'])  $rows[] = $card['website'];
+        if ($card['address'])  $rows[] = $card['address'];
+        $y += 22;
+        foreach (array_slice($rows, 0, 5) as $val) {
+            $y += 38;
+            $this->roundRect($img, $left, $y - 12, 9, 9, 4, $accent);
+            list($vs, $val) = $this->fitText($fRegular, 18, $val, $maxW - 22, 10);
+            $this->text($img, $left + 22, $y, $vs, $fRegular, $slate, $val);
+        }
+
+        // ---- QR as a floating white card on the panel ----
         $qrData = $this->cardQrPayload($card);
+        $box = 232;
+        $cx  = (int)round($panelX + (($W - $panelX) - $box) / 2);
+        $cy  = 138;
+        $this->roundRect($img, $cx + 3, $cy + 6, $box, $box, 18, $shadow);
+        $this->roundRect($img, $cx, $cy, $box, $box, 18, $white);
         try {
             $qr = QrCode::encode($qrData, 'M');
-            $qr->drawOnImage($img, $W - 250, $H - 250, 200, 2);
+            $qr->drawOnImage($img, $cx + 18, $cy + 18, $box - 36, 1);
         } catch (\Throwable $e) { /* QR optional */ }
+
+        // ---- Caption under the QR ----
+        $cap = $card['website'] !== '' ? $card['website'] : (parse_url(APP_URL, PHP_URL_HOST) ?: 'tektrend.online');
+        $capMax = ($W - $panelX) - 24;
+        list($cs, $cap) = $this->fitText($fRegular, 15, $cap, $capMax, 8);
+        $capColor = $this->hexColor($img, '#EAF0FB');
+        $tw = $this->textWidth($fRegular, $cs, $cap);
+        $this->text($img, (int)round($panelX + (($W - $panelX) - $tw) / 2), $cy + $box + 44, $cs, $fRegular, $capColor, $cap);
 
         return $img;
     }
@@ -340,38 +382,166 @@ class QrCodeController extends Controller {
         imagedestroy($src);
     }
 
-    private function findFont($size = 24) {
+    /**
+     * Locate a TrueType font for the requested weight. Returns an absolute
+     * path or null (callers then fall back to GD's built-in bitmap font).
+     */
+    private function findFont($weight = 'regular') {
         static $cache = [];
-        $key = (int)$size;
-        if (isset($cache[$key])) return $cache[$key];
-        $paths = [
-            BASE_PATH . '/assets/fonts/Inter-Regular.ttf',
-            BASE_PATH . '/assets/fonts/DejaVuSans.ttf',
-            'C:/Windows/Fonts/arial.ttf',
-            'C:/Windows/Fonts/segoeui.ttf',
-            '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
-            '/usr/share/fonts/dejavu/DejaVuSans.ttf',
-            '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
+        if (array_key_exists($weight, $cache)) return $cache[$weight];
+        $groups = [
+            'regular'  => ['Inter-Regular', 'DejaVuSans', 'LiberationSans-Regular', 'segoeui', 'arial'],
+            'bold'     => ['Inter-Bold', 'DejaVuSans-Bold', 'LiberationSans-Bold', 'segoeuib', 'arialbd'],
+            'semibold' => ['Inter-SemiBold', 'seguisb', 'DejaVuSans-Bold', 'segoeuib', 'arialbd'],
+            'light'    => ['Inter-Light', 'segoeuil', 'DejaVuSans-Light', 'arial'],
+            'italic'   => ['Inter-Italic', 'segoeuii', 'DejaVuSans-Oblique', 'ariali'],
+        ];
+        $dirs = [
+            BASE_PATH . '/assets/fonts/',
+            'C:/Windows/Fonts/',
+            '/usr/share/fonts/truetype/dejavu/',
+            '/usr/share/fonts/truetype/liberation/',
+            '/usr/share/fonts/dejavu/',
+            '/usr/share/fonts/TTF/',
         ];
         $found = null;
-        foreach ($paths as $p) {
-            if (is_file($p)) { $found = $p; break; }
+        foreach (($groups[$weight] ?? $groups['regular']) as $stem) {
+            foreach ($dirs as $d) {
+                foreach (['ttf', 'otf'] as $e) {
+                    $p = $d . $stem . '.' . $e;
+                    if (is_file($p)) { $found = $p; break 3; }
+                }
+            }
         }
-        $cache[$key] = $found;
+        $cache[$weight] = $found;
         return $found;
     }
 
-    private function drawText($img, $x, $y, $text, $color, $size, $fontFile, $bold = false) {
-        $text = (string)$text;
-        if ($fontFile && function_exists('imagettftext')) {
-            // $size is a pt-ish value when a TTF is available
-            imagettftext($img, $size, 0, $x, $y, $color, $fontFile, $text);
-        } else {
-            $sf = is_int($size) && $size <= 5 ? $size : 4;
-            // built-in bitmap font is small; emulate bold by drawing twice with 1px offset
-            imagestring($img, $sf, $x, $y - ($size > 20 ? 12 : 0), $text, $color);
-            if ($bold) imagestring($img, $sf, $x + 1, $y - ($size > 20 ? 12 : 0), $text, $color);
+    private function hexColor($img, $hex, $alpha = 0) {
+        $c = $this->hexRgb($hex);
+        return imagecolorallocatealpha($img, $c[0], $c[1], $c[2], $alpha);
+    }
+
+    private function hexRgb($hex) {
+        $hex = ltrim((string)$hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
         }
+        return [
+            (int)hexdec(substr($hex, 0, 2)),
+            (int)hexdec(substr($hex, 2, 2)),
+            (int)hexdec(substr($hex, 4, 2)),
+        ];
+    }
+
+    /** Vertical linear gradient fill between two hex colours. */
+    private function vGradient($img, $x0, $y0, $x1, $y1, $hexTop, $hexBot) {
+        $t = $this->hexRgb($hexTop);
+        $b = $this->hexRgb($hexBot);
+        $span = max(1, $y1 - $y0 - 1);
+        for ($y = $y0; $y < $y1; $y++) {
+            $f = ($y - $y0) / $span;
+            $col = imagecolorallocate($img,
+                (int)round($t[0] + ($b[0] - $t[0]) * $f),
+                (int)round($t[1] + ($b[1] - $t[1]) * $f),
+                (int)round($t[2] + ($b[2] - $t[2]) * $f));
+            imagefilledrectangle($img, $x0, $y, $x1, $y, $col);
+        }
+    }
+
+    /** Filled rounded rectangle. */
+    private function roundRect($img, $x, $y, $w, $h, $r, $color) {
+        $x = (int)$x; $y = (int)$y; $w = (int)$w; $h = (int)$h;
+        $r = (int)min($r, min($w, $h) / 2);
+        imageantialias($img, true);
+        imagefilledrectangle($img, $x + $r, $y, $x + $w - $r - 1, $y + $h - 1, $color);
+        imagefilledrectangle($img, $x, $y + $r, $x + $w - 1, $y + $h - $r - 1, $color);
+        imagefilledellipse($img, $x + $r, $y + $r, 2 * $r, 2 * $r, $color);
+        imagefilledellipse($img, $x + $w - $r - 1, $y + $r, 2 * $r, 2 * $r, $color);
+        imagefilledellipse($img, $x + $r, $y + $h - $r - 1, 2 * $r, 2 * $r, $color);
+        imagefilledellipse($img, $x + $w - $r - 1, $y + $h - $r - 1, 2 * $r, 2 * $r, $color);
+    }
+
+    /** Render a line of text; $y is the baseline when a TTF is available. */
+    private function text($img, $x, $y, $size, $font, $color, $str) {
+        $str = (string)$str;
+        if ($str === '') return;
+        if ($font && function_exists('imagettftext')) {
+            imagettftext($img, $size, 0, (int)$x, (int)$y, $color, $font, $str);
+        } else {
+            imagestring($img, 5, (int)$x, (int)($y - 12), $str, $color);
+        }
+    }
+
+    /** Uppercase-style text with letter spacing, drawn glyph by glyph. */
+    private function spacedText($img, $x, $y, $size, $font, $color, $str, $spacing = 2) {
+        $str = (string)$str;
+        if ($font && function_exists('imagettftext')) {
+            $cx = $x;
+            for ($i = 0, $len = mb_strlen($str); $i < $len; $i++) {
+                $ch = mb_substr($str, $i, 1);
+                imagettftext($img, $size, 0, (int)$cx, (int)$y, $color, $font, $ch);
+                $cx += $this->textWidth($font, $size, $ch) + $spacing;
+            }
+        } else {
+            imagestring($img, 5, (int)$x, (int)($y - 12), $str, $color);
+        }
+    }
+
+    /** Pixel width of a string for a given TTF size (0 if no TTF). */
+    private function textWidth($font, $size, $str) {
+        $str = (string)$str;
+        if ($font && function_exists('imagettfbbox')) {
+            $bb = imagettfbbox($size, 0, $font, $str);
+            return $bb ? max(0, $bb[2] - $bb[0]) : 0;
+        }
+        return strlen($str) * 8;
+    }
+
+    /**
+     * Largest whole point size <= $size that fits $str within $maxW. If even
+     * $min is too wide, the string is truncated with an ellipsis so text can
+     * never bleed across the layout. Returns [size, text].
+     */
+    private function fitText($font, $size, $str, $maxW, $min = 8) {
+        $str = (string)$str;
+        if (!$font || !function_exists('imagettfbbox') || $maxW <= 0) return [$size, $str];
+        while ($size > $min && $this->textWidth($font, $size, $str) > $maxW) {
+            $size--;
+        }
+        if ($this->textWidth($font, $size, $str) > $maxW) {
+            while ($str !== '' && $this->textWidth($font, $size, $str . '…') > $maxW) {
+                $str = mb_substr($str, 0, mb_strlen($str) - 1);
+            }
+            $str .= '…';
+        }
+        return [$size, $str];
+    }
+
+    /** Total advance width of letter-spaced text. */
+    private function spacedWidth($font, $size, $str, $spacing) {
+        $str = (string)$str;
+        $w = 0;
+        for ($i = 0, $len = mb_strlen($str); $i < $len; $i++) {
+            $w += $this->textWidth($font, $size, mb_substr($str, $i, 1));
+        }
+        return $w + $spacing * max(0, mb_strlen($str) - 1);
+    }
+
+    /** fitText() but accounting for per-glyph letter spacing. Returns [size, text]. */
+    private function fitSpaced($font, $size, $str, $maxW, $min, $spacing) {
+        $str = (string)$str;
+        if (!$font || !function_exists('imagettfbbox') || $maxW <= 0) return [$size, $str];
+        while ($size > $min && $this->spacedWidth($font, $size, $str, $spacing) > $maxW) {
+            $size--;
+        }
+        if ($this->spacedWidth($font, $size, $str, $spacing) > $maxW) {
+            while ($str !== '' && $this->spacedWidth($font, $size, $str . '…', $spacing) > $maxW) {
+                $str = mb_substr($str, 0, mb_strlen($str) - 1);
+            }
+            $str .= '…';
+        }
+        return [$size, $str];
     }
 
     private function getSettings() {
