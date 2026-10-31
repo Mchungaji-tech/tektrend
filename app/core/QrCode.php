@@ -24,10 +24,10 @@ class QrCode {
     // Number of error correction blocks, indexed [ecl][version]
     private static $NUM_ERROR_CORRECTION_BLOCKS = [
         // Version: 0  1  2  3  4  5  6  7  8  9 10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40
-        [-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4,  4,  4,  5,  5,  5,  5,  8,  9,  9, 11, 13, 14, 16, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45], // Low
-        [-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5,  5,  8,  9,  9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45], // Medium
-        [-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8,  8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 44, 46, 50, 50, 56, 52, 55, 57, 57], // Quartile
-        [-1, 1, 1, 1, 1, 1, 2, 2, 4, 4, 4,  6,  6,  8,  8,  8,  8, 10, 10, 12, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57], // High
+        [-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4,  4,  4,  4,  4,  6,  6,  6,  6,  7,  8,  8,  9,  9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25], // Low
+        [-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5,  5,  8,  9,  9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49], // Medium
+        [-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8,  8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 45, 48, 51, 53, 56, 59, 62, 65, 68], // Quartile
+        [-1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81], // High
     ];
 
     private static $PENALTY_N1 = 3;
@@ -452,12 +452,18 @@ class QrCode {
     private function getAlignmentPatternPositions() {
         if ($this->version == 1) return [];
         $numAlign = intdiv($this->version, 7) + 2;
-        $step = ($this->version == 32) ? 26 : intdiv(($this->version - 2) * 4, $numAlign * 2 - 2) + 2;
+        // Spacing between alignment centres, rounded up to an even module count.
+        // Version 32 is the one defined exception (fixed step of 26).
+        $step = ($this->version == 32) ? 26
+            : intdiv($this->version * 4 + $numAlign * 2 + 1, $numAlign * 2 - 2) * 2;
+        // Coordinates are anchored at the LAST pattern (size - 7 = 4*version + 10)
+        // and stepped backwards; the first is always 6. Building forward from 6
+        // misplaces every pattern and makes the code unscannable.
         $result = array_fill(0, $numAlign, 0);
-        $result[0] = 6;
-        for ($i = $numAlign - 1; $i > 0; $i--) {
-            $result[$i] = $result[$i - 1] + $step;
+        for ($i = $numAlign - 1, $pos = $this->version * 4 + 10; $i >= 1; $i--, $pos -= $step) {
+            $result[$i] = $pos;
         }
+        $result[0] = 6;
         return $result;
     }
 
