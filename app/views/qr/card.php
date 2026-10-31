@@ -76,7 +76,9 @@ $cv = function ($k) use ($card) { return isset($card[$k]) ? $card[$k] : ''; };
 
 <script>
 (function () {
-    var base = '<?= eurl('/') ?>';
+    // Strip trailing slash: `base + '/qr/...'` must not create a `//` path
+    // because parse_url() would treat it as a host and the router would 404.
+    var base = '<?= eurl('/') ?>'.replace(/\/+$/, '');
     var csrf = '<?= csrfToken() ?>';
     function fields() {
         var o = {};

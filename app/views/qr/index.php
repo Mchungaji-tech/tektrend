@@ -73,7 +73,9 @@
 
 <script>
 (function () {
-    var base = '<?= eurl('/') ?>';
+    // Strip any trailing slash so `base + '/qr/...'` never produces a `//`
+    // path, which parse_url() misreads as a host and breaks routing (404).
+    var base = '<?= eurl('/') ?>'.replace(/\/+$/, '');
     function q(s) { return encodeURIComponent(s); }
     function params(download) {
         var data = document.getElementById('qrData').value.trim();
