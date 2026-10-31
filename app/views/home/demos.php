@@ -692,6 +692,10 @@ $canonicalUrl = url('/live-demos');
               <?php elseif (!empty($demo['award_badge'])): ?>
                 <span class="akar-pill-tag" style="background: rgba(228, 147, 102, 0.15); color: var(--terra);"><i class="fas fa-medal"></i> <?= sanitize($demo['award_badge']) ?></span>
               <?php endif; ?>
+              <?php $demoQrUrl = eurl('/qr/view?data=' . urlencode($targetUrl) . '&title=' . urlencode($demo['title']) . '&scale=10'); ?>
+              <a href="<?= $demoQrUrl ?>" target="_blank" rel="noopener noreferrer" class="akar-pill-tag" style="cursor: pointer; text-decoration: none; background: rgba(37, 99, 235, 0.15); color: #60a5fa; border: 1px solid rgba(37, 99, 235, 0.3);" title="QR code &mdash; share link, PNG or PDF">
+                <i class="fas fa-qrcode"></i> QR
+              </a>
             </div>
           </div>
 

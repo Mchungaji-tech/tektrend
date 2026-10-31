@@ -568,6 +568,9 @@
                 <a href="<?= eurl('/demos') ?>" class="nav-link <?= ($currentPage ?? '') === 'demos' ? 'active' : '' ?>">
                     <i class="fas fa-globe"></i> Manage Demos & Domains <span class="nav-badge accent">Domains</span>
                 </a>
+                <a href="<?= eurl('/qr-studio') ?>" class="nav-link <?= ($currentPage ?? '') === 'qr' ? 'active' : '' ?>">
+                    <i class="fas fa-qrcode"></i> QR Code &amp; Cards Studio
+                </a>
                 <a href="<?= eurl('/marketplace') ?>" class="nav-link <?= ($currentPage ?? '') === 'marketplace' ? 'active' : '' ?>">
                     <i class="fas fa-trophy"></i> Design Marketplace
                 </a>

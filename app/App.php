@@ -274,6 +274,17 @@ class App {
         $this->router->get('/content/{key}/edit', 'ContentController@edit', ['staff']);
         $this->router->post('/content/{key}', 'ContentController@update', ['staff']);
 
+        // QR Code Studio & Business Cards (backend) + public QR rendering endpoints
+        $this->router->get('/qr-studio', 'QrCodeController@index', ['staff']);
+        $this->router->get('/qr/card', 'QrCodeController@card', ['staff']);
+        $this->router->get('/qr/card/png', 'QrCodeController@cardPng', ['staff']);
+        $this->router->get('/qr/card/pdf', 'QrCodeController@cardPdf', ['staff']);
+        $this->router->post('/qr/upload-logo', 'QrCodeController@uploadLogo', ['staff']);
+        $this->router->get('/qr/view', 'QrCodeController@view');
+        $this->router->get('/qr/png', 'QrCodeController@png');
+        $this->router->get('/qr/svg', 'QrCodeController@svg');
+        $this->router->get('/qr/pdf', 'QrCodeController@pdf');
+
         // Settings
         $this->router->get('/settings', 'SettingController@index', ['staff']);
         $this->router->post('/settings', 'SettingController@update', ['staff']);

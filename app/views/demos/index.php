@@ -94,6 +94,13 @@
                             </td>
                             <td style="text-align: right;">
                                 <div style="display: inline-flex; gap: 0.35rem;">
+                                    <?php
+                                        $qrTarget = preg_match('#^https?://#i', $d['demo_url']) ? $d['demo_url'] : url($d['demo_url']);
+                                        $qrLink = eurl('/qr/view?data=' . urlencode($qrTarget) . '&title=' . urlencode($d['title']) . '&scale=10');
+                                    ?>
+                                    <a href="<?= $qrLink ?>" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" title="QR code (share link / PNG / PDF)">
+                                        <i class="fas fa-qrcode" style="color: var(--primary);"></i>
+                                    </a>
                                     <a href="<?= sanitize($d['demo_url']) ?>" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" title="Open Demo">
                                         <i class="fas fa-external-link-alt"></i>
                                     </a>
